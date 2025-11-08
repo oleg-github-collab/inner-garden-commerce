@@ -1,700 +1,17 @@
 /* ========================================
-   INNER GARDEN - COMMERCE
+   INNER GARDEN - COMMERCE PAGE
+   Additional styles for commerce.html
+   Base styles from: premium-design.css + main.css
    ======================================== */
-
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-body {
-  font-family: 'Raleway', sans-serif;
-  color: #2c3e50;
-  background: #fafafa;
-  overflow-x: hidden;
-  line-height: 1.6;
-}
 
 /* ========================================
-   CONTAINER & SECTION - BASE LAYOUT
+   COLLECTION SECTION
    ======================================== */
 
-.container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 2rem;
-  width: 100%;
-}
-
-.section {
+.collection-section {
   padding: 4rem 0;
-  width: 100%;
-}
-
-.section-header {
-  text-align: center;
-  margin-bottom: 3rem;
-}
-
-.section-title {
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #2c3e50;
-  margin-bottom: 1rem;
-  font-family: 'Playfair Display', serif;
-}
-
-.section-subtitle {
-  font-size: 1.1rem;
-  color: #666;
-  max-width: 700px;
-  margin: 0 auto;
-  line-height: 1.7;
-}
-
-.section-line {
-  width: 80px;
-  height: 4px;
-  background: linear-gradient(90deg, #e67e22, #f39c12);
-  margin: 1rem auto;
-  border-radius: 2px;
-}
-
-/* ========================================
-   PREMIUM DESIGN SYSTEM - INNER GARDEN
-   Ultra-Modern UI Components
-   ======================================== */
-
-/* ========================================
-   HEADER - PREMIUM DESIGN
-   ======================================== */
-
-.catalog-header {
-  background: rgba(255, 255, 255, 0.98);
-  backdrop-filter: blur(20px) saturate(180%);
-  border-bottom: 1px solid rgba(230, 126, 34, 0.08);
-  box-shadow:
-    0 1px 3px rgba(0, 0, 0, 0.02),
-    0 4px 12px rgba(0, 0, 0, 0.04);
-  position: sticky;
-  top: 0;
-  z-index: 1000;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-}
-
-.catalog-header.scrolled {
-  box-shadow:
-    0 2px 8px rgba(0, 0, 0, 0.06),
-    0 8px 24px rgba(0, 0, 0, 0.08);
-}
-
-.header-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 1.25rem 2rem;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  gap: 2rem;
-}
-
-.artist-logo {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #1a2332;
-  text-decoration: none;
-  letter-spacing: -0.02em;
-  transition: all 0.3s ease;
-  position: relative;
-}
-
-.artist-logo::after {
-  content: '';
-  position: absolute;
-  bottom: -4px;
-  left: 0;
-  width: 0;
-  height: 2px;
-  background: linear-gradient(90deg, #e67e22, #f39c12);
-  transition: width 0.3s ease;
-}
-
-.artist-logo:hover::after {
-  width: 100%;
-}
-
-.artist-logo:hover {
-  color: #e67e22;
-  transform: translateY(-1px);
-}
-
-/* Navigation */
-.header-nav {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-}
-
-.nav-item {
-  padding: 0.75rem 1.25rem;
-  font-size: 0.95rem;
-  font-weight: 500;
-  color: #555;
-  text-decoration: none;
-  border-radius: 24px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  letter-spacing: 0.01em;
-  position: relative;
-}
-
-.nav-item:hover {
-  color: #e67e22;
-  background: rgba(230, 126, 34, 0.06);
-  transform: translateY(-1px);
-}
-
-.nav-item.special {
-  background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
-  color: white;
-  font-weight: 600;
-  box-shadow: 0 4px 12px rgba(230, 126, 34, 0.25);
-}
-
-.nav-item.special:hover {
-  background: linear-gradient(135deg, #d35400 0%, #e67e22 100%);
-  box-shadow: 0 6px 18px rgba(230, 126, 34, 0.35);
-  transform: translateY(-2px);
-}
-
-/* Language Selector */
-.language-selector {
-  position: relative;
-}
-
-.lang-toggle {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.75rem 1rem;
-  background: white;
-  border: 1.5px solid rgba(0, 0, 0, 0.08);
-  border-radius: 24px;
-  font-size: 0.9rem;
-  font-weight: 600;
-  color: #555;
-  cursor: pointer;
-  transition: all 0.3s ease;
-}
-
-.lang-toggle:hover {
-  border-color: #e67e22;
-  background: rgba(230, 126, 34, 0.04);
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
-}
-
-.lang-icon {
-  font-size: 1.1rem;
-}
-
-.lang-dropdown {
-  position: absolute;
-  top: calc(100% + 0.75rem);
-  right: 0;
-  min-width: 200px;
-  background: white;
-  border-radius: 16px;
-  box-shadow:
-    0 4px 12px rgba(0, 0, 0, 0.08),
-    0 12px 32px rgba(0, 0, 0, 0.12);
-  opacity: 0;
-  visibility: hidden;
-  transform: translateY(-10px);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  overflow: hidden;
-  border: 1px solid rgba(0, 0, 0, 0.06);
-}
-
-.lang-dropdown.active {
-  opacity: 1;
-  visibility: visible;
-  transform: translateY(0);
-}
-
-.lang-option {
-  width: 100%;
-  padding: 1rem 1.25rem;
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  background: none;
-  border: none;
-  font-size: 0.95rem;
-  color: #555;
-  cursor: pointer;
-  transition: all 0.2s ease;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.04);
-}
-
-.lang-option:last-child {
-  border-bottom: none;
-}
-
-.lang-option:hover {
-  background: rgba(230, 126, 34, 0.06);
-  color: #e67e22;
-}
-
-.lang-option.active {
-  background: linear-gradient(135deg, rgba(230, 126, 34, 0.1) 0%, rgba(243, 156, 18, 0.08) 100%);
-  color: #e67e22;
-  font-weight: 600;
-}
-
-/* ========================================
-   HERO BANNER - ELEGANT DESIGN
-   ======================================== */
-
-.hero-banner {
-  background:
-    linear-gradient(135deg,
-      rgba(246, 248, 251, 1) 0%,
-      rgba(255, 255, 255, 1) 50%,
-      rgba(254, 250, 246, 1) 100%);
-  padding: 5rem 2rem;
-  text-align: center;
-  position: relative;
-  overflow: hidden;
-}
-
-.hero-banner::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background:
-    radial-gradient(circle at 20% 50%, rgba(230, 126, 34, 0.03) 0%, transparent 50%),
-    radial-gradient(circle at 80% 80%, rgba(102, 126, 234, 0.02) 0%, transparent 50%);
-  pointer-events: none;
-}
-
-.hero-banner h1 {
-  font-family: 'Playfair Display', serif;
-  font-size: 3.5rem;
-  font-weight: 700;
-  color: #1a2332;
-  margin-bottom: 1.25rem;
-  letter-spacing: -0.03em;
-  line-height: 1.2;
-  position: relative;
-  z-index: 1;
-}
-
-.hero-banner p {
-  font-size: 1.25rem;
-  color: #666;
-  max-width: 700px;
-  margin: 0 auto 3rem;
-  line-height: 1.7;
-  font-weight: 400;
-  letter-spacing: 0.01em;
-  position: relative;
-  z-index: 1;
-}
-
-/* Collection Links */
-.collection-links {
-  display: flex;
-  gap: 1.5rem;
-  justify-content: center;
-  align-items: center;
-  flex-wrap: wrap;
-  position: relative;
-  z-index: 1;
-}
-
-.collection-link {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.75rem;
-  padding: 1.25rem 2.5rem;
-  background: #e67e22;
-  color: white;
-  text-decoration: none;
-  border-radius: 32px;
-  font-size: 1.05rem;
-  font-weight: 600;
-  letter-spacing: 0.02em;
-  box-shadow:
-    0 4px 12px rgba(230, 126, 34, 0.25),
-    0 8px 24px rgba(230, 126, 34, 0.15);
-  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
-  border: 2px solid transparent;
-}
-
-.collection-link i {
-  font-size: 1.1rem;
-}
-
-.collection-link:hover {
-  background: linear-gradient(135deg, #d35400 0%, #e67e22 100%);
-  transform: translateY(-4px) scale(1.02);
-  box-shadow:
-    0 8px 20px rgba(230, 126, 34, 0.35),
-    0 16px 40px rgba(230, 126, 34, 0.2);
-  border-color: rgba(255, 255, 255, 0.3);
-}
-
-.collection-link:active {
-  transform: translateY(-2px) scale(1);
-}
-
-/* ========================================
-   FOOTER - PREMIUM DESIGN
-   ======================================== */
-
-.simple-footer {
-  background:
-    linear-gradient(135deg,
-      #1a2332 0%,
-      #2c3e50 100%);
-  color: rgba(255, 255, 255, 0.85);
-  padding: 4rem 2rem 2rem;
-  position: relative;
-  overflow: hidden;
-}
-
-.simple-footer::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 1px;
-  background: linear-gradient(90deg,
-    transparent 0%,
-    rgba(230, 126, 34, 0.5) 50%,
-    transparent 100%);
-}
-
-.footer-container {
-  max-width: 1400px;
-  margin: 0 auto;
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-  gap: 3rem;
-  margin-bottom: 3rem;
-}
-
-.footer-section h3 {
-  color: white;
-  font-size: 1.15rem;
-  font-weight: 600;
-  margin-bottom: 1.25rem;
-  letter-spacing: 0.02em;
-  position: relative;
-  display: inline-block;
-}
-
-.footer-section h3::after {
-  content: '';
-  position: absolute;
-  bottom: -6px;
-  left: 0;
-  width: 40px;
-  height: 2px;
-  background: linear-gradient(90deg, #e67e22, #f39c12);
-}
-
-.footer-section p,
-.footer-section a {
-  color: rgba(255, 255, 255, 0.75);
-  line-height: 1.8;
-  font-size: 0.95rem;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  display: block;
-  margin-bottom: 0.75rem;
-}
-
-.footer-section a:hover {
-  color: #f39c12;
-  transform: translateX(4px);
-}
-
-.footer-bottom {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding-top: 2rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
-  text-align: center;
-  font-size: 0.9rem;
-  color: rgba(255, 255, 255, 0.6);
-}
-
-/* ========================================
-   RESPONSIVE - MOBILE PERFECT
-   ======================================== */
-
-@media (max-width: 768px) {
-  .header-container {
-    padding: 1rem 1.25rem;
-  }
-
-  .artist-logo {
-    font-size: 1.3rem;
-  }
-
-  .hero-banner {
-    padding: 3.5rem 1.5rem;
-  }
-
-  .hero-banner h1 {
-    font-size: 2.25rem;
-  }
-
-  .hero-banner p {
-    font-size: 1.05rem;
-    margin-bottom: 2rem;
-  }
-
-  .collection-links {
-    flex-direction: column;
-    width: 100%;
-  }
-
-  .collection-link {
-    width: 100%;
-    justify-content: center;
-    padding: 1.1rem 2rem;
-    font-size: 1rem;
-  }
-
-  .footer-container {
-    grid-template-columns: 1fr;
-    gap: 2.5rem;
-    text-align: center;
-  }
-
-  .footer-section h3::after {
-    left: 50%;
-    transform: translateX(-50%);
-  }
-}
-
-@media (max-width: 480px) {
-  .hero-banner h1 {
-    font-size: 1.85rem;
-  }
-
-  .hero-banner p {
-    font-size: 1rem;
-  }
-
-  .collection-link {
-    padding: 1rem 1.75rem;
-    font-size: 0.95rem;
-  }
-}
-/* ========================================
-   INNER GARDEN - Main Styles
-   Clean & Professional Design
-   ======================================== */
-
-/* ========================================
-   GALLERY GRID - Perfect Layout
-   ======================================== */
-
-.gallery-grid,
-.artworks-grid,
-.collection-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2.5rem;
-  padding: 2rem 0;
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-/* ========================================
-   ARTWORK CARDS - Clean Design
-   ======================================== */
-
-.artwork-card {
-  background: white;
-  border-radius: 12px;
-  overflow: hidden;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  height: 100%;
-}
-
-.artwork-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
-}
-
-/* ========================================
-   ARTWORK IMAGES - Full Display
-   ======================================== */
-
-.artwork-image,
-.artwork-image-container {
-  position: relative;
-  width: 100%;
-  min-height: 500px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
   background: #fafafa;
-  padding: 0;
-  margin-bottom: 1rem;
-  overflow: hidden !important;
 }
-
-.artwork-image img,
-.artwork-image-container img {
-  width: 100%;
-  height: auto;
-  max-width: 100%;
-  object-fit: contain;
-  object-position: center center;
-  display: block;
-  border-radius: 0;
-  box-shadow: none;
-  transition: all 0.3s ease;
-  margin: 0;
-  padding: 0;
-}
-
-.artwork-card:hover .artwork-image img,
-.artwork-card:hover .artwork-image-container img {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(230, 126, 34, 0.15);
-}
-
-/* ========================================
-   ARTWORK OVERLAY
-   ======================================== */
-
-.artwork-overlay {
-  position: absolute;
-  bottom: 1rem;
-  left: 0;
-  right: 0;
-  padding: 2rem 1.5rem;
-  background: linear-gradient(to top, rgba(0, 0, 0, 0.9) 0%, rgba(0, 0, 0, 0.7) 50%, transparent 100%);
-  color: white;
-  opacity: 0;
-  visibility: hidden;
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  z-index: 10;
-  backdrop-filter: blur(8px);
-  border-radius: 0 0 8px 8px;
-}
-
-.artwork-card:hover .artwork-overlay {
-  opacity: 1;
-  visibility: visible;
-}
-
-.artwork-price {
-  font-size: 1.75rem;
-  font-weight: 700;
-  color: #f39c12;
-  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
-  letter-spacing: -0.02em;
-}
-
-.artwork-details,
-.artwork-meta {
-  font-size: 0.95rem;
-  opacity: 0.95;
-  line-height: 1.6;
-  color: rgba(255, 255, 255, 0.95);
-}
-
-/* ========================================
-   ARTWORK INFO
-   ======================================== */
-
-.artwork-info {
-  padding: 1.5rem;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-  background: white;
-}
-
-.artwork-info h3,
-.artwork-title {
-  font-size: 1.35rem;
-  font-weight: 600;
-  color: #2c3e50;
-  margin: 0;
-  line-height: 1.3;
-  font-family: 'Playfair Display', serif;
-  transition: color 0.3s ease;
-}
-
-.artwork-card:hover .artwork-info h3,
-.artwork-card:hover .artwork-title {
-  color: #e67e22;
-}
-
-.artwork-info p,
-.artwork-description {
-  font-size: 0.95rem;
-  color: #666;
-  line-height: 1.6;
-  margin: 0;
-}
-
-/* ========================================
-   ARTWORK STATUS BADGE
-   ======================================== */
-
-.artwork-status {
-  position: absolute;
-  top: 1rem;
-  right: 1rem;
-  background: rgba(46, 204, 113, 0.95);
-  color: white;
-  padding: 0.5rem 1rem;
-  border-radius: 24px;
-  font-size: 0.75rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 1px;
-  z-index: 20;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 12px rgba(46, 204, 113, 0.3);
-}
-
-.artwork-status.sold {
-  background: rgba(231, 76, 60, 0.95);
-  box-shadow: 0 4px 12px rgba(231, 76, 60, 0.3);
-}
-
-.artwork-status.reserved {
-  background: rgba(243, 156, 18, 0.95);
-  box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
-}
-
-/* ========================================
-   COLLECTION FILTERS
-   ======================================== */
 
 .collection-filters {
   display: flex;
@@ -714,11 +31,16 @@ body {
   outline: none;
   transition: all 0.3s ease;
   font-family: 'Raleway', sans-serif;
+  background: white;
 }
 
 .collection-search:focus {
   border-color: #e67e22;
   box-shadow: 0 0 0 4px rgba(230, 126, 34, 0.1);
+}
+
+.collection-search::placeholder {
+  color: #999;
 }
 
 .filter-buttons {
@@ -756,7 +78,21 @@ body {
 }
 
 /* ========================================
-   COLLECTION ITEMS - Commerce & Home Pages
+   COLLECTION GRID - Same as gallery-grid
+   ======================================== */
+
+.collection-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2.5rem;
+  padding: 2rem 0;
+  width: 100%;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* ========================================
+   COLLECTION ITEMS - Same style as artwork-card
    ======================================== */
 
 .collection-item {
@@ -773,6 +109,20 @@ body {
 .collection-item:hover {
   transform: translateY(-8px);
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+/* Collection image container - same as artwork-image */
+.collection-item > img {
+  width: 100%;
+  height: auto;
+  min-height: 500px;
+  object-fit: contain;
+  object-position: center center;
+  display: block;
+  background: #fafafa;
+  padding: 0;
+  margin: 0;
+  transition: all 0.3s ease;
 }
 
 .collection-image {
@@ -792,6 +142,7 @@ body {
   transform: translateY(-4px);
 }
 
+/* Collection body - same as artwork-info */
 .collection-body {
   padding: 1.5rem;
   flex: 1;
@@ -834,68 +185,30 @@ body {
    ======================================== */
 
 @media (max-width: 768px) {
-  .gallery-grid,
-  .artworks-grid,
   .collection-grid {
     grid-template-columns: 1fr;
     gap: 2rem;
     padding: 1.5rem 1rem;
   }
 
-  .artwork-image,
-  .artwork-image-container {
-    min-height: 400px;
-    padding: 0;
-  }
-
-  .collection-image {
+  .collection-image,
+  .collection-item > img {
     min-height: 400px;
   }
 
-  /* Show overlay always on mobile */
-  .artwork-overlay {
-    opacity: 1;
-    visibility: visible;
-    background: linear-gradient(to top, rgba(0, 0, 0, 0.92) 0%, rgba(0, 0, 0, 0.75) 40%, transparent 100%);
-  }
-
-  .artwork-price {
-    font-size: 1.5rem;
-  }
-
-  .artwork-info h3,
-  .artwork-title {
-    font-size: 1.2rem;
+  .collection-search {
+    max-width: 100%;
   }
 }
 
 @media (max-width: 480px) {
-  .gallery-grid,
-  .artworks-grid,
   .collection-grid {
     gap: 1.5rem;
   }
 
-  .artwork-image,
-  .artwork-image-container {
+  .collection-image,
+  .collection-item > img {
     min-height: 350px;
-    padding: 0;
-  }
-
-  .collection-image {
-    min-height: 350px;
-  }
-
-  .artwork-overlay {
-    padding: 1.5rem 1rem;
-  }
-
-  .artwork-price {
-    font-size: 1.35rem;
-  }
-
-  .artwork-card {
-    border-radius: 8px;
   }
 }
 
@@ -904,19 +217,13 @@ body {
    ======================================== */
 
 @media (min-width: 769px) and (max-width: 1024px) {
-  .gallery-grid,
-  .artworks-grid,
   .collection-grid {
     grid-template-columns: repeat(2, 1fr);
     gap: 2.25rem;
   }
 
-  .artwork-image,
-  .artwork-image-container {
-    min-height: 450px;
-  }
-
-  .collection-image {
+  .collection-image,
+  .collection-item > img {
     min-height: 450px;
   }
 }
@@ -926,12 +233,8 @@ body {
    ======================================== */
 
 @media (min-width: 1025px) and (max-width: 1399px) {
-  .artwork-image,
-  .artwork-image-container {
-    min-height: 480px;
-  }
-
-  .collection-image {
+  .collection-image,
+  .collection-item > img {
     min-height: 480px;
   }
 }
@@ -941,12 +244,8 @@ body {
    ======================================== */
 
 @media (min-width: 1400px) {
-  .artwork-image,
-  .artwork-image-container {
-    min-height: 550px;
-  }
-
-  .collection-image {
+  .collection-image,
+  .collection-item > img {
     min-height: 550px;
   }
 }
