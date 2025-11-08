@@ -647,6 +647,80 @@ body {
 }
 
 /* ========================================
+   COLLECTION ITEMS - Commerce & Home Pages
+   ======================================== */
+
+.collection-item {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+}
+
+.collection-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
+}
+
+.collection-image {
+  width: 100%;
+  height: auto;
+  min-height: 500px;
+  object-fit: contain;
+  object-position: center center;
+  display: block;
+  background: #fafafa;
+  padding: 0;
+  margin: 0;
+  transition: all 0.3s ease;
+}
+
+.collection-item:hover .collection-image {
+  transform: translateY(-4px);
+}
+
+.collection-body {
+  padding: 1.5rem;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  background: white;
+}
+
+.collection-body h3 {
+  font-size: 1.35rem;
+  font-weight: 600;
+  color: #2c3e50;
+  margin: 0;
+  line-height: 1.3;
+  font-family: 'Playfair Display', serif;
+  transition: color 0.3s ease;
+}
+
+.collection-item:hover .collection-body h3 {
+  color: #e67e22;
+}
+
+.collection-body p {
+  font-size: 0.95rem;
+  color: #666;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.collection-meta {
+  font-size: 0.85rem;
+  color: #999;
+  font-weight: 500;
+  margin-top: 0.5rem;
+}
+
+/* ========================================
    RESPONSIVE - Mobile
    ======================================== */
 
@@ -662,7 +736,11 @@ body {
   .artwork-image,
   .artwork-image-container {
     min-height: 400px;
-    padding: 1.5rem;
+    padding: 0;
+  }
+
+  .collection-image {
+    min-height: 400px;
   }
 
   /* Show overlay always on mobile */
@@ -692,7 +770,11 @@ body {
   .artwork-image,
   .artwork-image-container {
     min-height: 350px;
-    padding: 1rem;
+    padding: 0;
+  }
+
+  .collection-image {
+    min-height: 350px;
   }
 
   .artwork-overlay {
@@ -724,6 +806,10 @@ body {
   .artwork-image-container {
     min-height: 450px;
   }
+
+  .collection-image {
+    min-height: 450px;
+  }
 }
 
 /* ========================================
@@ -735,6 +821,10 @@ body {
   .artwork-image-container {
     min-height: 480px;
   }
+
+  .collection-image {
+    min-height: 480px;
+  }
 }
 
 /* ========================================
@@ -744,6 +834,10 @@ body {
 @media (min-width: 1400px) {
   .artwork-image,
   .artwork-image-container {
+    min-height: 550px;
+  }
+
+  .collection-image {
     min-height: 550px;
   }
 }
