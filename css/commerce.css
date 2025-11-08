@@ -1,10 +1,5 @@
 /* ========================================
-   INNER GARDEN - COMMERCE PAGE
-   Complete Professional Styles
-   ======================================== */
-
-/* ========================================
-   BASE & RESET
+   INNER GARDEN - COMMERCE
    ======================================== */
 
 * {
@@ -13,38 +8,11 @@
   box-sizing: border-box;
 }
 
-html {
-  scroll-behavior: smooth;
-}
-
 body {
-  font-family: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  line-height: 1.6;
+  font-family: 'Raleway', sans-serif;
   color: #2c3e50;
   background: #fafafa;
   overflow-x: hidden;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-img {
-  max-width: 100%;
-  height: auto;
-  display: block;
-}
-
-a {
-  text-decoration: none;
-  color: inherit;
-}
-
-button {
-  font-family: inherit;
-  cursor: pointer;
-}
-
-.no-scroll {
-  overflow: hidden;
 }
 
 /* ========================================
@@ -499,7 +467,7 @@ button {
 .artworks-grid,
 .collection-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  grid-template-columns: repeat(3, 1fr);
   gap: 2.5rem;
   padding: 2rem 0;
   width: 100%;
@@ -761,13 +729,6 @@ button {
    ======================================== */
 
 @media (min-width: 1025px) and (max-width: 1399px) {
-  .gallery-grid,
-  .artworks-grid,
-  .collection-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2.25rem;
-  }
-
   .artwork-image,
   .artwork-image-container {
     min-height: 480px;
@@ -779,15 +740,8 @@ button {
    ======================================== */
 
 @media (min-width: 1400px) {
-  .gallery-grid,
-  .artworks-grid,
-  .collection-grid {
-    grid-template-columns: repeat(3, 1fr);
-    gap: 2.5rem;
-  }
-
   .artwork-image,
   .artwork-image-container {
-    min-height: 500px;
+    min-height: 550px;
   }
 }
