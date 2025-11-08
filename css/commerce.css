@@ -1,4 +1,53 @@
 /* ========================================
+   INNER GARDEN - COMMERCE PAGE
+   Complete Professional Styles
+   ======================================== */
+
+/* ========================================
+   BASE & RESET
+   ======================================== */
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family: 'Raleway', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  line-height: 1.6;
+  color: #2c3e50;
+  background: #fafafa;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  font-family: inherit;
+  cursor: pointer;
+}
+
+.no-scroll {
+  overflow: hidden;
+}
+
+/* ========================================
    PREMIUM DESIGN SYSTEM - INNER GARDEN
    Ultra-Modern UI Components
    ======================================== */
@@ -733,379 +782,12 @@
   .gallery-grid,
   .artworks-grid,
   .collection-grid {
-    grid-template-columns: repeat(4, 1fr);
+    grid-template-columns: repeat(3, 1fr);
     gap: 2.5rem;
   }
 
   .artwork-image,
   .artwork-image-container {
     min-height: 500px;
-  }
-}
-
-/* ========================================
-   SECTIONS - UNIVERSAL STYLES
-   ======================================== */
-
-.section {
-  padding: 5rem 0;
-}
-
-.container {
-  max-width: 1400px;
-  margin: 0 auto;
-  padding: 0 2rem;
-}
-
-.section-header {
-  text-align: center;
-  margin-bottom: 3.5rem;
-}
-
-.section-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 2.75rem;
-  font-weight: 700;
-  color: #1a2332;
-  margin-bottom: 1rem;
-  letter-spacing: -0.02em;
-}
-
-.section-line {
-  width: 80px;
-  height: 3px;
-  background: linear-gradient(90deg, #e67e22, #f39c12);
-  margin: 1rem auto;
-  border-radius: 2px;
-}
-
-.section-subtitle {
-  font-size: 1.15rem;
-  color: #666;
-  max-width: 700px;
-  margin: 0 auto;
-  line-height: 1.7;
-}
-
-/* ========================================
-   COLLECTION FILTERS
-   ======================================== */
-
-.collection-filters {
-  display: flex;
-  flex-direction: column;
-  gap: 1.5rem;
-  margin-bottom: 3rem;
-  align-items: center;
-}
-
-.collection-search {
-  width: 100%;
-  max-width: 500px;
-  padding: 1rem 1.5rem;
-  border: 2px solid #e8e8e8;
-  border-radius: 50px;
-  font-size: 1rem;
-  font-family: 'Raleway', sans-serif;
-  transition: all 0.3s ease;
-}
-
-.collection-search:focus {
-  outline: none;
-  border-color: #e67e22;
-  box-shadow: 0 4px 20px rgba(230, 126, 34, 0.15);
-}
-
-.filter-buttons {
-  display: flex;
-  gap: 1rem;
-  flex-wrap: wrap;
-  justify-content: center;
-}
-
-.collection-filter-btn {
-  padding: 0.75rem 1.5rem;
-  background: white;
-  border: 2px solid #e8e8e8;
-  border-radius: 30px;
-  font-size: 0.95rem;
-  font-weight: 600;
-  color: #555;
-  cursor: pointer;
-  transition: all 0.3s ease;
-  font-family: 'Raleway', sans-serif;
-}
-
-.collection-filter-btn:hover {
-  border-color: #e67e22;
-  color: #e67e22;
-  transform: translateY(-2px);
-}
-
-.collection-filter-btn.active {
-  background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
-  border-color: #e67e22;
-  color: white;
-  box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
-}
-
-/* ========================================
-   MAP SECTION
-   ======================================== */
-
-.harmony-map-section {
-  background: #ffffff;
-}
-
-.map-container {
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-.map-wrapper {
-  display: grid;
-  grid-template-columns: 1fr 300px;
-  gap: 2rem;
-  background: white;
-  border-radius: 16px;
-  padding: 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-}
-
-.world-map {
-  width: 100%;
-  min-height: 500px;
-  background: #f8f9fa;
-  border-radius: 12px;
-}
-
-.map-legend {
-  background: #fafafa;
-  border-radius: 12px;
-  padding: 1.5rem;
-}
-
-.map-legend-title {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #1a2332;
-  margin-bottom: 1rem;
-}
-
-.map-legend-list {
-  list-style: none;
-  display: flex;
-  flex-direction: column;
-  gap: 0.75rem;
-}
-
-.map-legend-list li {
-  padding: 0.5rem;
-  font-size: 0.9rem;
-  color: #666;
-  border-left: 3px solid #e67e22;
-  padding-left: 0.75rem;
-}
-
-/* ========================================
-   QUIZ SECTION
-   ======================================== */
-
-.quiz-section {
-  background: #fafafa;
-}
-
-.quiz-container {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-  gap: 2rem;
-  margin-bottom: 3rem;
-}
-
-.quiz-option {
-  background: white;
-  border: 2px solid #e8e8e8;
-  border-radius: 16px;
-  padding: 2rem;
-  cursor: pointer;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  text-align: left;
-  position: relative;
-  overflow: hidden;
-}
-
-.quiz-option::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 0;
-  height: 100%;
-  background: linear-gradient(135deg, rgba(230, 126, 34, 0.05) 0%, rgba(243, 156, 18, 0.05) 100%);
-  transition: width 0.3s ease;
-}
-
-.quiz-option:hover {
-  border-color: #e67e22;
-  transform: translateY(-5px);
-  box-shadow: 0 12px 35px rgba(230, 126, 34, 0.15);
-}
-
-.quiz-option:hover::before {
-  width: 100%;
-}
-
-.quiz-option h3 {
-  font-family: 'Playfair Display', serif;
-  font-size: 1.6rem;
-  font-weight: 600;
-  color: #1a2332;
-  margin-bottom: 0.75rem;
-  position: relative;
-  z-index: 2;
-}
-
-.quiz-option p {
-  font-size: 1rem;
-  color: #666;
-  line-height: 1.6;
-  margin-bottom: 1.25rem;
-  position: relative;
-  z-index: 2;
-}
-
-.quiz-tags {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-  list-style: none;
-  position: relative;
-  z-index: 2;
-}
-
-.quiz-tags li {
-  font-size: 0.85rem;
-  padding: 0.4rem 0.9rem;
-  background: rgba(230, 126, 34, 0.1);
-  color: #e67e22;
-  border-radius: 20px;
-  font-weight: 500;
-}
-
-.quiz-results-panel {
-  background: white;
-  border-radius: 20px;
-  padding: 2.5rem;
-  margin-top: 2rem;
-  box-shadow: 0 8px 30px rgba(0, 0, 0, 0.06);
-}
-
-/* ========================================
-   ARTWORKS SECTION
-   ======================================== */
-
-.artworks-section {
-  background: #ffffff;
-}
-
-.artwork-buttons {
-  display: flex;
-  gap: 0.75rem;
-  margin-top: auto;
-}
-
-.btn {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.5rem;
-  padding: 0.875rem 1.5rem;
-  font-size: 0.95rem;
-  font-weight: 600;
-  text-decoration: none;
-  border-radius: 50px;
-  transition: all 0.3s ease;
-  border: none;
-  cursor: pointer;
-  font-family: 'Raleway', sans-serif;
-}
-
-.btn-primary {
-  background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
-  color: white;
-  box-shadow: 0 4px 15px rgba(230, 126, 34, 0.25);
-}
-
-.btn-primary:hover {
-  background: linear-gradient(135deg, #d35400 0%, #e67e22 100%);
-  box-shadow: 0 6px 20px rgba(230, 126, 34, 0.35);
-  transform: translateY(-2px);
-}
-
-.btn-outline {
-  background: white;
-  color: #e67e22;
-  border: 2px solid #e67e22;
-}
-
-.btn-outline:hover {
-  background: #e67e22;
-  color: white;
-  transform: translateY(-2px);
-}
-
-/* ========================================
-   RESPONSIVE
-   ======================================== */
-
-@media (max-width: 1024px) {
-  .map-wrapper {
-    grid-template-columns: 1fr;
-  }
-  
-  .section-title {
-    font-size: 2.25rem;
-  }
-}
-
-@media (max-width: 768px) {
-  .section {
-    padding: 3rem 0;
-  }
-  
-  .section-title {
-    font-size: 2rem;
-  }
-  
-  .quiz-container {
-    grid-template-columns: 1fr;
-  }
-  
-  .filter-buttons {
-    width: 100%;
-  }
-  
-  .collection-filter-btn {
-    flex: 1;
-    min-width: 120px;
-  }
-}
-
-@media (max-width: 480px) {
-  .section-title {
-    font-size: 1.75rem;
-  }
-  
-  .quiz-option {
-    padding: 1.5rem;
-  }
-  
-  .filter-buttons {
-    flex-direction: column;
-  }
-  
-  .collection-filter-btn {
-    width: 100%;
   }
 }
