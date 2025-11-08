@@ -31,8 +31,8 @@
   <!-- Styles -->
   
   
-  <link rel="stylesheet" href="css/premium-design.css?v=3">
-  <link rel="stylesheet" href="css/main.css?v=3">
+  <link rel="stylesheet" href="css/premium-design.css?v=4">
+  <link rel="stylesheet" href="css/main.css?v=4">
 
   <style>
     /* Simple Catalog Styles - Enhanced matching commerce.html */
@@ -631,92 +631,7 @@
       color: #666;
     }
 
-    /* Gallery Grid */
-    .gallery-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
-      gap: 2.5rem;
-    }
-
-    .artwork-card {
-      background: white;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
-      transition: all 0.4s ease;
-      cursor: pointer;
-    }
-
-    .artwork-card:hover {
-      transform: translateY(-10px);
-      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
-    }
-
-    .artwork-image {
-      position: relative;
-      overflow: hidden;
-      height: 350px;
-    }
-
-    .artwork-image img {
-      width: 100%;
-      height: 100%;
-      object-fit: cover;
-      transition: transform 0.4s ease;
-    }
-
-    .artwork-card:hover .artwork-image img {
-      transform: scale(1.08);
-    }
-
-    .artwork-overlay {
-      position: absolute;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.85) 100%);
-      opacity: 0;
-      transition: opacity 0.4s ease;
-      display: flex;
-      flex-direction: column;
-      justify-content: flex-end;
-      padding: 1.5rem;
-    }
-
-    .artwork-card:hover .artwork-overlay {
-      opacity: 1;
-    }
-
-    .artwork-price {
-      color: var(--color-accent);
-      font-size: 1.3rem;
-      font-weight: 700;
-      margin-bottom: 0.5rem;
-    }
-
-    .artwork-details {
-      color: rgba(255, 255, 255, 0.9);
-      font-size: 0.95rem;
-    }
-
-    .artwork-info {
-      padding: 1.5rem;
-    }
-
-    .artwork-info h3 {
-      font-size: 1.4rem;
-      font-weight: 600;
-      color: var(--color-primary);
-      margin-bottom: 0.5rem;
-      font-family: 'Playfair Display', serif;
-    }
-
-    .artwork-info p {
-      color: #666;
-      font-size: 0.95rem;
-      line-height: 1.6;
-    }
+    /* Gallery styles moved to main.css - all gallery styles now in external CSS */
 
     /* Footer */
     .simple-footer {
@@ -802,10 +717,7 @@
         display: none;
       }
 
-      .gallery-grid {
-        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-        gap: 2rem;
-      }
+      /* gallery-grid styles in main.css */
 
       .collection-links {
         flex-direction: column;
@@ -1003,30 +915,7 @@
         gap: 1.5rem;
       }
 
-      .artwork-card {
-        border-radius: 12px;
-        overflow: hidden;
-        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-      }
-
-      .artwork-image {
-        height: 280px;
-      }
-
-      .artwork-image img {
-        height: 100%;
-        object-fit: cover;
-      }
-
-      .artwork-overlay {
-        opacity: 1;
-        background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
-      }
-
-      .artwork-price {
-        font-size: 1.3rem;
-        font-weight: 700;
-      }
+      /* artwork styles in main.css */
 
       .artwork-details {
         font-size: 0.85rem;
