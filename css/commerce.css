@@ -1,18 +1,9 @@
 /* ========================================
    INNER GARDEN - COMMERCE PAGE
-   Additional styles for commerce.html
-   Base styles from: premium-design.css + main.css
+   Base: premium-design.css + main.css
    ======================================== */
 
-/* ========================================
-   COLLECTION SECTION
-   ======================================== */
-
-.collection-section {
-  padding: 4rem 0;
-  background: #fafafa;
-}
-
+/* Collection filters */
 .collection-filters {
   display: flex;
   flex-direction: column;
@@ -37,10 +28,6 @@
 .collection-search:focus {
   border-color: #e67e22;
   box-shadow: 0 0 0 4px rgba(230, 126, 34, 0.1);
-}
-
-.collection-search::placeholder {
-  color: #999;
 }
 
 .filter-buttons {
@@ -77,24 +64,7 @@
   box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
 }
 
-/* ========================================
-   COLLECTION GRID - Same as gallery-grid
-   ======================================== */
-
-.collection-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 2.5rem;
-  padding: 2rem 0;
-  width: 100%;
-  max-width: 1400px;
-  margin: 0 auto;
-}
-
-/* ========================================
-   COLLECTION ITEMS - Same style as artwork-card
-   ======================================== */
-
+/* Collection items - alias for artwork-card */
 .collection-item {
   background: white;
   border-radius: 12px;
@@ -111,45 +81,23 @@
   box-shadow: 0 12px 40px rgba(0, 0, 0, 0.15);
 }
 
-/* Collection image container - same as artwork-image */
-.collection-item > img {
-  width: 100%;
-  height: auto;
-  min-height: 500px;
-  object-fit: contain;
-  object-position: center center;
-  display: block;
-  background: #fafafa;
-  padding: 0;
-  margin: 0;
-  transition: all 0.3s ease;
-}
-
 .collection-image {
   width: 100%;
   height: auto;
-  min-height: 500px;
   object-fit: contain;
   object-position: center center;
   display: block;
   background: #fafafa;
   padding: 0;
   margin: 0;
-  transition: all 0.3s ease;
 }
 
-.collection-item:hover .collection-image {
-  transform: translateY(-4px);
-}
-
-/* Collection body - same as artwork-info */
 .collection-body {
   padding: 1.5rem;
   flex: 1;
   display: flex;
   flex-direction: column;
   gap: 0.75rem;
-  background: white;
 }
 
 .collection-body h3 {
@@ -177,75 +125,4 @@
   font-size: 0.85rem;
   color: #999;
   font-weight: 500;
-  margin-top: 0.5rem;
-}
-
-/* ========================================
-   RESPONSIVE - Mobile
-   ======================================== */
-
-@media (max-width: 768px) {
-  .collection-grid {
-    grid-template-columns: 1fr;
-    gap: 2rem;
-    padding: 1.5rem 1rem;
-  }
-
-  .collection-image,
-  .collection-item > img {
-    min-height: 400px;
-  }
-
-  .collection-search {
-    max-width: 100%;
-  }
-}
-
-@media (max-width: 480px) {
-  .collection-grid {
-    gap: 1.5rem;
-  }
-
-  .collection-image,
-  .collection-item > img {
-    min-height: 350px;
-  }
-}
-
-/* ========================================
-   RESPONSIVE - Tablet
-   ======================================== */
-
-@media (min-width: 769px) and (max-width: 1024px) {
-  .collection-grid {
-    grid-template-columns: repeat(2, 1fr);
-    gap: 2.25rem;
-  }
-
-  .collection-image,
-  .collection-item > img {
-    min-height: 450px;
-  }
-}
-
-/* ========================================
-   RESPONSIVE - Desktop
-   ======================================== */
-
-@media (min-width: 1025px) and (max-width: 1399px) {
-  .collection-image,
-  .collection-item > img {
-    min-height: 480px;
-  }
-}
-
-/* ========================================
-   RESPONSIVE - Large Desktop
-   ======================================== */
-
-@media (min-width: 1400px) {
-  .collection-image,
-  .collection-item > img {
-    min-height: 550px;
-  }
 }
