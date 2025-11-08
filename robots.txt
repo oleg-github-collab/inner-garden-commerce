@@ -1,0 +1,13 @@
+# Inner Garden Art - Robots.txt
+
+User-agent: *
+Allow: /
+Disallow: /api/
+Disallow: /.env
+Disallow: /node_modules/
+
+# Sitemap
+Sitemap: https://artkaminska.com/sitemap.xml
+
+# Crawl-delay for polite crawling
+Crawl-delay: 1

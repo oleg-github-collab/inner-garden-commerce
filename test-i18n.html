@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Test i18n</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 800px;
+      margin: 50px auto;
+      padding: 20px;
+    }
+    .test-section {
+      margin: 20px 0;
+      padding: 20px;
+      border: 2px solid #ddd;
+      border-radius: 8px;
+    }
+    button {
+      padding: 10px 20px;
+      margin: 5px;
+      cursor: pointer;
+      font-size: 16px;
+    }
+    .active {
+      background: #4CAF50;
+      color: white;
+    }
+    .lang-dropdown {
+      display: none;
+    }
+    .lang-dropdown.active {
+      display: block;
+    }
+  </style>
+</head>
+<body data-page="test">
+
+<h1 data-key="page-title">Тест Локалізації</h1>
+
+<div class="test-section">
+  <h2>Language Selector</h2>
+  <button class="lang-toggle" id="langBtn">
+    <span class="lang-icon">🇺🇦</span>
+    <span class="lang-text">УКР</span>
+  </button>
+  
+  <div class="lang-dropdown" id="langMenu">
+    <button class="lang-option" data-lang="uk">🇺🇦 Українська</button>
+    <button class="lang-option" data-lang="en">🇺🇸 English</button>
+    <button class="lang-option" data-lang="de">🇩🇪 Deutsch</button>
+  </div>
+</div>
+
+<div class="test-section">
+  <h2>Translatable Elements</h2>
+  <p data-key="hero-title">Hero Title</p>
+  <p data-key="hero-subtitle">Hero Subtitle</p>
+  <p data-key="nav-gallery">Navigation Gallery</p>
+</div>
+
+<div class="test-section">
+  <h2>API Test</h2>
+  <button onclick="testAPI()">Test IndexI18n API</button>
+  <pre id="api-result"></pre>
+</div>
+
+<script src="js/simple-i18n.js" defer></script>
+<script>
+  function testAPI() {
+    const result = document.getElementById('api-result');
+    result.textContent = `
+Current Language: ${window.simpleI18n?.getLanguage?.()}
+Translation Test: ${window.simpleI18n?.translate?.('hero-title') ?? 'fallback'}
+API Available: ${window.simpleI18n ? 'YES' : 'NO'}
+    `;
+  }
+  
+  // Auto-test on load
+  setTimeout(testAPI, 1000);
+</script>
+
+</body>
+</html>

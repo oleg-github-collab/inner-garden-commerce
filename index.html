@@ -1,0 +1,2606 @@
+<!DOCTYPE html>
+<html lang="uk" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+
+  <!-- Primary Meta Tags -->
+  <meta name="description" content="Marina Kaminska - Ukrainian abstract artist. Explore unique abstract paintings for business and home spaces. 12 years experience. Worldwide shipping.">
+  <meta name="keywords" content="Marina Kaminska, Марина Камінська, abstract art, Ukrainian artist, modern paintings, art gallery">
+  <meta name="author" content="Marina Kaminska">
+
+  <!-- Open Graph -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://artkaminska.com/">
+  <meta property="og:title" content="Marina Kaminska - Ukrainian Abstract Artist">
+  <meta property="og:description" content="Explore unique abstract paintings by Marina Kaminska. Art for business and home spaces.">
+  <meta property="og:image" content="https://artkaminska.com/assets/images/og-image.jpg">
+
+  <title data-key="page-title">Marina Kaminska - Abstract Art Gallery | Українська Художниця</title>
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/images/apple-touch-icon.png">
+
+  <!-- Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;0,700;1,400&family=Raleway:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+  <!-- Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+
+  <!-- Styles -->
+  
+  
+  <link rel="stylesheet" href="css/premium-design.css">
+  <link rel="stylesheet" href="css/main.css">
+
+  <style>
+    /* Simple Catalog Styles - Enhanced matching commerce.html */
+    :root {
+      --color-primary: #2c3e50;
+      --color-accent: #e67e22;
+      --color-purple: #667eea;
+    }
+
+    body {
+      font-family: 'Raleway', sans-serif;
+      color: #333;
+      background: #fafafa;
+      margin: 0;
+      padding: 0;
+      cursor: none !important;
+    }
+
+    /* Custom Cursor - matching commerce.html style */
+    .cursor-dot {
+      position: fixed;
+      width: 10px;
+      height: 10px;
+      background: var(--color-accent);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.2s ease, height 0.2s ease, background-color 0.2s ease;
+      z-index: 9999999;
+      pointer-events: none;
+      box-shadow: 0 0 15px var(--color-accent), 0 0 30px rgba(230, 126, 34, 0.5);
+      will-change: transform;
+    }
+
+    .cursor-outline {
+      position: fixed;
+      width: 40px;
+      height: 40px;
+      border: 2px solid var(--color-accent);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.3s ease, height 0.3s ease, border-color 0.3s ease;
+      z-index: 9999998;
+      pointer-events: none;
+      box-shadow: 0 0 20px rgba(230, 126, 34, 0.3);
+      will-change: transform;
+    }
+
+    .cursor-dot.hover {
+      width: 16px;
+      height: 16px;
+      background: #764ba2;
+      box-shadow: 0 0 20px #764ba2, 0 0 40px rgba(118, 75, 162, 0.6);
+    }
+
+    .cursor-outline.hover {
+      width: 60px;
+      height: 60px;
+      border-color: #764ba2;
+      box-shadow: 0 0 30px rgba(118, 75, 162, 0.4);
+    }
+
+    * {
+      cursor: none !important;
+    }
+
+    a, button, .artwork-card, input, select, textarea {
+      cursor: none !important;
+    }
+
+    /* Модалки - звичайний курсор */
+    .order-modal *,
+    .order-modal button,
+    .order-modal input,
+    .order-modal select,
+    .order-modal textarea,
+    .modal *,
+    .modal button {
+      cursor: auto !important;
+    }
+
+    /* Collection Links - Same Color as Other Buttons */
+    .collection-link.business,
+    .collection-link.home {
+      background: var(--color-accent) !important;
+      color: white !important;
+      box-shadow: 0 4px 20px rgba(230, 126, 34, 0.3) !important;
+      transition: all 0.3s ease !important;
+    }
+
+    .collection-link.business:hover,
+    .collection-link.home:hover {
+      background: #d35400 !important;
+      transform: translateY(-3px) !important;
+      box-shadow: 0 8px 30px rgba(230, 126, 34, 0.5) !important;
+    }
+
+    /* Prevent any flickering - Override all animations */
+    * {
+      animation-duration: 0s !important;
+      animation-delay: 0s !important;
+    }
+
+    .artwork-card,
+    .gallery-grid,
+    .hero-banner,
+    .catalog-header,
+    body,
+    section {
+      opacity: 1 !important;
+      visibility: visible !important;
+      transform: none !important;
+    }
+
+    /* Disable problematic transitions */
+    .artwork-image img,
+    .artwork-card {
+      transition: transform 0.3s ease, box-shadow 0.3s ease !important;
+    }
+
+    /* ========================================
+       PERFECT IMAGE CONTAINERS - ALL PAGES
+       ======================================== */
+
+    /* Gallery Grid - Perfect Layout */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+      gap: 2rem;
+      padding: 1rem 0;
+    }
+
+    /* Artwork Card - Perfect Container */
+    .artwork-card {
+      background: white;
+      border-radius: 12px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .artwork-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.12);
+    }
+
+    /* Artwork Image Container - Using perfect-images.css */
+
+    /* Artwork Overlay - Always Visible on Mobile */
+    .artwork-overlay {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      padding: 1.5rem;
+      background: linear-gradient(to top, rgba(0, 0, 0, 0.8) 0%, rgba(0, 0, 0, 0.4) 50%, transparent 100%);
+      color: white;
+      opacity: 1;
+      transition: opacity 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .artwork-price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--color-accent);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    .artwork-details {
+      font-size: 0.9rem;
+      opacity: 0.95;
+    }
+
+    /* Artwork Info - Perfect Typography */
+    .artwork-info {
+      padding: 1.5rem;
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .artwork-info h3 {
+      font-size: 1.3rem;
+      font-weight: 600;
+      color: var(--color-primary);
+      margin: 0;
+      line-height: 1.3;
+    }
+
+    .artwork-info p {
+      font-size: 0.95rem;
+      color: var(--color-text-light);
+      line-height: 1.6;
+      margin: 0;
+      flex: 1;
+    }
+
+    /* Order Modal */
+    .order-modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 999999;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      pointer-events: auto;
+    }
+
+    .order-modal * {
+      cursor: auto !important;
+      pointer-events: auto;
+    }
+
+    .order-modal-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.8);
+      backdrop-filter: blur(10px);
+      cursor: pointer !important;
+      pointer-events: auto;
+    }
+
+    .order-modal-content {
+      position: relative;
+      background: white;
+      border-radius: 20px;
+      padding: 3rem;
+      max-width: 600px;
+      width: 90%;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+      animation: modalSlideIn 0.4s ease;
+      z-index: 999999;
+      pointer-events: auto;
+    }
+
+    @keyframes modalSlideIn {
+      from {
+        opacity: 0;
+        transform: translateY(-50px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    .order-modal-close {
+      position: absolute;
+      top: 1.5rem;
+      right: 1.5rem;
+      background: transparent;
+      border: none;
+      font-size: 1.5rem;
+      color: #999;
+      cursor: pointer;
+      transition: color 0.3s ease;
+    }
+
+    .order-modal-close:hover {
+      color: var(--color-accent);
+    }
+
+    .order-modal-header {
+      margin-bottom: 2rem;
+      text-align: center;
+    }
+
+    .order-modal-header h2 {
+      font-size: 2rem;
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 0.5rem;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .order-artwork-title {
+      color: var(--color-accent);
+      font-size: 1.2rem;
+      font-weight: 600;
+    }
+
+    .order-form .form-group {
+      margin-bottom: 1.5rem;
+    }
+
+    .order-form label {
+      display: block;
+      margin-bottom: 0.5rem;
+      color: var(--color-primary);
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .order-form input,
+    .order-form select,
+    .order-form textarea {
+      width: 100%;
+      padding: 0.75rem 1rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 10px;
+      font-size: 1rem;
+      font-family: 'Raleway', sans-serif;
+      transition: border-color 0.3s ease;
+    }
+
+    .order-form input:focus,
+    .order-form select:focus,
+    .order-form textarea:focus {
+      outline: none;
+      border-color: var(--color-accent);
+    }
+
+    .order-price {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1.5rem;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(230, 126, 34, 0.1) 100%);
+      border-radius: 15px;
+      margin-bottom: 2rem;
+      font-size: 1.3rem;
+      font-weight: 700;
+    }
+
+    .price-value {
+      color: var(--color-accent);
+      font-size: 1.8rem;
+    }
+
+    .order-submit-btn {
+      width: 100%;
+      padding: 1rem 2rem;
+      background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
+      color: white;
+      border: none;
+      border-radius: 24px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      box-shadow: 0 10px 24px rgba(230, 126, 34, 0.28);
+    }
+
+    .order-submit-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 14px 30px rgba(230, 126, 34, 0.34);
+    }
+
+    .order-success {
+      text-align: center;
+      padding: 2rem;
+    }
+
+    .order-success h3 {
+      font-size: 1.8rem;
+      color: var(--color-primary);
+      margin-bottom: 1rem;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .order-success p {
+      color: #666;
+      font-size: 1.1rem;
+    }
+
+    /* Frame Options */
+    .frame-options {
+      display: grid;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .frame-option {
+      cursor: pointer;
+    }
+
+    .frame-option input[type="radio"] {
+      display: none;
+    }
+
+    .frame-option-card {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 1rem;
+      border: 2px solid #e0e0e0;
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      background: white;
+    }
+
+    .frame-option input[type="radio"]:checked + .frame-option-card {
+      border-color: var(--color-accent);
+      background: linear-gradient(135deg, rgba(230, 126, 34, 0.05) 0%, rgba(102, 126, 234, 0.05) 100%);
+      box-shadow: 0 4px 15px rgba(230, 126, 34, 0.15);
+    }
+
+    .frame-option-card:hover {
+      border-color: var(--color-purple);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .frame-icon {
+      width: 50px;
+      height: 50px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.1) 0%, rgba(230, 126, 34, 0.1) 100%);
+      border-radius: 10px;
+      font-size: 1.5rem;
+      color: var(--color-accent);
+    }
+
+    .frame-option-text {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .frame-option-text strong {
+      font-size: 1rem;
+      color: var(--color-primary);
+    }
+
+    .frame-option-text span {
+      font-size: 0.85rem;
+      color: #666;
+    }
+
+    .frame-price {
+      font-weight: 700;
+      color: var(--color-accent);
+      font-size: 1.1rem;
+    }
+
+    /* Header */
+    .catalog-header {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.98);
+      backdrop-filter: blur(10px);
+      box-shadow: 0 2px 15px rgba(0, 0, 0, 0.08);
+      z-index: 1000;
+      padding: 1.25rem 0;
+    }
+
+    .header-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      padding: 0 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .artist-logo {
+      font-size: 1.75rem;
+      font-weight: 600;
+      color: var(--color-primary);
+      text-decoration: none;
+      font-family: 'Playfair Display', serif;
+      transition: color 0.3s ease;
+    }
+
+    .artist-logo:hover {
+      color: var(--color-accent);
+    }
+
+    .header-nav {
+      display: flex;
+      gap: 2rem;
+      align-items: center;
+    }
+
+    .nav-item {
+      color: var(--color-primary);
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: color 0.3s ease;
+      position: relative;
+    }
+
+    .nav-item::after {
+      content: '';
+      position: absolute;
+      bottom: -5px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--color-accent);
+      transition: width 0.3s ease;
+    }
+
+    .nav-item:hover::after {
+      width: 100%;
+    }
+
+    .nav-item.special {
+      background-color: var(--color-accent);
+      color: white;
+      padding: 0.75rem 1.5rem;
+      border-radius: 25px;
+      box-shadow: 0 4px 15px rgba(230, 126, 34, 0.3);
+      transition: all 0.3s ease;
+    }
+
+    .nav-item.special::after {
+      display: none;
+    }
+
+    .nav-item.special:hover {
+      background-color: #d87522;
+      transform: translateY(-2px);
+      box-shadow: 0 6px 20px rgba(230, 126, 34, 0.4);
+    }
+
+    /* Language Selector - override ultra-perfect-fixed.css */
+    .language-selector {
+      position: relative;
+      display: flex !important; /* Force display */
+      align-items: center;
+    }
+
+    .lang-dropdown {
+      position: absolute;
+      top: calc(100% + 0.5rem);
+      right: 0;
+      background: white;
+      border-radius: 12px;
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+      padding: 0.5rem;
+      display: none;
+      min-width: 150px;
+      z-index: 1000;
+    }
+
+    .lang-dropdown.active {
+      display: block;
+      animation: fadeIn 0.3s ease;
+    }
+
+    .lang-option {
+      display: flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 0.75rem 1rem;
+      border: none;
+      background: transparent;
+      width: 100%;
+      text-align: left;
+      cursor: pointer;
+      border-radius: 8px;
+      transition: background 0.2s ease;
+      font-size: 0.95rem;
+      color: #333;
+    }
+
+    .lang-option:hover {
+      background: #f5f5f5;
+    }
+
+    .lang-option.active {
+      background: var(--color-accent);
+      color: white;
+    }
+
+    /* Hero Banner */
+    .hero-banner {
+      margin-top: 5rem;
+      padding: 4rem 2rem;
+      text-align: center;
+      background: linear-gradient(135deg, rgba(102, 126, 234, 0.05) 0%, rgba(230, 126, 34, 0.05) 100%);
+    }
+
+    .hero-banner h1 {
+      font-size: clamp(2.5rem, 5vw, 4rem);
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 1rem;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .hero-banner p {
+      font-size: clamp(1.1rem, 2vw, 1.4rem);
+      color: #666;
+      max-width: 700px;
+      margin: 0 auto 2rem;
+      line-height: 1.7;
+    }
+
+    .collection-links {
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+      flex-wrap: wrap;
+      margin-top: 2rem;
+    }
+
+    .collection-link {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.75rem;
+      padding: 1rem 2rem;
+      background: white;
+      color: var(--color-primary);
+      text-decoration: none;
+      border-radius: 30px;
+      font-weight: 600;
+      font-size: 1.05rem;
+      box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .collection-link:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .collection-link.business {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      color: white;
+    }
+
+    .collection-link.home {
+      background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+      color: white;
+    }
+
+    /* Gallery Section */
+    .gallery-section {
+      padding: 4rem 2rem;
+      max-width: 1400px;
+      margin: 0 auto;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-header h2 {
+      font-size: clamp(2rem, 4vw, 2.75rem);
+      font-weight: 700;
+      color: var(--color-primary);
+      margin-bottom: 0.75rem;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .section-header p {
+      font-size: 1.1rem;
+      color: #666;
+    }
+
+    /* Gallery Grid */
+    .gallery-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 2.5rem;
+    }
+
+    .artwork-card {
+      background: white;
+      border-radius: 16px;
+      overflow: hidden;
+      box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+      transition: all 0.4s ease;
+      cursor: pointer;
+    }
+
+    .artwork-card:hover {
+      transform: translateY(-10px);
+      box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+    }
+
+    .artwork-image {
+      position: relative;
+      overflow: hidden;
+      height: 350px;
+    }
+
+    .artwork-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.4s ease;
+    }
+
+    .artwork-card:hover .artwork-image img {
+      transform: scale(1.08);
+    }
+
+    .artwork-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: linear-gradient(to bottom, transparent 50%, rgba(0, 0, 0, 0.85) 100%);
+      opacity: 0;
+      transition: opacity 0.4s ease;
+      display: flex;
+      flex-direction: column;
+      justify-content: flex-end;
+      padding: 1.5rem;
+    }
+
+    .artwork-card:hover .artwork-overlay {
+      opacity: 1;
+    }
+
+    .artwork-price {
+      color: var(--color-accent);
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.5rem;
+    }
+
+    .artwork-details {
+      color: rgba(255, 255, 255, 0.9);
+      font-size: 0.95rem;
+    }
+
+    .artwork-info {
+      padding: 1.5rem;
+    }
+
+    .artwork-info h3 {
+      font-size: 1.4rem;
+      font-weight: 600;
+      color: var(--color-primary);
+      margin-bottom: 0.5rem;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .artwork-info p {
+      color: #666;
+      font-size: 0.95rem;
+      line-height: 1.6;
+    }
+
+    /* Footer */
+    .simple-footer {
+      background: var(--color-primary);
+      color: white;
+      padding: 3rem 2rem 1.5rem;
+      margin-top: 4rem;
+    }
+
+    .footer-container {
+      max-width: 1400px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 3rem;
+      margin-bottom: 2rem;
+    }
+
+    .footer-section h3 {
+      margin-bottom: 1rem;
+      font-size: 1.3rem;
+      font-family: 'Playfair Display', serif;
+    }
+
+    .footer-section p,
+    .footer-section a {
+      color: rgba(255, 255, 255, 0.8);
+      text-decoration: none;
+      line-height: 2;
+      transition: color 0.3s ease;
+      display: block;
+    }
+
+    .footer-section a:hover {
+      color: var(--color-accent);
+    }
+
+    .social-icons {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .social-icon {
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.1);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      font-size: 1.1rem;
+    }
+
+    .social-icon:hover {
+      background: var(--color-accent);
+      transform: translateY(-3px);
+    }
+
+    .footer-bottom {
+      text-align: center;
+      padding-top: 2rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.1);
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* Animations */
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(-10px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    /* Responsive */
+    @media (max-width: 968px) {
+      .header-nav {
+        display: none;
+      }
+
+      .gallery-grid {
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 2rem;
+      }
+
+      .collection-links {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .collection-link {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+      }
+    }
+
+    /* ========================================
+       MOBILE OPTIMIZATION - PERFECT UX
+       ======================================== */
+
+    @media (max-width: 768px) {
+      /* Header - Mobile Optimized */
+      .catalog-header {
+        padding: 0.75rem 0;
+        position: sticky;
+        top: 0;
+        background: rgba(255, 255, 255, 0.98);
+        backdrop-filter: blur(10px);
+        z-index: 1000;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+      }
+
+      .header-container {
+        padding: 0 1rem;
+        position: relative;
+      }
+
+      .artist-logo {
+        font-size: 1.2rem;
+        z-index: 1001;
+      }
+
+      /* Mobile Menu Toggle Button */
+      .mobile-menu-btn {
+        display: block;
+        background: transparent;
+        border: none;
+        padding: 0.5rem;
+        cursor: pointer;
+        z-index: 1001;
+      }
+
+      .mobile-menu-btn span {
+        display: block;
+        width: 25px;
+        height: 2px;
+        background: var(--color-primary);
+        margin: 5px 0;
+        transition: 0.3s;
+      }
+
+      .mobile-menu-btn.active span:nth-child(1) {
+        transform: rotate(-45deg) translate(-5px, 6px);
+      }
+
+      .mobile-menu-btn.active span:nth-child(2) {
+        opacity: 0;
+      }
+
+      .mobile-menu-btn.active span:nth-child(3) {
+        transform: rotate(45deg) translate(-5px, -6px);
+      }
+
+      /* Mobile Navigation */
+      .header-nav {
+        position: fixed;
+        top: 0;
+        left: -100%;
+        width: 80%;
+        max-width: 300px;
+        height: 100vh;
+        background: white;
+        flex-direction: column;
+        padding: 5rem 2rem 2rem;
+        gap: 0;
+        transition: left 0.3s ease;
+        box-shadow: 2px 0 20px rgba(0, 0, 0, 0.1);
+        overflow-y: auto;
+      }
+
+      .header-nav.active {
+        left: 0;
+      }
+
+      .nav-item {
+        width: 100%;
+        text-align: left;
+        padding: 1rem 0;
+        border-bottom: 1px solid #f0f0f0;
+        font-size: 1rem;
+      }
+
+      .nav-item.special {
+        padding: 1rem 0;
+        margin-top: 1rem;
+        background: var(--color-accent);
+        color: white;
+        text-align: center;
+        border-radius: 8px;
+        border: none;
+      }
+
+      /* Mobile Menu Overlay */
+      .mobile-overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 999;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+
+      .mobile-overlay.active {
+        display: block;
+        opacity: 1;
+      }
+
+      /* Language Selector - Mobile */
+      .lang-toggle {
+        padding: 0.4rem 0.8rem;
+        font-size: 0.85rem;
+      }
+
+      .lang-icon {
+        font-size: 1rem;
+      }
+
+      /* Hero Banner - Mobile Perfect */
+      .hero-banner {
+        padding: 3rem 1.5rem 2.5rem;
+        min-height: auto;
+      }
+
+      .hero-banner h1 {
+        font-size: 2rem;
+        margin-bottom: 1rem;
+      }
+
+      .hero-banner p {
+        font-size: 1rem;
+        line-height: 1.6;
+        margin-bottom: 2rem;
+        max-width: 100%;
+      }
+
+      /* Collection Links - Mobile Stack */
+      .collection-links {
+        flex-direction: column;
+        gap: 1rem;
+        width: 100%;
+      }
+
+      .collection-link {
+        width: 100%;
+        max-width: 100%;
+        padding: 1rem 1.5rem;
+        font-size: 1rem;
+        justify-content: center;
+      }
+
+      .collection-link i {
+        font-size: 1.2rem;
+        margin-right: 0.75rem;
+      }
+
+      /* Gallery Section - Mobile Grid */
+      .gallery-section {
+        padding: 2.5rem 1rem;
+      }
+
+      .section-header h2 {
+        font-size: 1.75rem;
+        margin-bottom: 0.75rem;
+      }
+
+      .section-header p {
+        font-size: 0.95rem;
+        margin-bottom: 2rem;
+      }
+
+      /* Gallery Grid - Perfect Mobile Cards */
+      .gallery-grid {
+        grid-template-columns: 1fr;
+        gap: 1.5rem;
+      }
+
+      .artwork-card {
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+      }
+
+      .artwork-image {
+        height: 280px;
+      }
+
+      .artwork-image img {
+        height: 100%;
+        object-fit: cover;
+      }
+
+      .artwork-overlay {
+        opacity: 1;
+        background: linear-gradient(to top, rgba(0,0,0,0.8) 0%, transparent 100%);
+      }
+
+      .artwork-price {
+        font-size: 1.3rem;
+        font-weight: 700;
+      }
+
+      .artwork-details {
+        font-size: 0.85rem;
+      }
+
+      .artwork-info {
+        padding: 1.25rem;
+      }
+
+      .artwork-info h3 {
+        font-size: 1.2rem;
+        margin-bottom: 0.5rem;
+      }
+
+      .artwork-info p {
+        font-size: 0.9rem;
+        line-height: 1.5;
+      }
+
+      /* Footer - Mobile */
+      .simple-footer {
+        padding: 2rem 1rem;
+      }
+
+      .footer-container {
+        flex-direction: column;
+        text-align: center;
+        gap: 2rem;
+      }
+
+      .footer-section {
+        width: 100%;
+      }
+
+      .footer-section h3 {
+        font-size: 1.1rem;
+        margin-bottom: 0.75rem;
+      }
+
+      /* Touch Targets - Minimum 44px */
+      a, button, .lang-option {
+        min-height: 44px;
+        min-width: 44px;
+      }
+
+      /* Cursor - Hide on Mobile */
+      .cursor-dot,
+      .cursor-outline {
+        display: none !important;
+      }
+
+      body * {
+        cursor: auto !important;
+      }
+    }
+
+    /* Small Mobile Devices */
+    @media (max-width: 480px) {
+      .artist-logo {
+        font-size: 1.1rem;
+      }
+
+      .nav-item {
+        font-size: 0.75rem;
+        padding: 0.35rem 0.6rem;
+      }
+
+      .hero-banner h1 {
+        font-size: 1.75rem;
+      }
+
+      .hero-banner p {
+        font-size: 0.95rem;
+      }
+
+      .collection-link {
+        padding: 0.9rem 1.25rem;
+        font-size: 0.95rem;
+      }
+
+      .section-header h2 {
+        font-size: 1.5rem;
+      }
+
+      .artwork-image {
+        height: 240px;
+      }
+    }
+
+    /* Landscape Mobile */
+    @media (max-width: 768px) and (orientation: landscape) {
+      .hero-banner {
+        padding: 2rem 1.5rem;
+      }
+
+      .hero-banner h1 {
+        font-size: 1.75rem;
+      }
+
+      .collection-links {
+        flex-direction: row;
+      }
+
+      .collection-link {
+        width: auto;
+        flex: 1;
+      }
+    }
+  </style>
+</head>
+
+<body data-page="index">
+
+  <!-- Custom Cursor -->
+  <div class="cursor-dot"></div>
+  <div class="cursor-outline"></div>
+
+  <!-- Mobile Menu Overlay -->
+  <div class="mobile-overlay" id="mobileOverlay"></div>
+
+  <!-- Header -->
+  <header class="catalog-header">
+    <div class="header-container">
+      <a href="#" class="artist-logo">Marina Kaminska</a>
+
+      <nav class="header-nav" id="mobileNav">
+        <a href="#gallery" class="nav-item"><span data-key="nav-gallery">Галерея</span></a>
+        <a href="commerce.html" class="nav-item special"><span data-key="nav-business">Для Бізнесу</span></a>
+        <a href="home.html" class="nav-item special"><span data-key="link-home">Для Дому</span></a>
+      </nav>
+
+      <div style="display: flex; align-items: center; gap: 1rem;">
+        <!-- Language Selector -->
+        <div class="language-selector">
+          <button class="lang-toggle" id="langBtn">
+            <span class="lang-icon">🇺🇦</span>
+            <span class="lang-text">УКР</span>
+            <i class="fas fa-chevron-down"></i>
+          </button>
+          <div class="lang-dropdown" id="langMenu">
+            <button class="lang-option active" data-lang="uk">
+              <span class="lang-icon">🇺🇦</span>
+              <span>Українська</span>
+            </button>
+            <button class="lang-option" data-lang="en">
+              <span class="lang-icon">🇺🇸</span>
+              <span>English</span>
+            </button>
+            <button class="lang-option" data-lang="de">
+              <span class="lang-icon">🇩🇪</span>
+              <span>Deutsch</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Mobile Menu Button -->
+        <button class="mobile-menu-btn" id="mobileMenuBtn" style="display: none;">
+          <span></span>
+          <span></span>
+          <span></span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Hero Banner -->
+  <section class="hero-banner">
+    <h1><span data-key="hero-title">Marina Kaminska</span></h1>
+    <p><span data-key="hero-subtitle">Українська художниця абстрактного мистецтва. Створюю унікальні картини для бізнесу та дому.</span></p>
+
+    <div class="collection-links">
+      <a href="commerce.html" class="collection-link business">
+        <i class="fas fa-building"></i>
+        <span data-key="link-business">Мистецтво для Бізнесу</span>
+      </a>
+      <a href="home.html" class="collection-link home">
+        <i class="fas fa-home"></i>
+        <span data-key="link-home">Мистецтво для Дому</span>
+      </a>
+    </div>
+  </section>
+
+  <!-- Gallery Section -->
+  <section class="gallery-section" id="gallery">
+    <div class="section-header">
+      <h2><span data-key="gallery-title">Галерея Робіт</span></h2>
+      <p><span data-key="gallery-subtitle">Досліджуйте мої унікальні абстрактні картини</span></p>
+    </div>
+
+    <div class="gallery-grid">
+      <!-- Artwork 1 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/cjdam66bgapeypc6jbmk.webp" alt="Inner Peace">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,800</div>
+            <div class="artwork-details" data-key="art-1-size">120 × 80 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3 data-key="art-1-title">Внутрішній Спокій</h3>
+          <p data-key="art-1-desc">Плавні переходи кольорів створюють атмосферу глибокого спокою</p>
+        </div>
+      </div>
+
+      <!-- Artwork 2 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/bophmlcfc59t2gbrojcj.webp" alt="Aurora Pulse">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€3,200</div>
+            <div class="artwork-details" data-key="art-2-size">140 × 100 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3 data-key="art-2-title">Пульс Аврори</h3>
+          <p data-key="art-2-desc">Світіння енергії у поєднанні теплих і холодних відтінків</p>
+        </div>
+      </div>
+
+      <!-- Artwork 3 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/ahhjrthahilbpq7vfxtm.webp" alt="Golden Horizon">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,500</div>
+            <div class="artwork-details" data-key="art-3-size">100 × 90 см · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3 data-key="art-3-title">Золотий Горизонт</h3>
+          <p data-key="art-3-desc">Металічні відтінки додають відчуття розкоші та елегантності</p>
+        </div>
+      </div>
+
+      <!-- Artwork 4 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/mxqry3lw3fcgfdfidupg.webp" alt="Zen Garden">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,400</div>
+            <div class="artwork-details" data-key="art-4-size">100 × 90 см · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3 data-key="art-4-title">Дзен Сад</h3>
+          <p data-key="art-4-desc">Мінімалістична композиція для медитативного простору</p>
+        </div>
+      </div>
+
+      <!-- Artwork 5 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/qhvtqjfrokrawpwzgirh.webp" alt="City Breeze">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€3,000</div>
+            <div class="artwork-details" data-key="art-5-size">140 × 100 см · Акрил, текстура</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3 data-key="art-5-title">Міський Бриз</h3>
+          <p data-key="art-5-desc">Динамічна композиція для сучасних інтер'єрів</p>
+        </div>
+      </div>
+
+      <!-- Artwork 6 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/uglnt2onrbzlxz2iqhge.webp" alt="Inner Harmony">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,700</div>
+            <div class="artwork-details" data-key="art-6-size">120 × 80 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3 data-key="art-6-title">Внутрішня Гармонія</h3>
+          <p data-key="art-6-desc">Збалансована палітра для створення затишку</p>
+        </div>
+      </div>
+
+      <!-- Artwork 7 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/bluuydwtjxbgwmgaefge.webp" alt="Autumn Leaf">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,200</div>
+            <div class="artwork-details" data-key="art-7-size">90 × 70 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3 data-key="art-7-title">Осінній Лист</h3>
+          <p data-key="art-7-desc">Теплі червоно-помаранчеві відтінки осені</p>
+        </div>
+      </div>
+
+      <!-- Artwork 8 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/niggq9nlrc8w3qphww4o.webp" alt="Sea Wave">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,900</div>
+            <div class="artwork-details" data-key="art-8-size">130 × 90 см · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3 data-key="art-8-title">Морська Хвиля</h3>
+          <p data-key="art-8-desc">Динаміка океану в абстрактній формі</p>
+        </div>
+      </div>
+
+      <!-- Artwork 9 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/bzrsep3sbbgtsiz5wjkh.webp" alt="Sunbeam">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,600</div>
+            <div class="artwork-details" data-key="art-9-size">110 × 80 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3 data-key="art-9-title">Сонячний Промінь</h3>
+          <p data-key="art-9-desc">Яскраві жовті акценти додають енергії</p>
+        </div>
+      </div>
+
+      <!-- Artwork 10 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/dxdiokbyx0wxwzarmtse.webp" alt="Night City">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,800</div>
+            <div class="artwork-details" data-key="art-10-size">120 × 100 см · Акрил, текстура</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3 data-key="art-10-title">Нічне Місто</h3>
+          <p data-key="art-10-desc">Таємничі сині відтінки міської ночі</p>
+        </div>
+      </div>
+
+      <!-- Artwork 11 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/sulp2oyw2fibpaamjl9g.webp" alt="Spring Blossom">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,500</div>
+            <div class="artwork-details" data-key="art-11-size">100 × 80 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3 data-key="art-11-title">Весняний Цвіт</h3>
+          <p data-key="art-11-desc">Ніжні пастельні тони пробудження природи</p>
+        </div>
+      </div>
+
+      <!-- Artwork 12 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/ybew3hhb3ks8pyvu94of.webp" alt="Earth Energy">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€3,100</div>
+            <div class="artwork-details" data-key="art-12-size">140 × 100 см · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3 data-key="art-12-title">Енергія Землі</h3>
+          <p data-key="art-12-desc">Природні коричнево-зелені відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 13 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/wyjweijtla7vmefwrgyf.webp" alt="Abstract Flow">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,650</div>
+            <div class="artwork-details">115 × 85 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Абстрактний Потік</h3>
+          <p>Гармонійні переходи та текстури</p>
+        </div>
+      </div>
+
+      <!-- Artwork 14 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/spw3eqlbijdqi4hbfcnx.webp" alt="Cosmic Dreams">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€3,400</div>
+            <div class="artwork-details">150 × 110 см · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Космічні Мрії</h3>
+          <p>Глибокі космічні відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 15 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/oqbo7w0mxiregs2vvxcn.webp" alt="Forest Whisper">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,300</div>
+            <div class="artwork-details">95 × 75 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Шепіт Лісу</h3>
+          <p>Природні зелені відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 16 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/goury05ttnng7amufhjy.webp" alt="Sunset Glow">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,750</div>
+            <div class="artwork-details">125 × 90 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Захід Сонця</h3>
+          <p>Теплі червоно-золоті відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 17 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/tn9rnxkjfmxl4dksxwyt.webp" alt="Ocean Depth">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,950</div>
+            <div class="artwork-details">135 × 95 см · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Глибина Океану</h3>
+          <p>Глибокі сині та бірюзові тони</p>
+        </div>
+      </div>
+
+      <!-- Artwork 18 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/jwxdsnghxkb1pcj2x26c.webp" alt="Mountain Echo">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,550</div>
+            <div class="artwork-details">105 × 85 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Гірське Відлуння</h3>
+          <p>Потужні сірі та сині акценти</p>
+        </div>
+      </div>
+
+      <!-- Artwork 19 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/xszts9poc98ivzyqdngb.webp" alt="Fire Dance">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€3,100</div>
+            <div class="artwork-details">140 × 100 см · Акрил, текстура</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Танець Вогню</h3>
+          <p>Енергія червоних та помаранчевих відтінків</p>
+        </div>
+      </div>
+
+      <!-- Artwork 20 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/daacoaqigsrcsew9ig8i.webp" alt="Crystal Vision">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,850</div>
+            <div class="artwork-details">120 × 90 см · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Кришталеве Бачення</h3>
+          <p>Прозорі та чисті кольори</p>
+        </div>
+      </div>
+
+      <!-- Artwork 21 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/qgkpx6exryljzmwvusew.webp" alt="Desert Wind">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,450</div>
+            <div class="artwork-details">110 × 80 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Пустельний Вітер</h3>
+          <p>Теплі пісочні відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 22 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/liknbxqmfzyzpwrzyblq.webp" alt="Northern Light">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€3,300</div>
+            <div class="artwork-details">145 × 105 см · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Північне Сяйво</h3>
+          <p>Магічні зелені та блакитні переливи</p>
+        </div>
+      </div>
+
+      <!-- Artwork 23 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/zhm1lom6bfhurjol45nq.webp" alt="Urban Rhythm">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,700</div>
+            <div class="artwork-details">115 × 95 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Міський Ритм</h3>
+          <p>Динамічні лінії та форми</p>
+        </div>
+      </div>
+
+      <!-- Artwork 24 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/tloiey6kz1ownf9l5ihu.webp" alt="Lavender Field">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,600</div>
+            <div class="artwork-details">100 × 85 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Лавандове Поле</h3>
+          <p>Ніжні фіолетові відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 25 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/yyqy8f0lakulzsl4juw6.webp" alt="Storm Energy">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€3,050</div>
+            <div class="artwork-details">130 × 100 см · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Енергія Бурі</h3>
+          <p>Потужні темні та світлі контрасти</p>
+        </div>
+      </div>
+
+      <!-- Artwork 26 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/wy9anctgppkvao5q12l3.webp" alt="Cherry Blossom">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,400</div>
+            <div class="artwork-details">95 × 80 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Вишневий Цвіт</h3>
+          <p>Ніжні рожеві та білі відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 27 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/ist49orz4ithogsw0vgv.webp" alt="Midnight Sky">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,900</div>
+            <div class="artwork-details">125 × 95 cm · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Північне Небо</h3>
+          <p>Глибокі нічні відтінки зі зірками</p>
+        </div>
+      </div>
+
+      <!-- Artwork 28 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/c6430udjmijfq6pcs5by.webp" alt="Golden Waves">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,750</div>
+            <div class="artwork-details">110 × 90 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Золоті Хвилі</h3>
+          <p>Розкішні золоті та мідні тони</p>
+        </div>
+      </div>
+
+      <!-- Artwork 29 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/m3ktmuszgjkypwaf4kz9.webp" alt="Emerald Dream">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€3,200</div>
+            <div class="artwork-details">140 × 105 см · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Смарагдова Мрія</h3>
+          <p>Насичені зелені відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 30 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/tsxjond5i3jlxpdkd0sd.webp" alt="Rose Garden">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,500</div>
+            <div class="artwork-details">105 × 85 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Трояндовий Сад</h3>
+          <p>Романтичні рожеві та червоні тони</p>
+        </div>
+      </div>
+
+      <!-- Artwork 31 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/ruu3byyrrsnwbubzuzrd.webp" alt="Arctic Ice">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,850</div>
+            <div class="artwork-details">120 × 90 см · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Арктичний Лід</h3>
+          <p>Холодні білі та блакитні відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 32 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/wyh5i7fl5aju3nj6uwtz.webp" alt="Amber Light">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,650</div>
+            <div class="artwork-details">115 × 85 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Бурштинове Світло</h3>
+          <p>Теплі янтарні та медові відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 33 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/juk1cqda7nydltxawxey.webp" alt="Violet Mist">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,950</div>
+            <div class="artwork-details">130 × 95 см · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Фіолетовий Туман</h3>
+          <p>Таємничі фіолетові та лавандові тони</p>
+        </div>
+      </div>
+
+      <!-- Artwork 34 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/mowymvrvgktatzvtvj6x.webp" alt="Tropical Paradise">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€3,100</div>
+            <div class="artwork-details">135 × 100 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Тропічний Рай</h3>
+          <p>Яскраві тропічні кольори</p>
+        </div>
+      </div>
+
+      <!-- Artwork 35 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/gtw2ozjopcts96ojvxpw.webp" alt="Copper Sunset">
+          <div class="artwork-overlay">
+            <div class="artwork-price">���2,700</div>
+            <div class="artwork-details">110 × 90 см · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Мідний Захід</h3>
+          <p>Теплі мідні та бронзові відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 36 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/eq6avvp7dzqok8if1ixy.webp" alt="Azure Dream">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,550</div>
+            <div class="artwork-details">105 × 80 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Лазурна Мрія</h3>
+          <p>Чисті блакитні та білі відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 37 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/m5ihjwhdxv4k5697qpbm.webp" alt="Crimson Passion">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€3,000</div>
+            <div class="artwork-details">125 × 95 см · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Багряна Пристрасть</h3>
+          <p>Глибокі червоні та бордові тони</p>
+        </div>
+      </div>
+
+      <!-- Artwork 38 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/smkypeeeefgoqbrxqgfv.webp" alt="Pearl Essence">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,800</div>
+            <div class="artwork-details">115 × 90 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Перлова Есенція</h3>
+          <p>Ніжні перламутрові відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 39 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/ptes3exkqgnuwyv9jqux.webp" alt="Turquoise Lagoon">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,900</div>
+            <div class="artwork-details">130 × 95 см · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Бірюзова Лагуна</h3>
+          <p>Свіжі бірюзові та аквамаринові тони</p>
+        </div>
+      </div>
+
+      <!-- Artwork 40 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/f45eijtdu8d7l4jcwhyt.webp" alt="Charcoal Shadow">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,600</div>
+            <div class="artwork-details">100 × 85 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Вугільна Тінь</h3>
+          <p>Елегантні сірі та чорні відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 41 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/ix71nebvaeprh7dgaj0d.webp" alt="Sunflower Joy">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,750</div>
+            <div class="artwork-details">110 × 90 см · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Радість Соняшника</h3>
+          <p>Яскраві жовті та золоті відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 42 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/pipgdmfn9cpsttinll59.webp" alt="Sapphire Depths">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€3,150</div>
+            <div class="artwork-details">140 × 100 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Сапфірові Глибини</h3>
+          <p>Насичені сині та індиго відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 43 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/n7rkvmox81waciqvkugq.webp" alt="Coral Reef">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,850</div>
+            <div class="artwork-details">120 × 90 см · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Кораловий Риф</h3>
+          <p>Живі коралові та помаранчеві тони</p>
+        </div>
+      </div>
+
+      <!-- Artwork 44 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/ufl7dz7qn8zryhodawht.webp" alt="Silver Moon">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,650</div>
+            <div class="artwork-details">105 × 85 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Срібний Місяць</h3>
+          <p>Холодні срібні та сталеві відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 45 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/grjuapehz3lbqpyl5tcw.webp" alt="Magenta Magic">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,950</div>
+            <div class="artwork-details">125 × 95 см · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Магічна Магента</h3>
+          <p>Яскраві пурпурні та рожеві відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 46 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/npxmlzig1fzbvnggdtg5.webp" alt="Olive Grove">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,500</div>
+            <div class="artwork-details">100 × 80 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Оливкова Гай</h3>
+          <p>Природні оливкові та зелені тони</p>
+        </div>
+      </div>
+
+      <!-- Artwork 47 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/sqnxer3gvnx7xdm3w1nz.webp" alt="Burgundy Wine">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€3,050</div>
+            <div class="artwork-details">130 × 100 см · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Бургундське Вино</h3>
+          <p>Глибокі винні та бордові відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 48 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/pghpfnjqqe8az0dooelv.webp" alt="Ivory Dream">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,700</div>
+            <div class="artwork-details">115 × 85 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Слонова Кістка</h3>
+          <p>Теплі кремові та бежеві відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 49 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/ibgaszbpm1s01lircvex.webp" alt="Teal Wave">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,800</div>
+            <div class="artwork-details">120 × 90 см · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Чирокова Хвиля</h3>
+          <p>Освіжаючі бірюзові відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 50 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/oxpxiqnqasenh2ckuyus.webp" alt="Tangerine Burst">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,900</div>
+            <div class="artwork-details">125 × 95 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Мандариновий Вибух</h3>
+          <p>Енергійні помаранчеві відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 51 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/hh9bbtkuad6t5ucm2ids.webp" alt="Pewter Sky">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,600</div>
+            <div class="artwork-details">110 × 85 см · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Олов'яне Небо</h3>
+          <p>М'які сірі та перламутрові відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 52 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/gybvhe1n8kvdhr3qaxdg.webp" alt="Plum Blossom">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€3,000</div>
+            <div class="artwork-details">135 × 100 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Сливовий Цвіт</h3>
+          <p>Багаті сливові та пурпурні тони</p>
+        </div>
+      </div>
+
+      <!-- Artwork 53 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/ocmcxbv9me84nkp99zsk.webp" alt="Mint Freshness">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,550</div>
+            <div class="artwork-details">100 × 80 см · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>М'ятна Свіжість</h3>
+          <p>Освіжаючі м'ятні та зелені відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 54 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/bdxb495ioyrozkuqyzsy.webp" alt="Rust & Gold">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,850</div>
+            <div class="artwork-details">120 × 90 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Іржа і Золото</h3>
+          <p>Теплі іржаві та золоті відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 55 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/zmzgzqzxn3h8vd2fxx8w.webp" alt="Indigo Night">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,950</div>
+            <div class="artwork-details">125 × 95 см · Змішана техніка</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Індиго Ніч</h3>
+          <p>Глибокі індиго та фіолетові відтінки</p>
+        </div>
+      </div>
+
+      <!-- Artwork 56 -->
+      <div class="artwork-card">
+        <div class="artwork-image">
+          <img src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/hkb67tcav2ya0m2airn5.webp" alt="Cream & Caramel">
+          <div class="artwork-overlay">
+            <div class="artwork-price">€2,700</div>
+            <div class="artwork-details">110 × 85 см · Акрил на полотні</div>
+          </div>
+        </div>
+        <div class="artwork-info">
+          <h3>Крем і Карамель</h3>
+          <p>М'які кремові та карамельні тони</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="simple-footer">
+    <div class="footer-container">
+      <div class="footer-section">
+        <h3>Marina Kaminska</h3>
+        <p data-key="footer-desc">Українська художниця абстрактного мистецтва</p>
+        <div class="social-icons">
+          <a href="https://instagram.com/marina.kaminska" class="social-icon" target="_blank">
+            <i class="fab fa-instagram"></i>
+          </a>
+          <a href="https://facebook.com/marina.kaminska.art" class="social-icon" target="_blank">
+            <i class="fab fa-facebook"></i>
+          </a>
+          <a href="mailto:hello@artkaminska.com" class="social-icon">
+            <i class="fas fa-envelope"></i>
+          </a>
+        </div>
+      </div>
+
+      <div class="footer-section">
+        <h3 data-key="footer-collections">Колекції</h3>
+        <a href="commerce.html" data-key="footer-business">Art for Business</a>
+        <a href="home.html" data-key="footer-home">Art for Home</a>
+        <a href="#gallery" data-key="footer-gallery">Галерея</a>
+      </div>
+
+      <div class="footer-section">
+        <h3 data-key="footer-contact">Контакти</h3>
+        <p>Email: hello@artkaminska.com</p>
+        <p>Instagram: @marina.kaminska</p>
+        <p data-key="footer-shipping">Worldwide shipping</p>
+      </div>
+    </div>
+
+    <div class="footer-bottom">
+      <p data-key="footer-copyright">&copy; 2024 Marina Kaminska. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Artwork Order Modal -->
+  <div id="orderModal" class="order-modal" style="display: none;">
+    <div class="order-modal-overlay"></div>
+    <div class="order-modal-content">
+      <button class="order-modal-close" id="closeOrderModal">
+        <i class="fas fa-times"></i>
+      </button>
+
+      <div class="order-modal-header">
+        <h2 data-key="order-title">Замовити Картину</h2>
+        <p class="order-artwork-title" id="orderArtworkTitle"></p>
+      </div>
+
+      <form class="order-form" id="orderForm">
+        <div class="form-group">
+          <label data-key="order-name-label">Ім'я</label>
+          <input type="text" name="name" required data-key="order-name-placeholder" placeholder="Ваше ім'я">
+        </div>
+
+        <div class="form-group">
+          <label data-key="order-email-label">Email</label>
+          <input type="email" name="email" required placeholder="your@email.com">
+        </div>
+
+        <div class="form-group">
+          <label data-key="order-phone-label">Телефон</label>
+          <input type="tel" name="phone" data-key="order-phone-placeholder" placeholder="+380 XX XXX XX XX">
+        </div>
+
+        <div class="form-group">
+          <label data-key="order-country-label">Країна</label>
+          <select name="country" required>
+            <option value="" data-key="order-country-select">Оберіть країну</option>
+            <option value="UA">Україна</option>
+            <option value="US">США</option>
+            <option value="GB">Великобританія</option>
+            <option value="DE">Німеччина</option>
+            <option value="PL">Польща</option>
+            <option value="other" data-key="order-country-other">Інша</option>
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label data-key="order-frame-label">Рама</label>
+          <div class="frame-options">
+            <label class="frame-option">
+              <input type="radio" name="frame" value="no-frame" checked>
+              <div class="frame-option-card">
+                <div class="frame-icon">
+                  <i class="fas fa-image"></i>
+                </div>
+                <div class="frame-option-text">
+                  <strong data-key="order-frame-no">Без рами</strong>
+                  <span data-key="order-frame-no-desc">Картина на підрамнику</span>
+                </div>
+                <div class="frame-price" data-key="order-frame-no-price">Включено</div>
+              </div>
+            </label>
+            <label class="frame-option">
+              <input type="radio" name="frame" value="wooden-frame">
+              <div class="frame-option-card">
+                <div class="frame-icon">
+                  <i class="fas fa-border-all"></i>
+                </div>
+                <div class="frame-option-text">
+                  <strong data-key="order-frame-wooden">Дерев'яна рама</strong>
+                  <span data-key="order-frame-wooden-desc">Натуральне дерево</span>
+                </div>
+                <div class="frame-price" id="woodenFramePrice">+€200</div>
+              </div>
+            </label>
+            <label class="frame-option">
+              <input type="radio" name="frame" value="metal-frame">
+              <div class="frame-option-card">
+                <div class="frame-icon">
+                  <i class="fas fa-square"></i>
+                </div>
+                <div class="frame-option-text">
+                  <strong data-key="order-frame-metal">Металева рама</strong>
+                  <span data-key="order-frame-metal-desc">Преміум алюміній</span>
+                </div>
+                <div class="frame-price" id="metalFramePrice">+€350</div>
+              </div>
+            </label>
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label data-key="order-message-label">Повідомлення</label>
+          <textarea name="message" rows="4" data-key="order-message-placeholder" placeholder="Додаткова інформація..."></textarea>
+        </div>
+
+        <div class="order-price">
+          <span data-key="order-price-label">Ціна:</span>
+          <span class="price-value" id="orderPrice">€2,800</span>
+        </div>
+
+        <button type="submit" class="order-submit-btn" data-key="order-submit">
+          Відправити Запит
+        </button>
+      </form>
+
+      <div class="order-success" id="orderSuccess" style="display: none;">
+        <i class="fas fa-check-circle" style="color: #4CAF50; font-size: 4rem; margin-bottom: 1rem;"></i>
+        <h3 data-key="order-success-title">Дякуємо за замовлення!</h3>
+        <p data-key="order-success-message">Ми зв'яжемося з вами протягом 24 годин.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <!-- i18n System -->
+  <script src="js/simple-i18n.js"></script>
+
+  <script>
+    // Order Modal and page-specific functionality
+    document.addEventListener('DOMContentLoaded', () => {
+      console.log('Initializing index page functionality...');
+
+      // Smooth scroll
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+
+      // Custom Cursor - matching commerce.html
+      const cursorDot = document.querySelector('.cursor-dot');
+      const cursorOutline = document.querySelector('.cursor-outline');
+
+      if (cursorDot && cursorOutline) {
+        let mouseX = 0, mouseY = 0;
+        let dotX = 0, dotY = 0;
+        let outlineX = 0, outlineY = 0;
+
+        document.addEventListener('mousemove', (e) => {
+          mouseX = e.clientX;
+          mouseY = e.clientY;
+        });
+
+        // Smooth cursor animation
+        function animateCursor() {
+          // Dot follows mouse quickly
+          dotX += (mouseX - dotX) * 0.25;
+          dotY += (mouseY - dotY) * 0.25;
+
+          // Outline follows with delay
+          outlineX += (mouseX - outlineX) * 0.15;
+          outlineY += (mouseY - outlineY) * 0.15;
+
+          cursorDot.style.left = `${dotX}px`;
+          cursorDot.style.top = `${dotY}px`;
+          cursorOutline.style.left = `${outlineX}px`;
+          cursorOutline.style.top = `${outlineY}px`;
+
+          requestAnimationFrame(animateCursor);
+        }
+
+        animateCursor();
+
+        // Hover effects
+        const hoverElements = document.querySelectorAll('a, button, .artwork-card, .collection-link, input, select, textarea');
+        hoverElements.forEach(el => {
+          el.addEventListener('mouseenter', () => {
+            cursorDot.classList.add('hover');
+            cursorOutline.classList.add('hover');
+          });
+          el.addEventListener('mouseleave', () => {
+            cursorDot.classList.remove('hover');
+            cursorOutline.classList.remove('hover');
+          });
+        });
+      }
+
+      // Order Modal functionality
+      const orderModal = document.getElementById('orderModal');
+      const closeOrderModal = document.getElementById('closeOrderModal');
+      const orderForm = document.getElementById('orderForm');
+      const orderSuccess = document.getElementById('orderSuccess');
+      const orderArtworkTitle = document.getElementById('orderArtworkTitle');
+      const orderPrice = document.getElementById('orderPrice');
+
+      // Artwork data with prices
+      const artworkPrices = {
+        'art-1': '€2,800',
+        'art-2': '€3,200',
+        'art-3': '€2,500',
+        'art-4': '€2,400',
+        'art-5': '€3,000',
+        'art-6': '€2,700',
+        'art-7': '€2,200',
+        'art-8': '€2,900',
+        'art-9': '€2,600',
+        'art-10': '€2,800',
+        'art-11': '€2,500',
+        'art-12': '€3,100'
+      };
+
+      // Open modal when artwork card is clicked
+      let basePrice = 2800;
+      let currentArtKey = '';
+
+      document.querySelectorAll('.artwork-card').forEach((card, index) => {
+        card.addEventListener('click', () => {
+          currentArtKey = `art-${index + 1}`;
+          const artworkTitle = card.querySelector('h3').textContent;
+          const priceStr = artworkPrices[currentArtKey] || '€2,500';
+
+          // Extract numeric price
+          basePrice = parseInt(priceStr.replace(/[€,]/g, ''));
+
+          orderArtworkTitle.textContent = artworkTitle;
+          orderPrice.textContent = priceStr;
+          orderModal.style.display = 'flex';
+          document.body.style.overflow = 'hidden';
+
+          // Reset frame selection
+          document.querySelector('input[name="frame"][value="no-frame"]').checked = true;
+          updatePrice();
+
+          console.log('Opening order modal for:', artworkTitle);
+        });
+      });
+
+      // Update price based on frame selection
+      function updatePrice() {
+        const selectedFrame = document.querySelector('input[name="frame"]:checked').value;
+        let finalPrice = basePrice;
+
+        if (selectedFrame === 'wooden-frame') {
+          finalPrice += 200;
+        } else if (selectedFrame === 'metal-frame') {
+          finalPrice += 350;
+        }
+
+        orderPrice.textContent = `€${finalPrice.toLocaleString()}`;
+      }
+
+      // Listen to frame changes
+      document.querySelectorAll('input[name="frame"]').forEach(radio => {
+        radio.addEventListener('change', updatePrice);
+      });
+
+      // Close modal
+      function closeModal() {
+        orderModal.style.display = 'none';
+        document.body.style.overflow = '';
+        orderForm.style.display = 'block';
+        orderSuccess.style.display = 'none';
+        orderForm.reset();
+      }
+
+      closeOrderModal.addEventListener('click', closeModal);
+
+      orderModal.querySelector('.order-modal-overlay').addEventListener('click', closeModal);
+
+      // Handle form submission
+      orderForm.addEventListener('submit', async (e) => {
+        e.preventDefault();
+
+        const submitBtn = orderForm.querySelector('.order-submit-btn');
+        const originalText = submitBtn.textContent;
+
+        try {
+          // Disable button and show loading
+          submitBtn.disabled = true;
+          submitBtn.textContent = window.IndexI18n?.getTranslation('order-sending', 'Відправляємо...') || 'Відправляємо...';
+          submitBtn.style.opacity = '0.7';
+
+          const formData = new FormData(orderForm);
+          const data = {
+            artwork: orderArtworkTitle.textContent,
+            price: orderPrice.textContent,
+            name: formData.get('name'),
+            email: formData.get('email'),
+            phone: formData.get('phone'),
+            country: formData.get('country'),
+            frame: formData.get('frame'),
+            message: formData.get('message')
+          };
+
+          console.log('📤 Submitting order:', data);
+
+          // Send to server
+          const response = await fetch('/api/order', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data)
+          });
+
+          const result = await response.json();
+
+          if (response.ok && result.success) {
+            console.log('✅ Order submitted successfully');
+
+            // Show success message
+            orderForm.style.display = 'none';
+            orderSuccess.style.display = 'block';
+
+            // Close modal after 4 seconds
+            setTimeout(() => {
+              closeModal();
+            }, 4000);
+          } else {
+            throw new Error(result.error || 'Failed to submit order');
+          }
+
+        } catch (error) {
+          console.error('❌ Order submission error:', error);
+
+          // Show error to user
+          alert(window.IndexI18n?.getTranslation('order-error', 'Помилка відправки замовлення. Будь ласка, спробуйте ще раз або зв\'яжіться з нами напряму.') || 'Помилка відправки замовлення. Будь ласка, спробуйте ще раз або зв\'яжіться з нами напряму.');
+
+          // Re-enable button
+          submitBtn.disabled = false;
+          submitBtn.textContent = originalText;
+          submitBtn.style.opacity = '1';
+        }
+      });
+
+      // ========================================
+      // PREMIUM ANIMATIONS & INTERACTIONS
+      // ========================================
+
+      // Header Scroll Effect
+      const header = document.querySelector('.catalog-header');
+      let lastScroll = 0;
+
+      window.addEventListener('scroll', () => {
+        const currentScroll = window.pageYOffset;
+
+        if (currentScroll > 50) {
+          header.classList.add('scrolled');
+        } else {
+          header.classList.remove('scrolled');
+        }
+
+        lastScroll = currentScroll;
+      });
+
+      // Smooth Scroll for Anchor Links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+          const href = this.getAttribute('href');
+          if (href !== '#' && href !== '') {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+              target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }
+          }
+        });
+      });
+
+      // No scroll animations - prevent flickering
+      // All elements are visible immediately
+
+      // Mobile Menu Functionality
+      const mobileMenuBtn = document.getElementById('mobileMenuBtn');
+      const mobileNav = document.getElementById('mobileNav');
+      const mobileOverlay = document.getElementById('mobileOverlay');
+
+      // Show mobile menu button on mobile devices
+      if (window.innerWidth <= 768) {
+        mobileMenuBtn.style.display = 'block';
+      }
+
+      window.addEventListener('resize', () => {
+        if (window.innerWidth <= 768) {
+          mobileMenuBtn.style.display = 'block';
+        } else {
+          mobileMenuBtn.style.display = 'none';
+          mobileNav.classList.remove('active');
+          mobileOverlay.classList.remove('active');
+          mobileMenuBtn.classList.remove('active');
+          document.body.style.overflow = '';
+        }
+      });
+
+      // Toggle mobile menu
+      if (mobileMenuBtn) {
+        mobileMenuBtn.addEventListener('click', () => {
+          mobileMenuBtn.classList.toggle('active');
+          mobileNav.classList.toggle('active');
+          mobileOverlay.classList.toggle('active');
+
+          // Prevent body scroll when menu is open
+          if (mobileNav.classList.contains('active')) {
+            document.body.style.overflow = 'hidden';
+          } else {
+            document.body.style.overflow = '';
+          }
+        });
+      }
+
+      // Close menu when clicking overlay
+      if (mobileOverlay) {
+        mobileOverlay.addEventListener('click', () => {
+          mobileMenuBtn.classList.remove('active');
+          mobileNav.classList.remove('active');
+          mobileOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+        });
+      }
+
+      // Close menu when clicking nav item
+      document.querySelectorAll('.nav-item').forEach(item => {
+        item.addEventListener('click', () => {
+          mobileMenuBtn.classList.remove('active');
+          mobileNav.classList.remove('active');
+          mobileOverlay.classList.remove('active');
+          document.body.style.overflow = '';
+        });
+      });
+    });
+  </script>
+
+
+</body>
+</html>
