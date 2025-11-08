@@ -1824,3 +1824,219 @@ img {
 .ar-modal-content {
   padding: clamp(2rem, 3vw, 3rem);
 }
+
+/* ========================================
+   COLLECTION OVERLAY (як на index.html)
+   ======================================== */
+
+.collection-overlay {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  padding: 2rem 1.5rem;
+  background: linear-gradient(to top, rgba(0, 0, 0, 0.95) 0%, rgba(0, 0, 0, 0.75) 50%, transparent 100%);
+  color: white;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  z-index: 10;
+  backdrop-filter: blur(12px);
+  border-radius: 0 0 24px 24px;
+}
+
+.collection-item:hover .collection-overlay {
+  opacity: 1;
+  visibility: visible;
+}
+
+.collection-price {
+  font-size: 1.85rem;
+  font-weight: 700;
+  color: #f39c12;
+  text-shadow: 0 2px 8px rgba(0, 0, 0, 0.5);
+  letter-spacing: -0.02em;
+  font-family: var(--ig-font-serif);
+}
+
+.collection-overlay-details {
+  font-size: 0.95rem;
+  opacity: 0.95;
+  line-height: 1.6;
+  color: rgba(255, 255, 255, 0.95);
+}
+
+/* Покращені фільтри */
+.collection-filters {
+  background: var(--ig-surface);
+  border-radius: var(--ig-radius-xl);
+  padding: 2rem;
+  box-shadow: var(--ig-shadow-soft);
+  margin-bottom: 3rem;
+}
+
+.collection-search {
+  width: 100%;
+  max-width: 600px;
+  padding: 1.1rem 1.75rem;
+  font-size: 1.05rem;
+  border: 2px solid var(--ig-line);
+  border-radius: 999px;
+  outline: none;
+  transition: all 0.3s ease;
+  font-family: var(--ig-font-sans);
+  background: var(--ig-surface);
+  box-shadow: 0 4px 12px rgba(15, 23, 42, 0.04);
+}
+
+.collection-search:focus {
+  border-color: var(--ig-accent);
+  box-shadow: 0 0 0 5px rgba(230, 126, 34, 0.12),
+              0 8px 20px rgba(15, 23, 42, 0.08);
+  transform: translateY(-1px);
+}
+
+.collection-search::placeholder {
+  color: var(--ig-muted);
+}
+
+.filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+  margin-top: 1.5rem;
+}
+
+.collection-filter-btn {
+  padding: 0.85rem 1.75rem;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 2px solid var(--ig-line);
+  background: var(--ig-surface);
+  color: var(--ig-text);
+  border-radius: 999px;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  font-family: var(--ig-font-sans);
+  position: relative;
+  overflow: hidden;
+}
+
+.collection-filter-btn::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--ig-gradient);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.collection-filter-btn:hover {
+  border-color: var(--ig-accent);
+  color: var(--ig-accent);
+  transform: translateY(-3px);
+  box-shadow: 0 8px 20px rgba(230, 126, 34, 0.18);
+}
+
+.collection-filter-btn.active {
+  background: linear-gradient(135deg, var(--ig-accent), var(--ig-accent-dark));
+  border-color: transparent;
+  color: white;
+  box-shadow: 0 12px 28px rgba(230, 126, 34, 0.35);
+  transform: translateY(-2px);
+}
+
+.collection-filter-btn.active::before {
+  opacity: 1;
+}
+
+/* Покращені кнопки actions */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.65rem;
+  font-family: var(--ig-font-sans);
+  font-weight: 600;
+  border: none;
+  cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  text-decoration: none;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-outline {
+  background: transparent;
+  border: 2px solid var(--ig-line);
+  color: var(--ig-text);
+}
+
+.btn-outline:hover {
+  border-color: var(--ig-accent);
+  color: var(--ig-accent);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(230, 126, 34, 0.15);
+}
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--ig-accent), var(--ig-accent-dark));
+  border: 2px solid transparent;
+  color: white;
+  box-shadow: 0 8px 20px rgba(230, 126, 34, 0.25);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px rgba(230, 126, 34, 0.35);
+}
+
+.btn-primary:active {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 16px rgba(230, 126, 34, 0.3);
+}
+
+/* Responsive покращення */
+@media (max-width: 768px) {
+  .collection-filters {
+    padding: 1.5rem;
+  }
+  
+  .collection-search {
+    max-width: 100%;
+    font-size: 1rem;
+    padding: 1rem 1.5rem;
+  }
+  
+  .filter-buttons {
+    gap: 0.75rem;
+  }
+  
+  .collection-filter-btn {
+    padding: 0.75rem 1.5rem;
+    font-size: 0.95rem;
+  }
+  
+  .collection-overlay {
+    padding: 1.5rem 1.25rem;
+  }
+  
+  .collection-price {
+    font-size: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .collection-actions {
+    flex-direction: column;
+  }
+  
+  .collection-actions .btn {
+    width: 100%;
+    min-width: 100%;
+  }
+}
