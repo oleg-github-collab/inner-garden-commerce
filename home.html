@@ -1270,6 +1270,32 @@
   <script src="js/harmony-map.js" defer></script>
   <script src="js/main.js" defer></script>
 
+  <!-- Lazy Loading Images -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const lazyImages = document.querySelectorAll('.lazy-image');
+
+      const imageObserver = new IntersectionObserver((entries, observer) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            const img = entry.target;
+            if (img.dataset.src) {
+              img.src = img.dataset.src;
+              img.classList.remove('lazy-image');
+              img.classList.add('loaded');
+              observer.unobserve(img);
+            }
+          }
+        });
+      }, {
+        rootMargin: '50px 0px',
+        threshold: 0.01
+      });
+
+      lazyImages.forEach(img => imageObserver.observe(img));
+    });
+  </script>
+
   <!-- Service Worker Registration -->
   <script>
     if ('serviceWorker' in navigator) {
