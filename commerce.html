@@ -412,17 +412,26 @@
         </div>
         
         <div class="map-container">
-          <div class="map-wrapper">
-            <div
-              id="harmony-world-map"
-              class="world-map"
-              aria-label="Мапа представлених міст"
-              data-i18n-text="false"
-              data-i18n-attrs="aria-label:map-aria-label"></div>
-            <aside class="map-legend" aria-live="polite">
-              <h3 class="map-legend-title" data-key="map-legend-title">Міста, де можна побачити роботи</h3>
-              <ul class="map-legend-list" id="map-city-list"></ul>
-            </aside>
+          <div class="map-experience">
+            <div class="map-wrapper">
+              <div
+                id="harmony-world-map"
+                class="world-map"
+                aria-label="Мапа представлених міст"
+                data-i18n-text="false"
+                data-i18n-attrs="aria-label:map-aria-label"></div>
+            </div>
+            <div class="map-legend" aria-live="polite">
+              <div class="map-legend-head">
+                <div>
+                  <h3 class="map-legend-title" data-key="map-legend-title">Міста, де можна побачити роботи</h3>
+                </div>
+                <div class="map-type-legend" id="map-type-legend"></div>
+              </div>
+              <div class="map-city-scroll">
+                <ul class="map-legend-list" id="map-city-list"></ul>
+              </div>
+            </div>
           </div>
         </div>
       </div>
@@ -451,138 +460,247 @@
         
         <!-- Collection Grid -->
         <div class="collection-grid" id="collection-grid">
-          <article class="collection-item">
-            <img
-              class="collection-image lazy-image"
-              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='420'%3E%3Crect width='100%25' height='100%25' fill='%23f4f6f8'/%3E%3C/svg%3E"
-              data-src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/ous8ji6yspy9jqooyyjy.webp"
-              data-key="collection-item-1-alt"
-              loading="lazy"
-              decoding="async">
+          <article class="collection-item" data-filter-tags="abstract hotel premium">
+            <figure class="collection-figure">
+              <img
+                class="collection-image lazy-image"
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='420'%3E%3Crect width='100%25' height='100%25' fill='%23f4f6f8'/%3E%3C/svg%3E"
+                data-src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/ous8ji6yspy9jqooyyjy.webp"
+                data-key="collection-item-1-alt"
+                loading="lazy"
+                decoding="async">
+              <span class="collection-chip" data-key="collection-chip-new">Business best-seller</span>
+            </figure>
             <div class="collection-body">
               <h3 data-key="collection-item-1-title">Внутрішня Гармонія</h3>
-              <p data-key="collection-item-1-desc">Тепла палітра сонячних відтінків, що наповнює простір відчуттям стабільності та спокою.</p>
+              <p class="collection-description" data-key="collection-item-1-desc">Тепла палітра сонячних відтінків, що наповнює простір відчуттям стабільності та спокою.</p>
               <p class="collection-meta" data-key="collection-item-1-meta">120 × 80 см · Акрил на полотні</p>
+              <div class="collection-actions">
+                <button class="btn btn-outline" data-collection-action="ar" data-artwork="inner-harmony">
+                  <i class="fas fa-vr-cardboard"></i>
+                  <span data-key="collection-action-ar">AR Примірка</span>
+                </button>
+                <button class="btn btn-primary" data-collection-action="consult">
+                  <i class="fas fa-handshake"></i>
+                  <span data-key="collection-action-consult">Консультація</span>
+                </button>
+              </div>
             </div>
           </article>
 
-          <article class="collection-item">
-            <img
-              class="collection-image lazy-image"
-              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='420'%3E%3Crect width='100%25' height='100%25' fill='%23f4f6f8'/%3E%3C/svg%3E"
-              data-src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/n1w550wvauam6ldnmvnk.webp"
-              data-key="collection-item-2-alt"
-              loading="lazy"
-              decoding="async">
+          <article class="collection-item" data-filter-tags="minimalism lounge calm">
+            <figure class="collection-figure">
+              <img
+                class="collection-image lazy-image"
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='420'%3E%3Crect width='100%25' height='100%25' fill='%23f4f6f8'/%3E%3C/svg%3E"
+                data-src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/n1w550wvauam6ldnmvnk.webp"
+                data-key="collection-item-2-alt"
+                loading="lazy"
+                decoding="async">
+            </figure>
             <div class="collection-body">
               <h3 data-key="collection-item-2-title">Дзен Сад</h3>
-              <p data-key="collection-item-2-desc">Мінімалістична композиція з акцентом на дихання простору – ідеально для reception або лаунжу.</p>
+              <p class="collection-description" data-key="collection-item-2-desc">Мінімалістична композиція з акцентом на дихання простору – ідеально для reception або лаунжу.</p>
               <p class="collection-meta" data-key="collection-item-2-meta">100 × 90 см · Змішана техніка</p>
+              <div class="collection-actions">
+                <button class="btn btn-outline" data-collection-action="ar" data-artwork="zen-garden">
+                  <i class="fas fa-vr-cardboard"></i>
+                  <span data-key="collection-action-ar">AR Примірка</span>
+                </button>
+                <button class="btn btn-primary" data-collection-action="consult">
+                  <i class="fas fa-handshake"></i>
+                  <span data-key="collection-action-consult">Консультація</span>
+                </button>
+              </div>
             </div>
           </article>
 
-          <article class="collection-item">
-            <img
-              class="collection-image lazy-image"
-              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='420'%3E%3Crect width='100%25' height='100%25' fill='%23f4f6f8'/%3E%3C/svg%3E"
-              data-src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/vjyoe8gclo0rx32tl2vu.webp"
-              data-key="collection-item-3-alt"
-              loading="lazy"
-              decoding="async">
+          <article class="collection-item" data-filter-tags="geometric office dynamic">
+            <figure class="collection-figure">
+              <img
+                class="collection-image lazy-image"
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='420'%3E%3Crect width='100%25' height='100%25' fill='%23f4f6f8'/%3E%3C/svg%3E"
+                data-src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/vjyoe8gclo0rx32tl2vu.webp"
+                data-key="collection-item-3-alt"
+                loading="lazy"
+                decoding="async">
+            </figure>
             <div class="collection-body">
               <h3 data-key="collection-item-3-title">Міський Бриз</h3>
-              <p data-key="collection-item-3-desc">Насичені синьо-срібні мазки створюють динаміку, що оживляє переговорні та зони очікування.</p>
+              <p class="collection-description" data-key="collection-item-3-desc">Насичені синьо-срібні мазки створюють динаміку, що оживляє переговорні та зони очікування.</p>
               <p class="collection-meta" data-key="collection-item-3-meta">140 × 100 см · Акрил, текстурна паста</p>
+              <div class="collection-actions">
+                <button class="btn btn-outline" data-collection-action="ar" data-artwork="city-breeze">
+                  <i class="fas fa-vr-cardboard"></i>
+                  <span data-key="collection-action-ar">AR Примірка</span>
+                </button>
+                <button class="btn btn-primary" data-collection-action="consult">
+                  <i class="fas fa-handshake"></i>
+                  <span data-key="collection-action-consult">Консультація</span>
+                </button>
+              </div>
             </div>
           </article>
 
-          <article class="collection-item">
-            <img
-              class="collection-image lazy-image"
-              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='420'%3E%3Crect width='100%25' height='100%25' fill='%23f4f6f8'/%3E%3C/svg%3E"
-              data-src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/vjldxxai3uyhinhgifri.webp"
-              data-key="collection-item-4-alt"
-              loading="lazy"
-              decoding="async">
+          <article class="collection-item" data-filter-tags="energy office warm">
+            <figure class="collection-figure">
+              <img
+                class="collection-image lazy-image"
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='420'%3E%3Crect width='100%25' height='100%25' fill='%23f4f6f8'/%3E%3C/svg%3E"
+                data-src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/vjldxxai3uyhinhgifri.webp"
+                data-key="collection-item-4-alt"
+                loading="lazy"
+                decoding="async">
+            </figure>
             <div class="collection-body">
-              <h3>Офісна Енергія</h3>
-              <p>Стимулююча композиція для відкритих просторів</p>
-              <p class="collection-meta">135 × 100 см · Змішана техніка</p>
+              <h3 data-key="collection-item-4-title">Офісна Енергія</h3>
+              <p class="collection-description" data-key="collection-item-4-desc">Стимулююча композиція для відкритих просторів, яка підтримує фокус і натхнення.</p>
+              <p class="collection-meta" data-key="collection-item-4-meta">135 × 100 см · Змішана техніка</p>
+              <div class="collection-actions">
+                <button class="btn btn-outline" data-collection-action="ar" data-artwork="office-energy">
+                  <i class="fas fa-vr-cardboard"></i>
+                  <span data-key="collection-action-ar">AR Примірка</span>
+                </button>
+                <button class="btn btn-primary" data-collection-action="consult">
+                  <i class="fas fa-handshake"></i>
+                  <span data-key="collection-action-consult">Консультація</span>
+                </button>
+              </div>
             </div>
           </article>
 
-          <article class="collection-item">
-            <img
-              class="collection-image lazy-image"
-              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='420'%3E%3Crect width='100%25' height='100%25' fill='%23f4f6f8'/%3E%3C/svg%3E"
-              data-src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/dhtjtso6nvc0qnxobvov.webp"
-              data-key="collection-item-5-alt"
-              loading="lazy"
-              decoding="async">
+          <article class="collection-item" data-filter-tags="hotel luxury warm">
+            <figure class="collection-figure">
+              <img
+                class="collection-image lazy-image"
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='420'%3E%3Crect width='100%25' height='100%25' fill='%23f4f6f8'/%3E%3C/svg%3E"
+                data-src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/dhtjtso6nvc0qnxobvov.webp"
+                data-key="collection-item-5-alt"
+                loading="lazy"
+                decoding="async">
+            </figure>
             <div class="collection-body">
-              <h3>Готельна Розкіш</h3>
-              <p>Преміальні відтінки для лобі готелів</p>
-              <p class="collection-meta">150 × 110 см · Акрил на полотні</p>
+              <h3 data-key="collection-item-5-title">Готельна Розкіш</h3>
+              <p class="collection-description" data-key="collection-item-5-desc">Преміальні відтінки для лобі готелів, що підкреслюють сервіс класу люкс.</p>
+              <p class="collection-meta" data-key="collection-item-5-meta">150 × 110 см · Акрил на полотні</p>
+              <div class="collection-actions">
+                <button class="btn btn-outline" data-collection-action="ar" data-artwork="hotel-luxury">
+                  <i class="fas fa-vr-cardboard"></i>
+                  <span data-key="collection-action-ar">AR Примірка</span>
+                </button>
+                <button class="btn btn-primary" data-collection-action="consult">
+                  <i class="fas fa-handshake"></i>
+                  <span data-key="collection-action-consult">Консультація</span>
+                </button>
+              </div>
             </div>
           </article>
 
-          <article class="collection-item">
-            <img
-              class="collection-image lazy-image"
-              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='420'%3E%3Crect width='100%25' height='100%25' fill='%23f4f6f8'/%3E%3C/svg%3E"
-              data-src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/jbi0jjdszt7gc8k26wlr.webp"
-              data-key="collection-item-6-alt"
-              loading="lazy"
-              decoding="async">
+          <article class="collection-item" data-filter-tags="medical calm neutral">
+            <figure class="collection-figure">
+              <img
+                class="collection-image lazy-image"
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='420'%3E%3Crect width='100%25' height='100%25' fill='%23f4f6f8'/%3E%3C/svg%3E"
+                data-src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/jbi0jjdszt7gc8k26wlr.webp"
+                data-key="collection-item-6-alt"
+                loading="lazy"
+                decoding="async">
+            </figure>
             <div class="collection-body">
-              <h3>Медична Гармонія</h3>
-              <p>Заспокійливі тони для медичних центрів</p>
-              <p class="collection-meta">120 × 90 см · Змішана техніка</p>
+              <h3 data-key="collection-item-6-title">Медична Гармонія</h3>
+              <p class="collection-description" data-key="collection-item-6-desc">Заспокійливі тони для медичних центрів, що знижують рівень стресу пацієнтів.</p>
+              <p class="collection-meta" data-key="collection-item-6-meta">120 × 90 см · Змішана техніка</p>
+              <div class="collection-actions">
+                <button class="btn btn-outline" data-collection-action="ar" data-artwork="medical-harmony">
+                  <i class="fas fa-vr-cardboard"></i>
+                  <span data-key="collection-action-ar">AR Примірка</span>
+                </button>
+                <button class="btn btn-primary" data-collection-action="consult">
+                  <i class="fas fa-handshake"></i>
+                  <span data-key="collection-action-consult">Консультація</span>
+                </button>
+              </div>
             </div>
           </article>
 
-          <article class="collection-item">
-            <img
-              class="collection-image lazy-image"
-              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='420'%3E%3Crect width='100%25' height='100%25' fill='%23f4f6f8'/%3E%3C/svg%3E"
-              data-src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/bgrhzcnztxbn4cco8j0q.webp"
-              data-key="collection-item-7-alt"
-              loading="lazy"
-              decoding="async">
+          <article class="collection-item" data-filter-tags="creative office bold">
+            <figure class="collection-figure">
+              <img
+                class="collection-image lazy-image"
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='420'%3E%3Crect width='100%25' height='100%25' fill='%23f4f6f8'/%3E%3C/svg%3E"
+                data-src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/bgrhzcnztxbn4cco8j0q.webp"
+                data-key="collection-item-7-alt"
+                loading="lazy"
+                decoding="async">
+            </figure>
             <div class="collection-body">
-              <h3>Креативний Простір</h3>
-              <p>Натхненна палітра для робочих зон</p>
-              <p class="collection-meta">140 × 100 см · Акрил на полотні</p>
+              <h3 data-key="collection-item-7-title">Креативний Простір</h3>
+              <p class="collection-description" data-key="collection-item-7-desc">Натхненна палітра для робочих зон, де важлива візуальна енергія.</p>
+              <p class="collection-meta" data-key="collection-item-7-meta">140 × 100 см · Акрил на полотні</p>
+              <div class="collection-actions">
+                <button class="btn btn-outline" data-collection-action="ar" data-artwork="creative-space">
+                  <i class="fas fa-vr-cardboard"></i>
+                  <span data-key="collection-action-ar">AR Примірка</span>
+                </button>
+                <button class="btn btn-primary" data-collection-action="consult">
+                  <i class="fas fa-handshake"></i>
+                  <span data-key="collection-action-consult">Консультація</span>
+                </button>
+              </div>
             </div>
           </article>
 
-          <article class="collection-item">
-            <img
-              class="collection-image lazy-image"
-              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='420'%3E%3Crect width='100%25' height='100%25' fill='%23f4f6f8'/%3E%3C/svg%3E"
-              data-src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/ymu2dpujrvowhrlnbbzf.webp"
-              data-key="collection-item-8-alt"
-              loading="lazy"
-              decoding="async">
+          <article class="collection-item" data-filter-tags="wellness spa soft">
+            <figure class="collection-figure">
+              <img
+                class="collection-image lazy-image"
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='420'%3E%3Crect width='100%25' height='100%25' fill='%23f4f6f8'/%3E%3C/svg%3E"
+                data-src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/ymu2dpujrvowhrlnbbzf.webp"
+                data-key="collection-item-8-alt"
+                loading="lazy"
+                decoding="async">
+            </figure>
             <div class="collection-body">
-              <h3>Wellness Баланс</h3>
-              <p>Гармонійні відтінки для wellness центрів</p>
-              <p class="collection-meta">125 × 95 см · Змішана техніка</p>
+              <h3 data-key="collection-item-8-title">Wellness Баланс</h3>
+              <p class="collection-description" data-key="collection-item-8-desc">Гармонійні відтінки для wellness центрів, які підтримують внутрішній баланс.</p>
+              <p class="collection-meta" data-key="collection-item-8-meta">125 × 95 см · Змішана техніка</p>
+              <div class="collection-actions">
+                <button class="btn btn-outline" data-collection-action="ar" data-artwork="wellness-balance">
+                  <i class="fas fa-vr-cardboard"></i>
+                  <span data-key="collection-action-ar">AR Примірка</span>
+                </button>
+                <button class="btn btn-primary" data-collection-action="consult">
+                  <i class="fas fa-handshake"></i>
+                  <span data-key="collection-action-consult">Консультація</span>
+                </button>
+              </div>
             </div>
           </article>
 
-          <article class="collection-item">
-            <img
-              class="collection-image lazy-image"
-              src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='420'%3E%3Crect width='100%25' height='100%25' fill='%23f4f6f8'/%3E%3C/svg%3E"
-              data-src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/tdcuqjraki8tfaogokcj.webp"
-              data-key="collection-item-9-alt"
-              loading="lazy"
-              decoding="async">
+          <article class="collection-item" data-filter-tags="conference neutral premium">
+            <figure class="collection-figure">
+              <img
+                class="collection-image lazy-image"
+                src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='420'%3E%3Crect width='100%25' height='100%25' fill='%23f4f6f8'/%3E%3C/svg%3E"
+                data-src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/tdcuqjraki8tfaogokcj.webp"
+                data-key="collection-item-9-alt"
+                loading="lazy"
+                decoding="async">
+            </figure>
             <div class="collection-body">
-              <h3>Конференц-зал</h3>
-              <p>Стриманий професіоналізм</p>
-              <p class="collection-meta">130 × 100 см · Акрил на полотні</p>
+              <h3 data-key="collection-item-9-title">Конференц-зал</h3>
+              <p class="collection-description" data-key="collection-item-9-desc">Стриманий професіоналізм з художнім акцентом для переговорних.</p>
+              <p class="collection-meta" data-key="collection-item-9-meta">130 × 100 см · Акрил на полотні</p>
+              <div class="collection-actions">
+                <button class="btn btn-outline" data-collection-action="ar" data-artwork="conference-suite">
+                  <i class="fas fa-vr-cardboard"></i>
+                  <span data-key="collection-action-ar">AR Примірка</span>
+                </button>
+                <button class="btn btn-primary" data-collection-action="consult">
+                  <i class="fas fa-handshake"></i>
+                  <span data-key="collection-action-consult">Консультація</span>
+                </button>
+              </div>
             </div>
           </article>
         </div>

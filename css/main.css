@@ -47,22 +47,22 @@
 .artwork-image-container {
   position: relative;
   width: 100%;
-  min-height: 500px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  aspect-ratio: 2 / 3;
+  min-height: auto;
+  display: block;
   background: #fafafa;
   padding: 0;
   margin-bottom: 1rem;
   overflow: hidden !important;
+  border-radius: 20px;
 }
 
 .artwork-image img,
 .artwork-image-container img {
   width: 100%;
-  height: auto;
-  max-width: 100%;
-  object-fit: contain;
+  height: 100%;
+  max-width: none;
+  object-fit: cover;
   object-position: center center;
   display: block;
   border-radius: 0;

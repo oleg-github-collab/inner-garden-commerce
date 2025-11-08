@@ -5,6 +5,7 @@
   const MAP_CONTAINER_ID = 'harmony-world-map';
   const MAP_SECTION_ID = 'harmony-map';
   const CITY_LIST_ID = 'map-city-list';
+  const MAP_TYPE_ID = 'map-type-legend';
   const LEAFLET_VERSION = '1.9.4';
   const LEAFLET_JS = `https://unpkg.com/leaflet@${LEAFLET_VERSION}/dist/leaflet.js`;
   const LEAFLET_CSS = `https://unpkg.com/leaflet@${LEAFLET_VERSION}/dist/leaflet.css`;
@@ -152,6 +153,8 @@
     mural: '#9b59b6'
   };
 
+  const TYPE_ORDER = ['main', 'gallery', 'exhibition', 'mural'];
+
   const tooltipOptions = {
     permanent: false,
     direction: 'top',
@@ -161,6 +164,7 @@
   let leafletPromise = null;
   let mapInstance = null;
   let markerStore = [];
+  let activeCityIndex = null;
   let currentLanguage = detectLanguage();
   let resizeHandler = null;
   let languageHandler = null;
@@ -201,6 +205,54 @@
       return '';
     }
     return meta.labels[currentLanguage] || meta.labels.uk;
+  }
+
+  function getCityNames(city) {
+    const lang = currentLanguage;
+    return {
+      city: city.city[lang] || city.city.uk,
+      country: city.country[lang] || city.country.uk
+    };
+  }
+
+  function setActiveCity(index) {
+    if (typeof index !== 'number' || Number.isNaN(index)) {
+      activeCityIndex = null;
+      return;
+    }
+
+    activeCityIndex = index;
+
+    const buttons = document.querySelectorAll('.map-city-button');
+    buttons.forEach((button) => {
+      const buttonIndex = Number(button.dataset.cityIndex);
+      const isActive = buttonIndex === index;
+      button.classList.toggle('active', isActive);
+      button.setAttribute('aria-pressed', String(isActive));
+    });
+  }
+
+  function renderTypeLegend() {
+    const container = document.getElementById(MAP_TYPE_ID);
+    if (!container) {
+      return;
+    }
+
+    container.innerHTML = '';
+
+    TYPE_ORDER.forEach((type) => {
+      const meta = resolveTypeMeta(type);
+      const pill = document.createElement('span');
+      pill.className = 'map-type-pill';
+      pill.style.setProperty('--marker-color', TYPE_COLORS[type] || TYPE_COLORS.gallery);
+      pill.innerHTML = `
+        <span class="map-type-icon">
+          <i class="fas ${meta.icon || 'fa-map-marker-alt'}" aria-hidden="true"></i>
+        </span>
+        ${getTypeLabel(type)}
+      `;
+      container.appendChild(pill);
+    });
   }
 
   function ensureLeaflet() {
@@ -300,7 +352,7 @@
 
     listElement.innerHTML = '';
 
-    markerStore.forEach(({ city, marker }) => {
+    markerStore.forEach(({ city }, index) => {
       const item = document.createElement('li');
       item.className = 'map-city-item';
 
@@ -308,34 +360,38 @@
       button.type = 'button';
       button.className = 'city-link map-city-button';
       button.setAttribute('aria-label', getCityLabel(city));
+       button.dataset.cityIndex = String(index);
+       button.dataset.cityType = city.type;
+       button.setAttribute('aria-pressed', 'false');
 
       const iconClass = resolveTypeMeta(city.type).icon || 'fa-map-marker-alt';
       const color = TYPE_COLORS[city.type] || TYPE_COLORS.gallery;
 
       button.style.setProperty('--marker-color', color);
 
+      const names = getCityNames(city);
+
       button.innerHTML = `
         <span class="city-icon">
-          <i class="fas ${iconClass}"></i>
+          <i class="fas ${iconClass}" aria-hidden="true"></i>
         </span>
-        <span class="city-name">${getCityLabel(city)}</span>
+        <span class="city-labels">
+          <span class="city-name">${names.city}</span>
+          <span class="city-country">${names.country}</span>
+        </span>
         <span class="city-type">${getTypeLabel(city.type)}</span>
       `;
 
       button.addEventListener('click', () => {
-        const [lat, lng] = city.coordinates;
-        mapInstance.flyTo([lat, lng], 10, {
-          duration: 1.5,
-          easeLinearity: 0.4
-        });
-
-        marker.openTooltip();
-        window.setTimeout(() => marker.closeTooltip(), 2400);
+        focusCity(index);
       });
 
       item.appendChild(button);
       listElement.appendChild(item);
     });
+
+    const initialIndex = typeof activeCityIndex === 'number' ? activeCityIndex : 0;
+    setActiveCity(initialIndex);
   }
 
   function updateTooltips() {
@@ -362,6 +418,30 @@
     } else {
       map.setView([50, 10], 4);
     }
+  }
+
+  function focusCity(index) {
+    if (!mapInstance) {
+      return;
+    }
+
+    const entry = markerStore[index];
+    if (!entry) {
+      return;
+    }
+
+    const [lat, lng] = entry.city.coordinates;
+    const targetZoom = Math.min(Math.max(mapInstance.getZoom(), 6), 10);
+
+    mapInstance.flyTo([lat, lng], targetZoom, {
+      duration: 1.5,
+      easeLinearity: 0.4
+    });
+
+    entry.marker.openTooltip();
+    setActiveCity(index);
+
+    window.setTimeout(() => entry.marker.closeTooltip(), 2400);
   }
 
   function showFallback(errorKey) {
@@ -414,11 +494,17 @@
     }
 
     markerStore = [];
+    activeCityIndex = null;
 
     const container = document.getElementById(MAP_CONTAINER_ID);
     if (container) {
       container.removeAttribute('data-map-ready');
       container.innerHTML = '';
+    }
+
+    const typeLegend = document.getElementById(MAP_TYPE_ID);
+    if (typeLegend) {
+      typeLegend.innerHTML = '';
     }
   }
 
@@ -427,6 +513,7 @@
       const lang = event?.detail?.lang;
       currentLanguage = lang || detectLanguage();
       renderLegend();
+      renderTypeLegend();
       updateTooltips();
       if (typeof window.translateTree === 'function') {
         window.translateTree(document.getElementById(CITY_LIST_ID));
@@ -479,7 +566,11 @@
     });
 
     fitToMarkers(mapInstance);
+    if (activeCityIndex === null && markerStore.length) {
+      activeCityIndex = 0;
+    }
     renderLegend();
+    renderTypeLegend();
 
     setupEventListeners();
 
@@ -495,19 +586,11 @@
       markers: markerStore,
       refresh: () => {
         renderLegend();
+        renderTypeLegend();
         updateTooltips();
       },
-      flyToCity(index) {
-        const entry = markerStore[index];
-        if (entry) {
-          mapInstance.flyTo(entry.city.coordinates, 10, {
-            duration: 1.5,
-            easeLinearity: 0.4
-          });
-          entry.marker.openTooltip();
-          window.setTimeout(() => entry.marker.closeTooltip(), 2400);
-        }
-      },
+      flyToCity: focusCity,
+      focusCity,
       destroy: destroyMap
     };
   }
