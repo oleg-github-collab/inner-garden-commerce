@@ -3,24 +3,24 @@
    ======================================== */
 
 body[data-page="home"] {
-  --ig-accent: #c86bf2;
-  --ig-accent-dark: #9b42c4;
-  --ig-secondary: #ff9fb0;
-  --ig-gradient: linear-gradient(135deg, #fff0f9 0%, #f5fbff 100%);
-  --ig-surface-alt: #fffaf4;
+  --ig-accent: #e67e22;
+  --ig-accent-dark: #c65a0a;
+  --ig-secondary: #7f56d9;
+  --ig-gradient: linear-gradient(135deg, #fff7f0 0%, #f0f4ff 100%);
+  --ig-surface-alt: #fdfaf6;
 }
 
 body[data-page="home"] .hero-image .image-container {
-  background: rgba(255, 255, 255, 0.9);
+  background: rgba(255, 255, 255, 0.95);
 }
 
 body[data-page="home"] .meditation-controls,
 body[data-page="home"] .story-form-container {
   background: #fff;
-  border: 1px solid rgba(200, 107, 242, 0.1);
+  border: 1px solid rgba(230, 126, 34, 0.08);
 }
 
 body[data-page="home"] .collection-filter-btn.active,
 body[data-page="home"] .filter-btn.active {
-  box-shadow: 0 14px 32px rgba(200, 107, 242, 0.25);
+  box-shadow: 0 14px 32px rgba(230, 126, 34, 0.25);
 }

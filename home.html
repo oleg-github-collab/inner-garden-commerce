@@ -798,37 +798,77 @@
           <p class="section-subtitle" data-key="quiz-subtitle">Дозвольте нам знайти ідеальну картину для вашого простору</p>
         </div>
         
-        <div class="quiz-container" id="quiz-container">
-          <button class="quiz-option" type="button" data-space="living-room" data-mood="balance" data-palette="warm">
-            <h3 data-key="quiz-home-option-1-title">Вітальня</h3>
-            <p data-key="quiz-home-option-1-desc">Створіть атмосферу для сімейних зустрічей та приємних вечорів з друзями.</p>
-            <ul class="quiz-tags">
-              <li data-key="quiz-home-option-1-tag-1">Затишок</li>
-              <li data-key="quiz-home-option-1-tag-2">Гармонія</li>
-            </ul>
-          </button>
+        <div class="quiz-layout">
+          <div class="quiz-preview">
+            <img
+              src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/ygljcsxleructfousvu6.webp"
+              alt="Home art moodboard"
+              loading="lazy">
+            <div class="quiz-preview-copy">
+              <p data-key="quiz-home-preview-text">Натхнення для вітальні, спальні чи кабінету — однакові правила композиції, різна атмосфера.</p>
+              <div class="quiz-preview-tags">
+                <span>Living</span>
+                <span>Bedroom</span>
+                <span>Study</span>
+              </div>
+            </div>
+          </div>
 
-          <button class="quiz-option" type="button" data-space="bedroom" data-mood="calm" data-palette="cool">
-            <h3 data-key="quiz-home-option-2-title">Спальня</h3>
-            <p data-key="quiz-home-option-2-desc">Максимальне відчуття спокою та релаксації для якісного відпочинку.</p>
-            <ul class="quiz-tags">
-              <li data-key="quiz-home-option-2-tag-1">Спокій</li>
-              <li data-key="quiz-home-option-2-tag-2">Релакс</li>
-            </ul>
-          </button>
+          <div class="quiz-interactive">
+            <div class="quiz-container" id="quiz-container">
+              <button class="quiz-option" type="button" data-space="living-room" data-mood="balance" data-palette="warm">
+                <div class="quiz-option-head">
+                  <span class="quiz-icon">
+                    <i class="fas fa-couch" aria-hidden="true"></i>
+                  </span>
+                  <div>
+                    <h3 data-key="quiz-home-option-1-title">Вітальня</h3>
+                    <p data-key="quiz-home-option-1-desc">Створіть атмосферу для сімейних зустрічей та приємних вечорів з друзями.</p>
+                  </div>
+                </div>
+                <ul class="quiz-tags">
+                  <li data-key="quiz-home-option-1-tag-1">Затишок</li>
+                  <li data-key="quiz-home-option-1-tag-2">Гармонія</li>
+                </ul>
+              </button>
 
-          <button class="quiz-option" type="button" data-space="study" data-mood="focus" data-palette="neutral">
-            <h3 data-key="quiz-home-option-3-title">Кабінет</h3>
-            <p data-key="quiz-home-option-3-desc">Акцент на концентрації та натхненні для продуктивної роботи вдома.</p>
-            <ul class="quiz-tags">
-              <li data-key="quiz-home-option-3-tag-1">Фокус</li>
-              <li data-key="quiz-home-option-3-tag-2">Натхнення</li>
-            </ul>
-          </button>
-        </div>
+              <button class="quiz-option" type="button" data-space="bedroom" data-mood="calm" data-palette="cool">
+                <div class="quiz-option-head">
+                  <span class="quiz-icon">
+                    <i class="fas fa-bed" aria-hidden="true"></i>
+                  </span>
+                  <div>
+                    <h3 data-key="quiz-home-option-2-title">Спальня</h3>
+                    <p data-key="quiz-home-option-2-desc">Максимальне відчуття спокою та релаксації для якісного відпочинку.</p>
+                  </div>
+                </div>
+                <ul class="quiz-tags">
+                  <li data-key="quiz-home-option-2-tag-1">Спокій</li>
+                  <li data-key="quiz-home-option-2-tag-2">Релакс</li>
+                </ul>
+              </button>
 
-        <div class="quiz-results-panel" id="quiz-results-panel" aria-live="polite">
-          <!-- Dynamic atmosphere recommendations will appear here -->
+              <button class="quiz-option" type="button" data-space="study" data-mood="focus" data-palette="neutral">
+                <div class="quiz-option-head">
+                  <span class="quiz-icon">
+                    <i class="fas fa-lightbulb" aria-hidden="true"></i>
+                  </span>
+                  <div>
+                    <h3 data-key="quiz-home-option-3-title">Кабінет</h3>
+                    <p data-key="quiz-home-option-3-desc">Акцент на концентрації та натхненні для продуктивної роботи вдома.</p>
+                  </div>
+                </div>
+                <ul class="quiz-tags">
+                  <li data-key="quiz-home-option-3-tag-1">Фокус</li>
+                  <li data-key="quiz-home-option-3-tag-2">Натхнення</li>
+                </ul>
+              </button>
+            </div>
+
+            <div class="quiz-results-panel" id="quiz-results-panel" aria-live="polite">
+              <!-- Dynamic atmosphere recommendations will appear here -->
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -842,7 +882,8 @@
           <p class="section-subtitle" data-key="artworks-subtitle">Наведіть курсор на картину, щоб відчути її енергію</p>
         </div>
         
-        <div class="artworks-grid" id="artworks-grid">
+        <div class="artworks-gallery">
+          <div class="artworks-grid" id="artworks-grid">
           <article class="artwork-card">
             <div class="artwork-image">
               <img
@@ -1009,6 +1050,7 @@
                 <p data-key="ar-hint">Допоможіть камері знайти стіну</p>
               </div>
             </div>
+          </div>
           </div>
         </div>
       </div>

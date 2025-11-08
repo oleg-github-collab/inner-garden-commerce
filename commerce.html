@@ -716,37 +716,77 @@
           <p class="section-subtitle" data-key="quiz-subtitle">Дозвольте нам знайти ідеальну картину для вашого простору</p>
         </div>
         
-        <div class="quiz-container" id="quiz-container">
-          <button class="quiz-option" type="button" data-space="hotel" data-mood="balance" data-palette="neutral">
-            <h3 data-key="quiz-option-1-title">Лобі готелю</h3>
-            <p data-key="quiz-option-1-desc">Потрібна виразна робота, що створює перше враження і підтримує преміальний сервіс.</p>
-            <ul class="quiz-tags">
-              <li data-key="quiz-option-1-tag-1">Високий трафік</li>
-              <li data-key="quiz-option-1-tag-2">Нічне освітлення</li>
-            </ul>
-          </button>
+        <div class="quiz-layout">
+          <div class="quiz-preview">
+            <img
+              src="https://res.cloudinary.com/djdc6wcpg/image/upload/q_auto/vjyoe8gclo0rx32tl2vu.webp"
+              alt="Business art moodboard"
+              loading="lazy">
+            <div class="quiz-preview-copy">
+              <p data-key="quiz-preview-text">Комбінація кольору, текстури та форми задає тон сервісу. Підберіть сюжет, що підсилить ваш бренд.</p>
+              <div class="quiz-preview-tags">
+                <span>Hospitality</span>
+                <span>Wellness</span>
+                <span>Corporate</span>
+              </div>
+            </div>
+          </div>
 
-          <button class="quiz-option" type="button" data-space="medical" data-mood="calm" data-palette="cool">
-            <h3 data-key="quiz-option-2-title">Медичний центр</h3>
-            <p data-key="quiz-option-2-desc">Максимальне відчуття спокою та підтримки для відвідувачів і персоналу.</p>
-            <ul class="quiz-tags">
-              <li data-key="quiz-option-2-tag-1">Світлі тони</li>
-              <li data-key="quiz-option-2-tag-2">Антистрес</li>
-            </ul>
-          </button>
+          <div class="quiz-interactive">
+            <div class="quiz-container" id="quiz-container">
+              <button class="quiz-option" type="button" data-space="hotel" data-mood="balance" data-palette="neutral">
+                <div class="quiz-option-head">
+                  <span class="quiz-icon">
+                    <i class="fas fa-hotel" aria-hidden="true"></i>
+                  </span>
+                  <div>
+                    <h3 data-key="quiz-option-1-title">Лобі готелю</h3>
+                    <p data-key="quiz-option-1-desc">Потрібна виразна робота, що створює перше враження і підтримує преміальний сервіс.</p>
+                  </div>
+                </div>
+                <ul class="quiz-tags">
+                  <li data-key="quiz-option-1-tag-1">Високий трафік</li>
+                  <li data-key="quiz-option-1-tag-2">Нічне освітлення</li>
+                </ul>
+              </button>
 
-          <button class="quiz-option" type="button" data-space="office" data-mood="energy" data-palette="warm">
-            <h3 data-key="quiz-option-3-title">Офіс-креатив</h3>
-            <p data-key="quiz-option-3-desc">Акцент на енергії та натхненні для командних зустрічей і брейнштормінгу.</p>
-            <ul class="quiz-tags">
-              <li data-key="quiz-option-3-tag-1">Яскраві акценти</li>
-              <li data-key="quiz-option-3-tag-2">Потік ідей</li>
-            </ul>
-          </button>
-        </div>
+              <button class="quiz-option" type="button" data-space="medical" data-mood="calm" data-palette="cool">
+                <div class="quiz-option-head">
+                  <span class="quiz-icon">
+                    <i class="fas fa-heartbeat" aria-hidden="true"></i>
+                  </span>
+                  <div>
+                    <h3 data-key="quiz-option-2-title">Медичний центр</h3>
+                    <p data-key="quiz-option-2-desc">Максимальне відчуття спокою та підтримки для відвідувачів і персоналу.</p>
+                  </div>
+                </div>
+                <ul class="quiz-tags">
+                  <li data-key="quiz-option-2-tag-1">Світлі тони</li>
+                  <li data-key="quiz-option-2-tag-2">Антистрес</li>
+                </ul>
+              </button>
 
-        <div class="quiz-results-panel" id="quiz-results-panel" aria-live="polite">
-          <!-- Dynamic atmosphere recommendations will appear here -->
+              <button class="quiz-option" type="button" data-space="office" data-mood="energy" data-palette="warm">
+                <div class="quiz-option-head">
+                  <span class="quiz-icon">
+                    <i class="fas fa-bolt" aria-hidden="true"></i>
+                  </span>
+                  <div>
+                    <h3 data-key="quiz-option-3-title">Офіс-креатив</h3>
+                    <p data-key="quiz-option-3-desc">Акцент на енергії та натхненні для командних зустрічей і брейнштормінгу.</p>
+                  </div>
+                </div>
+                <ul class="quiz-tags">
+                  <li data-key="quiz-option-3-tag-1">Яскраві акценти</li>
+                  <li data-key="quiz-option-3-tag-2">Потік ідей</li>
+                </ul>
+              </button>
+            </div>
+
+            <div class="quiz-results-panel" id="quiz-results-panel" aria-live="polite">
+              <!-- Dynamic atmosphere recommendations will appear here -->
+            </div>
+          </div>
         </div>
       </div>
     </section>
@@ -760,7 +800,8 @@
           <p class="section-subtitle" data-key="artworks-subtitle">Наведіть курсор на картину, щоб відчути її енергію</p>
         </div>
         
-        <div class="artworks-grid" id="artworks-grid">
+        <div class="artworks-gallery">
+          <div class="artworks-grid" id="artworks-grid">
           <article class="artwork-card">
             <div class="artwork-image">
               <img
@@ -927,6 +968,7 @@
                 <p data-key="ar-hint">Допоможіть камері знайти стіну</p>
               </div>
             </div>
+          </div>
           </div>
         </div>
       </div>
