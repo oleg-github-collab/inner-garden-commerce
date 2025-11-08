@@ -13,6 +13,52 @@ body {
   color: #2c3e50;
   background: #fafafa;
   overflow-x: hidden;
+  line-height: 1.6;
+}
+
+/* ========================================
+   CONTAINER & SECTION - BASE LAYOUT
+   ======================================== */
+
+.container {
+  max-width: 1400px;
+  margin: 0 auto;
+  padding: 0 2rem;
+  width: 100%;
+}
+
+.section {
+  padding: 4rem 0;
+  width: 100%;
+}
+
+.section-header {
+  text-align: center;
+  margin-bottom: 3rem;
+}
+
+.section-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  color: #2c3e50;
+  margin-bottom: 1rem;
+  font-family: 'Playfair Display', serif;
+}
+
+.section-subtitle {
+  font-size: 1.1rem;
+  color: #666;
+  max-width: 700px;
+  margin: 0 auto;
+  line-height: 1.7;
+}
+
+.section-line {
+  width: 80px;
+  height: 4px;
+  background: linear-gradient(90deg, #e67e22, #f39c12);
+  margin: 1rem auto;
+  border-radius: 2px;
 }
 
 /* ========================================
@@ -644,6 +690,69 @@ body {
 .artwork-status.reserved {
   background: rgba(243, 156, 18, 0.95);
   box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+}
+
+/* ========================================
+   COLLECTION FILTERS
+   ======================================== */
+
+.collection-filters {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 3rem;
+  align-items: center;
+}
+
+.collection-search {
+  width: 100%;
+  max-width: 500px;
+  padding: 1rem 1.5rem;
+  font-size: 1rem;
+  border: 2px solid #e0e0e0;
+  border-radius: 50px;
+  outline: none;
+  transition: all 0.3s ease;
+  font-family: 'Raleway', sans-serif;
+}
+
+.collection-search:focus {
+  border-color: #e67e22;
+  box-shadow: 0 0 0 4px rgba(230, 126, 34, 0.1);
+}
+
+.filter-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  justify-content: center;
+}
+
+.collection-filter-btn {
+  padding: 0.75rem 1.5rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+  border: 2px solid #e0e0e0;
+  background: white;
+  color: #666;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Raleway', sans-serif;
+}
+
+.collection-filter-btn:hover {
+  border-color: #e67e22;
+  color: #e67e22;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(230, 126, 34, 0.15);
+}
+
+.collection-filter-btn.active {
+  background: #e67e22;
+  border-color: #e67e22;
+  color: white;
+  box-shadow: 0 4px 12px rgba(230, 126, 34, 0.3);
 }
 
 /* ========================================
