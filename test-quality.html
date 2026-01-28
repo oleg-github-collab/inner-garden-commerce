@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="uk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Quality Test - Inner Garden</title>
+  <style>
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      padding: 2rem;
+      background: #f7f5f2;
+    }
+    .test-section {
+      background: white;
+      padding: 2rem;
+      margin-bottom: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+    }
+    .test-section h2 {
+      margin-top: 0;
+      color: #e67e22;
+    }
+    .status {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      border-radius: 6px;
+      margin: 0.5rem;
+      font-weight: 600;
+    }
+    .status.success {
+      background: #d4edda;
+      color: #155724;
+    }
+    .status.error {
+      background: #f8d7da;
+      color: #721c24;
+    }
+    .status.warning {
+      background: #fff3cd;
+      color: #856404;
+    }
+    pre {
+      background: #f4f4f4;
+      padding: 1rem;
+      border-radius: 6px;
+      overflow-x: auto;
+    }
+  </style>
+</head>
+<body>
+  <h1>🔍 Inner Garden Quality Test</h1>
+  
+  <div class="test-section">
+    <h2>📦 File Structure Check</h2>
+    <div id="file-check"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>🎨 CSS Files</h2>
+    <div id="css-check"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>📜 JavaScript Files</h2>
+    <div id="js-check"></div>
+  </div>
+
+  <div class="test-section">
+    <h2>🗺️ Map Initialization Test</h2>
+    <p>Check browser console for map initialization logs</p>
+    <div id="map-test"></div>
+  </div>
+
+  <script>
+    const files = {
+      css: [
+        'css/quality-improvements.css',
+        'css/showcase-pages.css',
+        'css/premium-design.css',
+        'css/main.css',
+        'css/home.css',
+        'css/commerce.css'
+      ],
+      js: [
+        'js/smooth-navigation.js',
+        'js/harmony-map.js',
+        'js/atmosphere-gallery.js',
+        'js/meditation-experience.js',
+        'js/collection.js',
+        'js/main.js'
+      ]
+    };
+
+    async function checkFile(path) {
+      try {
+        const response = await fetch(path);
+        return response.ok;
+      } catch (error) {
+        return false;
+      }
+    }
+
+    async function runTests() {
+      // Check CSS files
+      const cssResults = await Promise.all(
+        files.css.map(async (file) => {
+          const exists = await checkFile(file);
+          return { file, exists };
+        })
+      );
+
+      const cssHtml = cssResults.map(({ file, exists }) => 
+        `<div class="status ${exists ? 'success' : 'error'}">
+          ${exists ? '✓' : '✗'} ${file}
+        </div>`
+      ).join('');
+      document.getElementById('css-check').innerHTML = cssHtml;
+
+      // Check JS files
+      const jsResults = await Promise.all(
+        files.js.map(async (file) => {
+          const exists = await checkFile(file);
+          return { file, exists };
+        })
+      );
+
+      const jsHtml = jsResults.map(({ file, exists }) => 
+        `<div class="status ${exists ? 'success' : 'error'}">
+          ${exists ? '✓' : '✗'} ${file}
+        </div>`
+      ).join('');
+      document.getElementById('js-check').innerHTML = jsHtml;
+
+      // Map test info
+      document.getElementById('map-test').innerHTML = `
+        <p>Open <a href="home.html" target="_blank">home.html</a> or <a href="commerce.html" target="_blank">commerce.html</a> to test the map.</p>
+        <p>Expected: Map should load with markers visible within 3-5 seconds.</p>
+        <div class="status warning">⚠️ Check browser console for [harmony-map] logs</div>
+      `;
+    }
+
+    runTests();
+  </script>
+</body>
+</html>

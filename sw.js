@@ -34,7 +34,14 @@ self.addEventListener('activate', (event) => {
 self.addEventListener('fetch', (event) => {
   const { request } = event;
 
+  // Skip non-GET requests
   if (request.method !== 'GET') {
+    return;
+  }
+
+  // Skip chrome-extension and other unsupported schemes
+  const url = new URL(request.url);
+  if (!url.protocol.startsWith('http')) {
     return;
   }
 
@@ -49,7 +56,12 @@ self.addEventListener('fetch', (event) => {
           if (networkResponse && networkResponse.status === 200) {
             const responseClone = networkResponse.clone();
             caches.open(CACHE_NAME).then((cache) => {
-              cache.put(request, responseClone);
+              // Only cache http/https
+              if (url.protocol.startsWith('http')) {
+                cache.put(request, responseClone).catch((err) => {
+                  console.warn('Cache put failed:', err.message);
+                });
+              }
             });
           }
           return networkResponse;

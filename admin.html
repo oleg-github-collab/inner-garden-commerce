@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="uk" dir="ltr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Inner Garden Admin Panel">
+  <title>Inner Garden Admin</title>
+  <link rel="icon" type="image/x-icon" href="assets/images/favicon.ico">
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@500;600;700&family=Space+Grotesk:wght@400;500;600;700&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+  <link rel="stylesheet" href="css/admin.css">
+</head>
+<body>
+  <div class="admin-root" id="adminRoot">
+    <header class="admin-header">
+      <div class="brand">
+        <div class="brand-mark">Inner Garden</div>
+        <span class="brand-pill">Admin</span>
+      </div>
+      <div class="header-actions">
+        <button class="btn ghost" id="refreshBtn">
+          <i class="fas fa-rotate"></i>
+          Оновити
+        </button>
+        <button class="btn ghost" id="logoutBtn">
+          <i class="fas fa-sign-out-alt"></i>
+          Вийти
+        </button>
+      </div>
+    </header>
+
+    <main class="admin-main">
+      <section class="admin-summary" id="summaryCards"></section>
+
+      <section class="admin-grid">
+        <div class="admin-list">
+          <div class="list-header">
+            <div>
+              <p class="eyebrow">Колекція</p>
+              <h2>Керування картинами</h2>
+              <p class="muted">Додавайте, редагуйте, ставте статус продано та оновлюйте опис.</p>
+            </div>
+            <button class="btn primary" id="newArtworkBtn">
+              <i class="fas fa-plus"></i>
+              Додати картину
+            </button>
+          </div>
+
+          <div class="list-tools">
+            <div class="search-field">
+              <i class="fas fa-search"></i>
+              <input type="search" id="searchInput" placeholder="Пошук за назвою або описом">
+            </div>
+            <select id="statusFilter">
+              <option value="all">Усі статуси</option>
+              <option value="available">Доступні</option>
+              <option value="reserved">Резерв</option>
+              <option value="commission">Під замовлення</option>
+              <option value="sold">Продано</option>
+            </select>
+            <select id="segmentFilter">
+              <option value="all">Усі сегменти</option>
+              <option value="home">Для дому</option>
+              <option value="business">Для бізнесу</option>
+              <option value="wellness">Wellness</option>
+            </select>
+          </div>
+
+          <div class="artworks-list" id="artworksList"></div>
+        </div>
+
+        <aside class="admin-editor">
+          <div class="editor-header">
+            <div>
+              <p class="eyebrow">Редактор</p>
+              <h2 id="formTitle">Нова картина</h2>
+              <p class="muted">Зміни зберігаються у базі та відразу доступні на сайті.</p>
+            </div>
+            <span class="status-pill" id="formStatusBadge">Доступна</span>
+          </div>
+          <div class="admin-hint">
+            <strong>Як працювати</strong>
+            <ul>
+              <li>Оберіть роботу зі списку або натисніть “Додати картину”.</li>
+              <li>Вкажіть Cloudinary ID, статус і розмір — це критично для галереї.</li>
+              <li>Натисніть “Зберегти” — зміни одразу з’являться на сайті.</li>
+            </ul>
+          </div>
+
+          <form id="artworkForm" class="admin-form">
+            <input type="hidden" id="artworkId" name="id">
+
+            <div class="form-section">
+              <h3>Назви</h3>
+              <div class="form-grid">
+                <label>
+                  Українська
+                  <input type="text" name="title_uk" required>
+                </label>
+                <label>
+                  English
+                  <input type="text" name="title_en" required>
+                </label>
+                <label>
+                  Deutsch
+                  <input type="text" name="title_de" required>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3>Опис</h3>
+              <div class="form-grid">
+                <label>
+                  Українська
+                  <textarea name="description_uk" rows="3" required></textarea>
+                </label>
+                <label>
+                  English
+                  <textarea name="description_en" rows="3" required></textarea>
+                </label>
+                <label>
+                  Deutsch
+                  <textarea name="description_de" rows="3" required></textarea>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3>Ціна та статус</h3>
+              <div class="form-grid two-col">
+                <label>
+                  Ціна
+                  <input type="number" name="price" min="0" step="1" placeholder="2800">
+                </label>
+                <label>
+                  Валюта
+                  <select name="currency">
+                    <option value="EUR">EUR</option>
+                    <option value="USD">USD</option>
+                  </select>
+                </label>
+                <label>
+                  Статус
+                  <select name="status" id="statusSelect">
+                    <option value="available">Доступна</option>
+                    <option value="reserved">Резерв</option>
+                    <option value="commission">Під замовлення</option>
+                    <option value="sold">Продано</option>
+                  </select>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3>Розміри</h3>
+              <div class="form-grid two-col">
+                <label>
+                  Ширина (см)
+                  <input type="number" name="width_cm" min="10" step="1" required>
+                </label>
+                <label>
+                  Висота (см)
+                  <input type="number" name="height_cm" min="10" step="1" required>
+                </label>
+                <label>
+                  Розмір (рядок)
+                  <input type="text" name="size" placeholder="120 × 80 см">
+                </label>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3>Матеріали</h3>
+              <div class="form-grid">
+                <label>
+                  Українська
+                  <input type="text" name="technique_uk" placeholder="Акрил на полотні">
+                </label>
+                <label>
+                  English
+                  <input type="text" name="technique_en" placeholder="Acrylic on canvas">
+                </label>
+                <label>
+                  Deutsch
+                  <input type="text" name="technique_de" placeholder="Acryl auf Leinwand">
+                </label>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3>Категоризація</h3>
+              <div class="form-grid two-col">
+                <label>
+                  Настрій
+                  <select name="mood">
+                    <option value="calm">Calm</option>
+                    <option value="energy">Energy</option>
+                    <option value="luxury">Luxury</option>
+                    <option value="focus">Focus</option>
+                    <option value="warmth">Warmth</option>
+                    <option value="balance">Balance</option>
+                    <option value="depth">Depth</option>
+                  </select>
+                </label>
+                <label>
+                  Сегменти
+                  <div class="chip-group" id="segmentChips">
+                    <label class="chip">
+                      <input type="checkbox" name="segments" value="home">
+                      Дім
+                    </label>
+                    <label class="chip">
+                      <input type="checkbox" name="segments" value="business">
+                      Бізнес
+                    </label>
+                    <label class="chip">
+                      <input type="checkbox" name="segments" value="wellness">
+                      Wellness
+                    </label>
+                  </div>
+                </label>
+              </div>
+            </div>
+
+            <div class="form-section">
+              <h3>Зображення</h3>
+              <div class="form-grid">
+                <label>
+                  Cloudinary ID
+                  <input type="text" name="cloudinary_id" id="cloudinaryInput" placeholder="cjdam66bgapeypc6jbmk" required>
+                </label>
+                <div class="preview-card" id="cloudinaryDrop">
+                  <p class="muted">Прев’ю</p>
+                  <img id="previewImage" alt="Preview">
+                  <div class="drop-hint">Перетягніть Cloudinary URL або вставте ID</div>
+                </div>
+              </div>
+            </div>
+
+            <div class="form-actions">
+              <button type="submit" class="btn primary" id="saveBtn">
+                <i class="fas fa-save"></i>
+                Зберегти
+              </button>
+              <button type="button" class="btn ghost" id="resetBtn">
+                Очистити
+              </button>
+            </div>
+          </form>
+        </aside>
+      </section>
+    </main>
+  </div>
+
+  <div class="login-modal" id="loginModal" style="display: none;">
+    <div class="login-card">
+      <h2>Вхід до адмінки</h2>
+      <p class="muted">Використовуйте ADMIN_EMAIL / ADMIN_PASSWORD або ADMIN_TOKEN.</p>
+      <form id="loginForm">
+        <label>
+          Email
+          <input type="email" name="email" required placeholder="admin@inner-garden.art">
+        </label>
+        <label>
+          Пароль
+          <input type="password" name="password" required placeholder="••••••••">
+        </label>
+        <button type="submit" class="btn primary" id="loginBtn">Увійти</button>
+      </form>
+    </div>
+  </div>
+
+  <div class="toast" id="toast"></div>
+
+  <script src="js/admin-app.js"></script>
+</body>
+</html>

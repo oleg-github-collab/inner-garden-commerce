@@ -1055,9 +1055,9 @@
   const updateContent = () => {
     translateTree(document.body);
 
-    const title = translateForDom('site-title');
+    const title = translateForDom('page-title') || translateForDom('site-title');
     if (title) {
-      document.title = `${title} – Абстрактні картини для бізнесу`;
+      document.title = title;
     }
   };
 

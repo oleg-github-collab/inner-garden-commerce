@@ -49,10 +49,13 @@
     }
 
     createMeditationButton() {
-      const existingBtn = this.meditationSection.querySelector('#meditation-play-btn');
-      if (existingBtn) {
-        existingBtn.addEventListener('click', () => this.openModal());
+      const triggers = this.meditationSection.querySelectorAll('#meditation-play-btn, [data-trigger="meditation-play"]');
+      if (!triggers.length) {
+        return;
       }
+      triggers.forEach((btn) => {
+        btn.addEventListener('click', () => this.openModal());
+      });
     }
 
     createModal() {
@@ -541,9 +544,18 @@
     }
   }
 
+  function initMeditation() {
+    try {
+      new MeditationExperience();
+    } catch (error) {
+      console.error('[meditation-experience] Initialization error:', error);
+    }
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => new MeditationExperience());
-  } else {
-    new MeditationExperience();
+    document.addEventListener('DOMContentLoaded', initMeditation);
+  } else if (document.readyState === 'interactive' || document.readyState === 'complete') {
+    // DOM is ready, but wait a tick to ensure all other scripts loaded
+    setTimeout(initMeditation, 0);
   }
 })();

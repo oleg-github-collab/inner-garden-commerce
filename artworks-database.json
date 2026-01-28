@@ -13,7 +13,16 @@
       "technique_uk": "Акрил на полотні",
       "technique_en": "Acrylic on canvas",
       "technique_de": "Acryl auf Leinwand",
-      "cloudinary_id": "cjdam66bgapeypc6jbmk"
+      "cloudinary_id": "cjdam66bgapeypc6jbmk",
+      "width_cm": 120,
+      "height_cm": 80,
+      "segments": [
+        "home",
+        "wellness"
+      ],
+      "mood": "calm",
+      "status": "available",
+      "currency": "EUR"
     },
     {
       "id": "bophmlcfc59t2gbrojcj",
@@ -28,7 +37,16 @@
       "technique_uk": "Акрил на полотні",
       "technique_en": "Acrylic on canvas",
       "technique_de": "Acryl auf Leinwand",
-      "cloudinary_id": "bophmlcfc59t2gbrojcj"
+      "cloudinary_id": "bophmlcfc59t2gbrojcj",
+      "width_cm": 140,
+      "height_cm": 100,
+      "segments": [
+        "home",
+        "business"
+      ],
+      "mood": "energy",
+      "status": "available",
+      "currency": "EUR"
     },
     {
       "id": "ahhjrthahilbpq7vfxtm",
@@ -43,7 +61,16 @@
       "technique_uk": "Змішана техніка",
       "technique_en": "Mixed media",
       "technique_de": "Mischtechnik",
-      "cloudinary_id": "ahhjrthahilbpq7vfxtm"
+      "cloudinary_id": "ahhjrthahilbpq7vfxtm",
+      "width_cm": 100,
+      "height_cm": 90,
+      "segments": [
+        "home",
+        "business"
+      ],
+      "mood": "luxury",
+      "status": "available",
+      "currency": "EUR"
     },
     {
       "id": "mxqry3lw3fcgfdfidupg",
@@ -58,7 +85,16 @@
       "technique_uk": "Змішана техніка",
       "technique_en": "Mixed media",
       "technique_de": "Mischtechnik",
-      "cloudinary_id": "mxqry3lw3fcgfdfidupg"
+      "cloudinary_id": "mxqry3lw3fcgfdfidupg",
+      "width_cm": 100,
+      "height_cm": 90,
+      "segments": [
+        "home",
+        "wellness"
+      ],
+      "mood": "calm",
+      "status": "available",
+      "currency": "EUR"
     },
     {
       "id": "qhvtqjfrokrawpwzgirh",
@@ -73,7 +109,15 @@
       "technique_uk": "Акрил, текстура",
       "technique_en": "Acrylic, texture",
       "technique_de": "Acryl, Textur",
-      "cloudinary_id": "qhvtqjfrokrawpwzgirh"
+      "cloudinary_id": "qhvtqjfrokrawpwzgirh",
+      "width_cm": 140,
+      "height_cm": 100,
+      "segments": [
+        "business"
+      ],
+      "mood": "energy",
+      "status": "available",
+      "currency": "EUR"
     },
     {
       "id": "uglnt2onrbzlxz2iqhge",
@@ -88,7 +132,16 @@
       "technique_uk": "Акрил на полотні",
       "technique_en": "Acrylic on canvas",
       "technique_de": "Acryl auf Leinwand",
-      "cloudinary_id": "uglnt2onrbzlxz2iqhge"
+      "cloudinary_id": "uglnt2onrbzlxz2iqhge",
+      "width_cm": 120,
+      "height_cm": 80,
+      "segments": [
+        "home",
+        "business"
+      ],
+      "mood": "balance",
+      "status": "available",
+      "currency": "EUR"
     },
     {
       "id": "bluuydwtjxbgwmgaefge",
@@ -103,7 +156,15 @@
       "technique_uk": "Акрил на полотні",
       "technique_en": "Acrylic on canvas",
       "technique_de": "Acryl auf Leinwand",
-      "cloudinary_id": "bluuydwtjxbgwmgaefge"
+      "cloudinary_id": "bluuydwtjxbgwmgaefge",
+      "width_cm": 90,
+      "height_cm": 70,
+      "segments": [
+        "home"
+      ],
+      "mood": "warmth",
+      "status": "available",
+      "currency": "EUR"
     },
     {
       "id": "niggq9nlrc8w3qphww4o",
@@ -118,7 +179,16 @@
       "technique_uk": "Змішана техніка",
       "technique_en": "Mixed media",
       "technique_de": "Mischtechnik",
-      "cloudinary_id": "niggq9nlrc8w3qphww4o"
+      "cloudinary_id": "niggq9nlrc8w3qphww4o",
+      "width_cm": 130,
+      "height_cm": 90,
+      "segments": [
+        "home",
+        "wellness"
+      ],
+      "mood": "calm",
+      "status": "available",
+      "currency": "EUR"
     },
     {
       "id": "bzrsep3sbbgtsiz5wjkh",
@@ -133,7 +203,15 @@
       "technique_uk": "Акрил на полотні",
       "technique_en": "Acrylic on canvas",
       "technique_de": "Acryl auf Leinwand",
-      "cloudinary_id": "bzrsep3sbbgtsiz5wjkh"
+      "cloudinary_id": "bzrsep3sbbgtsiz5wjkh",
+      "width_cm": 110,
+      "height_cm": 80,
+      "segments": [
+        "home"
+      ],
+      "mood": "energy",
+      "status": "available",
+      "currency": "EUR"
     },
     {
       "id": "dxdiokbyx0wxwzarmtse",
@@ -148,7 +226,15 @@
       "technique_uk": "Акрил, текстура",
       "technique_en": "Acrylic, texture",
       "technique_de": "Acryl, Textur",
-      "cloudinary_id": "dxdiokbyx0wxwzarmtse"
+      "cloudinary_id": "dxdiokbyx0wxwzarmtse",
+      "width_cm": 120,
+      "height_cm": 100,
+      "segments": [
+        "business"
+      ],
+      "mood": "focus",
+      "status": "available",
+      "currency": "EUR"
     },
     {
       "id": "sulp2oyw2fibpaamjl9g",
@@ -163,7 +249,15 @@
       "technique_uk": "Акрил на полотні",
       "technique_en": "Acrylic on canvas",
       "technique_de": "Acryl auf Leinwand",
-      "cloudinary_id": "sulp2oyw2fibpaamjl9g"
+      "cloudinary_id": "sulp2oyw2fibpaamjl9g",
+      "width_cm": 100,
+      "height_cm": 80,
+      "segments": [
+        "home"
+      ],
+      "mood": "calm",
+      "status": "available",
+      "currency": "EUR"
     },
     {
       "id": "ybew3hhb3ks8pyvu94of",
@@ -178,7 +272,16 @@
       "technique_uk": "Змішана техніка",
       "technique_en": "Mixed media",
       "technique_de": "Mischtechnik",
-      "cloudinary_id": "ybew3hhb3ks8pyvu94of"
+      "cloudinary_id": "ybew3hhb3ks8pyvu94of",
+      "width_cm": 140,
+      "height_cm": 100,
+      "segments": [
+        "home",
+        "business"
+      ],
+      "mood": "energy",
+      "status": "available",
+      "currency": "EUR"
     },
     {
       "id": "wyjweijtla7vmefwrgyf",
@@ -193,7 +296,16 @@
       "technique_uk": "Акрил на полотні",
       "technique_en": "Acrylic on canvas",
       "technique_de": "Acryl auf Leinwand",
-      "cloudinary_id": "wyjweijtla7vmefwrgyf"
+      "cloudinary_id": "wyjweijtla7vmefwrgyf",
+      "width_cm": 115,
+      "height_cm": 85,
+      "segments": [
+        "home",
+        "business"
+      ],
+      "mood": "focus",
+      "status": "available",
+      "currency": "EUR"
     },
     {
       "id": "spw3eqlbijdqi4hbfcnx",
@@ -208,7 +320,16 @@
       "technique_uk": "Змішана техніка",
       "technique_en": "Mixed media",
       "technique_de": "Mischtechnik",
-      "cloudinary_id": "spw3eqlbijdqi4hbfcnx"
+      "cloudinary_id": "spw3eqlbijdqi4hbfcnx",
+      "width_cm": 150,
+      "height_cm": 110,
+      "segments": [
+        "business",
+        "wellness"
+      ],
+      "mood": "depth",
+      "status": "available",
+      "currency": "EUR"
     },
     {
       "id": "oqbo7w0mxiregs2vvxcn",
@@ -223,7 +344,17 @@
       "technique_uk": "Акрил на полотні",
       "technique_en": "Acrylic on canvas",
       "technique_de": "Acryl auf Leinwand",
-      "cloudinary_id": "oqbo7w0mxiregs2vvxcn"
+      "cloudinary_id": "oqbo7w0mxiregs2vvxcn",
+      "width_cm": 95,
+      "height_cm": 75,
+      "segments": [
+        "home",
+        "wellness"
+      ],
+      "mood": "calm",
+      "status": "available",
+      "currency": "EUR"
     }
-  ]
+  ],
+  "updated_at": "2026-01-26T15:27:27.827Z"
 }

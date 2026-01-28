@@ -1714,9 +1714,17 @@
     }
   }
 
+  function initAtmosphereGallery() {
+    try {
+      new AtmosphereGallery();
+    } catch (error) {
+      console.error('[atmosphere-gallery] Initialization error:', error);
+    }
+  }
+
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => new AtmosphereGallery());
-  } else {
-    new AtmosphereGallery();
+    document.addEventListener('DOMContentLoaded', initAtmosphereGallery);
+  } else if (document.readyState === 'interactive' || document.readyState === 'complete') {
+    setTimeout(initAtmosphereGallery, 0);
   }
 })();

@@ -606,38 +606,53 @@
   }
 
   function initialise(forceLoad = false) {
-    const section = document.getElementById(MAP_SECTION_ID);
-    if (!section) {
-      return;
-    }
+    try {
+      const section = document.getElementById(MAP_SECTION_ID);
+      if (!section) {
+        console.warn('[harmony-map] Map section not found');
+        return;
+      }
 
-    if (forceLoad) {
-      loadMapAssets();
-      return;
-    }
+      if (forceLoad) {
+        loadMapAssets();
+        return;
+      }
 
-    if ('IntersectionObserver' in window) {
-      const observer = new IntersectionObserver((entries, obs) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            obs.disconnect();
-            loadMapAssets();
-          }
+      if ('IntersectionObserver' in window) {
+        const observer = new IntersectionObserver((entries, obs) => {
+          entries.forEach((entry) => {
+            if (entry.isIntersecting) {
+              obs.disconnect();
+              loadMapAssets();
+            }
+          });
+        }, {
+          rootMargin: '200px 0px',
+          threshold: 0.1
         });
-      }, {
-        rootMargin: '200px 0px',
-        threshold: 0.1
-      });
 
-      observer.observe(section);
+        observer.observe(section);
+      } else {
+        loadMapAssets();
+      }
+    } catch (error) {
+      console.error('[harmony-map] Initialization error:', error);
+    }
+  }
+
+  function safeInit() {
+    // Wait a bit for DOM to be fully ready
+    if (document.getElementById(MAP_SECTION_ID)) {
+      initialise(false);
     } else {
-      loadMapAssets();
+      console.warn('[harmony-map] Section not available yet, retrying...');
+      setTimeout(safeInit, 100);
     }
   }
 
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', () => initialise(false));
-  } else {
-    initialise(false);
+    document.addEventListener('DOMContentLoaded', safeInit);
+  } else if (document.readyState === 'interactive' || document.readyState === 'complete') {
+    setTimeout(safeInit, 0);
   }
 })();

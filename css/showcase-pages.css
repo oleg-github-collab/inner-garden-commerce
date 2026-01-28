@@ -803,6 +803,12 @@ img {
   gap: clamp(1.5rem, 4vw, 2.5rem);
 }
 
+@media (min-width: 992px) {
+  .collection-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 .collection-item {
   position: relative;
   background: linear-gradient(180deg, #fff, #fbfbfb);
@@ -826,9 +832,8 @@ img {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: clamp(0.75rem, 2vw, 1rem);
-  background: #fff;
-  border-bottom: 1px solid rgba(15, 23, 42, 0.05);
+  padding: clamp(0.85rem, 2vw, 1.25rem);
+  background: linear-gradient(135deg, rgba(245, 246, 251, 0.6), rgba(255, 255, 255, 0.95));
   margin: 0;
 }
 
@@ -836,8 +841,9 @@ img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border-radius: 24px;
-  box-shadow: none;
+  border-radius: 20px;
+  box-shadow: 0 20px 35px rgba(15, 23, 42, 0.08);
+  background: #fff;
   transition: transform 0.35s ease;
 }
 
@@ -893,11 +899,12 @@ img {
 }
 
 .collection-actions .btn {
-  flex: 1;
-  min-width: 180px;
+  flex: 1 1 150px;
+  min-width: 150px;
   padding: 0.8rem 1.4rem;
   font-size: 0.95rem;
   border-radius: 999px;
+  justify-content: center;
 }
 
 .collection-actions .btn i {
@@ -1150,6 +1157,12 @@ img {
   grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
 }
 
+@media (min-width: 1200px) {
+  .artworks-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
 .artworks-grid .artwork-card {
   background: #fff;
   border-radius: 32px;
@@ -1174,6 +1187,8 @@ img {
 }
 
 .artworks-grid .artwork-image img {
+  width: 100%;
+  height: 100%;
   object-fit: cover;
   border-radius: 20px;
   filter: drop-shadow(0 15px 35px rgba(15, 23, 42, 0.2));
@@ -1388,13 +1403,20 @@ img {
   box-shadow: 0 25px 60px rgba(15, 23, 42, 0.15);
 }
 
+.meditation-preview img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
 .meditation-preview button {
   position: absolute;
   bottom: 1.5rem;
   left: 1.5rem;
 }
 
-.meditation-controls {
+.meditation-details {
   background: #fff;
   border-radius: 32px;
   padding: 2rem;
@@ -1402,6 +1424,67 @@ img {
   display: flex;
   flex-direction: column;
   gap: 1.25rem;
+  border: 1px solid rgba(15, 23, 42, 0.08);
+}
+
+.meditation-details p {
+  color: var(--ig-muted);
+}
+
+.meditation-steps {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.85rem;
+}
+
+.meditation-steps li {
+  display: flex;
+  gap: 0.75rem;
+  align-items: flex-start;
+  color: var(--ig-muted);
+}
+
+.meditation-step-bullet {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: rgba(230, 126, 34, 0.12);
+  color: var(--ig-accent);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+}
+
+.meditation-metrics {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.meditation-metric {
+  flex: 1;
+  min-width: 140px;
+  padding: 0.9rem 1rem;
+  border-radius: 20px;
+  background: rgba(15, 23, 42, 0.05);
+  text-align: center;
+  font-weight: 600;
+  color: var(--ig-text);
+}
+
+.meditation-metric span {
+  display: block;
+  font-size: 1.1rem;
+}
+
+.meditation-metric small {
+  font-size: 0.8rem;
+  font-weight: 500;
+  color: var(--ig-muted);
 }
 
 .meditation-buttons {
