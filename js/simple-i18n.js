@@ -31,10 +31,10 @@
       'link-business': 'Мистецтво для Бізнесу',
       'link-home': 'Мистецтво для Дому',
       'hero-title': 'Marina Kaminska',
-      'hero-subtitle': 'Українська художниця абстрактного мистецтва. Створюю унікальні картини для бізнесу та дому.',
+      'hero-subtitle': 'Головна сторінка-презентація мого мистецтва: галерея всіх картин, приватні й бізнес-проєкти, перформанси та ліцензування.',
       'hero-description': 'Відкрийте для себе світ абстрактного мистецтва, який трансформує бізнес-простори у оазиси спокою та натхнення. Кожна картина – це портал до внутрішньої гармонії ваших клієнтів і співробітників.',
       'gallery-title': 'Галерея Робіт',
-      'gallery-subtitle': 'Досліджуйте мої унікальні абстрактні картини',
+      'gallery-subtitle': 'Фільтруйте під ваш простір і настрій. Кожна робота — з можливістю примірки в інтер’єрі та оплатою через Stripe.',
       'hero-btn-quiz': 'Знайти Мою Картину',
       'hero-btn-artworks': 'Переглянути Колекцію',
       'scroll-explore': 'Досліджуйте',
@@ -251,6 +251,12 @@
       'terms-service': 'Умови Користування',
       'cookie-policy': 'Політика Cookies',
       'page-title': 'Inner Garden - Premium Abstract Art for Business Spaces | +40% ROI Proven | USA, EU, UK',
+      'meta-description': 'Inner Garden von Marina Kaminska — abstrakte Kunst für Zuhause & Business. KI-Raumvorschau in echter Größe, Beratung, weltweiter Versand, sicherer Stripe-Checkout.',
+      'meta-keywords': 'abstrakte Kunst, Kunst für Zuhause, Kunst fürs Business, Marina Kaminska, Art Licensing, Performance Art, moderne Kunstgalerie, KI Raumvorschau, Gemälde kaufen, Innenraumkunst',
+      'meta-description': 'Inner Garden by Marina Kaminska — abstract paintings for home & business. Real-size AI room try-on, consultations, worldwide delivery, secure Stripe checkout.',
+      'meta-keywords': 'abstract art, art for home, art for business, Marina Kaminska, art licensing, performance art, modern art gallery, AI room preview, buy painting, interior art',
+      'meta-description': 'Inner Garden — абстрактні картини Марини Камінської для дому й бізнесу. Реалістична AI-примірка в інтер’єрі, консультації, доставка світом, оплата Stripe.',
+      'meta-keywords': 'абстрактні картини, мистецтво для дому, мистецтво для бізнесу, Marina Kaminska, art licensing, performance art, картини в інтер’єрі, AI примірка, галерея сучасного мистецтва, купити картину',
       'select-language': 'Обрати мову',
       'toggle-mobile-menu': 'Відкрити меню',
       'back-to-top': 'Нагору',
@@ -296,7 +302,15 @@
       'map-retry': 'Спробувати ще раз',
       'meditation-artwork-alt': 'Картина для медитації Inner Garden',
       'map-aria-label': 'Мапа представлених міст',
-      'meditation-timer': '05:00'
+      'meditation-timer': '05:00',
+      'gallery-usp-fullscreen-title': 'Повноекранний перегляд',
+      'gallery-usp-fullscreen-text': 'Відкрийте картку й натисніть на прев’ю, щоб розгорнути картину на весь екран.',
+      'gallery-modal-fullscreen': 'Повноекранно',
+      'about-bio': 'Візуальна художниця, працюю з акрилом та аквареллю, поєдную геометричні форми з органічною абстракцією. Досліджую теми материнства, сім’ї, національної ідентичності та духовного розвитку. Випускниця НАОМА (Київ) і магістр НУФВСУ. З 2020 року беру участь у виставках у Києві, Львові, Кракові, Відні, Гаас-ам-Камп, Берліні, Мюнхені, Нюрнберзі, Кілі, Брауншвейгу, Парижі та Торонто.',
+      'about-exhibition-1': 'Art Fair “30. Kunstmarkt”, Kunsthaus BBK, Брауншвейг, Німеччина (2024).',
+      'about-exhibition-2': 'Персональна виставка “When the Sky Falls”, Shevchenko Museum, Торонто, Канада (2024).',
+      'about-exhibition-3': 'Персональна виставка “Forced Migration”, Museum of the Ukrainian diaspora, Київ, Україна (2023).',
+      'contact-location': '📍 Тимчасове проживання: Брауншвейг, Німеччина. Дім: Київ, Україна.'
     },
     en: {
       'site-title': 'Inner Garden',
@@ -315,10 +329,10 @@
       'link-business': 'Art for Business',
       'link-home': 'Art for Home',
       'hero-title': 'Marina Kaminska',
-      'hero-subtitle': 'Ukrainian abstract artist. Creating unique paintings for business and home.',
+      'hero-subtitle': 'Main presentation of my art: a gallery of all paintings, private and business projects, performances, and licensing.',
       'hero-description': 'Discover the world of abstract art that transforms business spaces into oases of tranquility and inspiration. Each painting is a portal to the inner harmony of your clients and employees.',
       'gallery-title': 'Art Gallery',
-      'gallery-subtitle': 'Explore my unique abstract paintings',
+      'gallery-subtitle': 'Filter by your space and mood. Each artwork includes an in-room try-on and Stripe payment.',
       'hero-btn-quiz': 'Find My Painting',
       'hero-btn-artworks': 'View Collection',
       'scroll-explore': 'Explore',
@@ -581,7 +595,15 @@
       'map-retry': 'Try again',
       'meditation-artwork-alt': 'Meditation artwork for Inner Garden relaxation experience',
       'map-aria-label': 'Map of featured cities',
-      'meditation-timer': '05:00'
+      'meditation-timer': '05:00',
+      'gallery-usp-fullscreen-title': 'Fullscreen view',
+      'gallery-usp-fullscreen-text': 'Open a card and tap the preview to view the artwork fullscreen.',
+      'gallery-modal-fullscreen': 'Fullscreen',
+      'about-bio': 'Visual artist working with acrylic and watercolor, combining geometric forms with organic abstraction. Exploring themes of motherhood, family, national identity, and spiritual growth. Graduate of the National Academy of Fine Arts and Culture in Kyiv and master of the National University of Physical Education and Sports of Ukraine. Since 2020, exhibitions in Kyiv, Lviv, Krakow, Vienna, Gars am Kamp, Berlin, Munich, Nuremberg, Kiel, Brunswick, Paris, and Toronto.',
+      'about-exhibition-1': 'Art Fair “30. Kunstmarkt”, Kunsthaus BBK, Brunswick, Germany (2024).',
+      'about-exhibition-2': 'Solo exhibition “When the Sky Falls”, Shevchenko Museum, Toronto, Canada (2024).',
+      'about-exhibition-3': 'Solo exhibition “Forced Migration”, Museum of the Ukrainian diaspora, Kyiv, Ukraine (2023).',
+      'contact-location': '📍 Temporary residence: Brunswick, Germany. Home: Kyiv, Ukraine.'
     },
     de: {
       'site-title': 'Inner Garden',
@@ -600,10 +622,10 @@
       'link-business': 'Kunst für Unternehmen',
       'link-home': 'Kunst für Zuhause',
       'hero-title': 'Marina Kaminska',
-      'hero-subtitle': 'Ukrainische abstrakte Künstlerin. Einzigartige Gemälde für Unternehmen und Zuhause.',
+      'hero-subtitle': 'Hauptpräsentation meiner Kunst: Galerie aller Gemälde, private und Business-Projekte, Performances und Licensing.',
       'hero-description': 'Entdecken Sie die Welt der abstrakten Kunst, die Geschäftsräume in Oasen der Ruhe und Inspiration verwandelt. Jedes Gemälde ist ein Portal zur inneren Harmonie Ihrer Kunden und Mitarbeiter.',
       'gallery-title': 'Kunstgalerie',
-      'gallery-subtitle': 'Entdecken Sie meine einzigartigen abstrakten Gemälde',
+      'gallery-subtitle': 'Filtern Sie nach Raum und Stimmung. Jedes Werk mit In‑Room‑Try‑on und Stripe-Zahlung.',
       'hero-btn-quiz': 'Mein Gemälde finden',
       'hero-btn-artworks': 'Kollektion ansehen',
       'scroll-explore': 'Erkunden',
@@ -862,6 +884,14 @@
       'ar-backdrop-camera-only': 'Der Hintergrund steht nur im Fallback-Modus zur Verfügung.',
       'ar-snapshot-saved': 'AR-Vorschau wurde gespeichert.',
       'ar-capture-error': 'Screenshot konnte nicht gespeichert werden.',
+      'gallery-usp-fullscreen-title': 'Vollbildansicht',
+      'gallery-usp-fullscreen-text': 'Öffnen Sie eine Karte und tippen Sie auf die Vorschau, um das Werk im Vollbild zu sehen.',
+      'gallery-modal-fullscreen': 'Vollbild',
+      'about-bio': 'Bildende Künstlerin, arbeite mit Acryl und Aquarell und verbinde geometrische Formen mit organischer Abstraktion. Themen: Mutterschaft, Familie, nationale Identität, spirituelle Entwicklung. Absolventin der Nationalen Akademie der Bildenden Kunst und Kultur in Kyjiw, Master an der Nationalen Universität für Körperkultur und Sport der Ukraine. Seit 2020 Ausstellungen in Kyjiw, Lwiw, Krakau, Wien, Gars am Kamp, Berlin, München, Nürnberg, Kiel, Braunschweig, Paris und Toronto.',
+      'about-exhibition-1': 'Art Fair „30. Kunstmarkt“, Kunsthaus BBK, Braunschweig, Deutschland (2024).',
+      'about-exhibition-2': 'Einzelausstellung „When the Sky Falls“, Shevchenko Museum, Toronto, Kanada (2024).',
+      'about-exhibition-3': 'Einzelausstellung „Forced Migration“, Museum of the Ukrainian diaspora, Kyjiw, Ukraine (2023).',
+      'contact-location': '📍 Vorübergehender Wohnsitz: Braunschweig, Deutschland. Zuhause: Kyjiw, Ukraine.',
       'map-fallback-message': 'Die interaktive Karte konnte nicht geladen werden. Bitte Internetverbindung prüfen.',
       'map-retry': 'Erneut versuchen',
       'meditation-artwork-alt': 'Meditationskunstwerk für Inner Garden Entspannungserlebnis',
@@ -1054,10 +1084,23 @@
 
   const updateContent = () => {
     translateTree(document.body);
+    translateTree(document.head);
 
     const title = translateForDom('page-title') || translateForDom('site-title');
     if (title) {
       document.title = title;
+    }
+
+    document.documentElement.lang = currentLanguage;
+
+    const canonical = document.querySelector('link[rel="canonical"]');
+    if (canonical) {
+      canonical.href = `${window.location.origin}${window.location.pathname}`;
+    }
+
+    const ogUrl = document.querySelector('meta[property="og:url"]');
+    if (ogUrl) {
+      ogUrl.setAttribute('content', canonical?.href || window.location.href);
     }
   };
 

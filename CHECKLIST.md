@@ -51,6 +51,8 @@
 - [ ] Order form validation works
 - [ ] Frame selection changes price
 - [ ] AR preview loads on mobile
+- [ ] Stripe Checkout працює (success/cancel)
+- [ ] Cloudinary адмінка показує та додає зображення
 - [ ] All links work
 - [ ] No console errors
 

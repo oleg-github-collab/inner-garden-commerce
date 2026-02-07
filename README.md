@@ -44,6 +44,33 @@ SMTP_PASS=your-app-password
 ADMIN_EMAIL=your-email@gmail.com
 ```
 
+## ⚙️ Integrations (Optional)
+
+Add these to `.env` if you плануєте AI-примірку, Cloudinary або Stripe:
+
+```env
+# Admin access
+ADMIN_PASSWORD=your-strong-password
+# or ADMIN_TOKEN=your-admin-token
+ADMIN_ROUTE=/studio-9f3c1b
+ADMIN_ACCESS_KEY=your-admin-access-key
+
+# OpenAI try-on
+OPENAI_API_KEY=your-openai-key
+OPENAI_VISION_MODEL=gpt-4o-mini
+
+# Cloudinary media library
+CLOUDINARY_CLOUD_NAME=your-cloud-name
+CLOUDINARY_API_KEY=your-cloudinary-key
+CLOUDINARY_API_SECRET=your-cloudinary-secret
+
+# Stripe payments
+STRIPE_SECRET_KEY=sk_live_xxx
+STRIPE_SUCCESS_URL=https://your-domain.com/?checkout=success
+STRIPE_CANCEL_URL=https://your-domain.com/?checkout=cancel
+PUBLIC_URL=https://your-domain.com
+```
+
 ## 🚂 Deploy to Railway
 
 1. Push code to GitHub

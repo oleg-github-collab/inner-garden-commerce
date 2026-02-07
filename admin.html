@@ -66,6 +66,104 @@
             </select>
           </div>
 
+          <div class="bulk-panel" id="bulkPanel">
+            <div class="bulk-header">
+              <div>
+                <p class="eyebrow">Bulk</p>
+                <h3>Масове редагування</h3>
+                <p class="muted" id="bulkCount">Обрано: 0</p>
+              </div>
+              <div class="bulk-actions">
+                <button class="btn ghost" id="bulkSelectAll">
+                  <i class="fas fa-check-double"></i>
+                  Вибрати всі у фільтрі
+                </button>
+                <button class="btn ghost" id="bulkClear">
+                  <i class="fas fa-xmark"></i>
+                  Очистити
+                </button>
+              </div>
+            </div>
+
+            <div class="bulk-grid">
+              <label>
+                Статус
+                <select id="bulkStatus">
+                  <option value="">— Не змінювати —</option>
+                  <option value="available">Доступна</option>
+                  <option value="reserved">Резерв</option>
+                  <option value="commission">Під замовлення</option>
+                  <option value="sold">Продано</option>
+                </select>
+              </label>
+              <label>
+                Настрій
+                <select id="bulkMood">
+                  <option value="">— Не змінювати —</option>
+                  <option value="calm">Calm</option>
+                  <option value="energy">Energy</option>
+                  <option value="luxury">Luxury</option>
+                  <option value="focus">Focus</option>
+                  <option value="warmth">Warmth</option>
+                  <option value="balance">Balance</option>
+                  <option value="depth">Depth</option>
+                </select>
+              </label>
+              <label>
+                Ціна
+                <input type="number" id="bulkPrice" min="0" step="1" placeholder="2800">
+              </label>
+              <label>
+                Валюта
+                <select id="bulkCurrency">
+                  <option value="">— Не змінювати —</option>
+                  <option value="EUR">EUR</option>
+                  <option value="USD">USD</option>
+                </select>
+              </label>
+            </div>
+
+            <div class="bulk-segments">
+              <div class="bulk-segments-head">
+                <label>Сегменти</label>
+                <select id="bulkSegmentsMode">
+                  <option value="replace">Замінити</option>
+                  <option value="add">Додати</option>
+                  <option value="remove">Видалити</option>
+                </select>
+              </div>
+              <div class="chip-group" id="bulkSegments">
+                <label class="chip">
+                  <input type="checkbox" value="home">
+                  Дім
+                </label>
+                <label class="chip">
+                  <input type="checkbox" value="business">
+                  Бізнес
+                </label>
+                <label class="chip">
+                  <input type="checkbox" value="wellness">
+                  Wellness
+                </label>
+              </div>
+              <label class="inline-check">
+                <input type="checkbox" id="bulkPriceClear">
+                Очистити ціну (показати “За запитом”)
+              </label>
+            </div>
+
+            <div class="bulk-footer">
+              <button class="btn primary" id="bulkApply">
+                <i class="fas fa-layer-group"></i>
+                Застосувати
+              </button>
+              <button class="btn ghost" id="bulkDelete">
+                <i class="fas fa-trash"></i>
+                Видалити вибране
+              </button>
+            </div>
+          </div>
+
           <div class="artworks-list" id="artworksList"></div>
         </div>
 
@@ -168,6 +266,7 @@
                   <input type="text" name="size" placeholder="120 × 80 см">
                 </label>
               </div>
+              <p class="muted small" id="ratioHint">Співвідношення: —</p>
             </div>
 
             <div class="form-section">
@@ -236,6 +335,23 @@
                   <div class="drop-hint">Перетягніть Cloudinary URL або вставте ID</div>
                 </div>
               </div>
+              <div class="cloudinary-inline">
+                <div class="cloudinary-inline-actions">
+                  <button class="btn ghost" type="button" id="cloudinaryInspectBtn">
+                    <i class="fas fa-magnifying-glass"></i>
+                    Перевірити
+                  </button>
+                  <button class="btn ghost" type="button" id="cloudinaryOpenBtn">
+                    <i class="fas fa-arrow-up-right-from-square"></i>
+                    Відкрити
+                  </button>
+                  <button class="btn ghost" type="button" id="cloudinaryCopyBtn">
+                    <i class="fas fa-copy"></i>
+                    Копія ID
+                  </button>
+                </div>
+                <p class="muted small" id="cloudinaryMeta">Метадані: —</p>
+              </div>
             </div>
 
             <div class="form-actions">
@@ -248,6 +364,64 @@
               </button>
             </div>
           </form>
+        </aside>
+
+        <aside class="admin-cloudinary">
+          <div class="editor-header">
+            <div>
+              <p class="eyebrow">Cloudinary</p>
+              <h2>Медіатека</h2>
+              <p class="muted">Пошук, імпорт і швидке додавання робіт з API.</p>
+            </div>
+            <span class="status-pill" id="cloudinaryStatus">API активне</span>
+          </div>
+          <div class="admin-hint">
+            <strong>Як працювати</strong>
+            <ul>
+              <li>Використовуйте пошук по ID, папці або тегу.</li>
+              <li>Натисніть “Використати”, щоб підставити Cloudinary ID.</li>
+              <li>Можна завантажити файл напряму у Cloudinary.</li>
+            </ul>
+          </div>
+
+          <div class="cloudinary-tools">
+            <div class="search-field">
+              <i class="fas fa-cloud"></i>
+              <input type="search" id="cloudinarySearch" placeholder="ID / ключове слово">
+            </div>
+            <div class="cloudinary-filters">
+              <input type="text" id="cloudinaryFolder" placeholder="Папка (optional)">
+              <input type="text" id="cloudinaryTag" placeholder="Тег (optional)">
+            </div>
+            <div class="cloudinary-actions">
+              <button class="btn ghost" id="cloudinarySearchBtn">
+                <i class="fas fa-magnifying-glass"></i>
+                Знайти
+              </button>
+              <button class="btn ghost" id="cloudinaryClearBtn">
+                Очистити
+              </button>
+            </div>
+          </div>
+
+          <div class="cloudinary-upload">
+            <label class="upload-field">
+              <span>Завантажити файл</span>
+              <input type="file" id="cloudinaryUpload" accept="image/*">
+            </label>
+            <input type="text" id="cloudinaryUploadFolder" placeholder="Папка для завантаження (optional)">
+            <input type="text" id="cloudinaryUploadPublicId" placeholder="Public ID (optional)">
+            <button class="btn primary" id="cloudinaryUploadBtn">
+              <i class="fas fa-cloud-arrow-up"></i>
+              Завантажити
+            </button>
+            <p class="muted small" id="cloudinaryUploadHint">Підтримуються JPG/PNG/WEBP. Файл піде напряму в Cloudinary.</p>
+          </div>
+
+          <div class="cloudinary-results" id="cloudinaryResults"></div>
+          <button class="btn ghost" id="cloudinaryLoadMore" style="display: none;">
+            Завантажити ще
+          </button>
         </aside>
       </section>
     </main>

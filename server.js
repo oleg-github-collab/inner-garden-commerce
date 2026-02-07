@@ -28,6 +28,9 @@ const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SEC
 const ARTWORKS_DB_PATH = path.join(__dirname, 'artworks-database.json');
 const ADMIN_SESSION_TTL_MS = 1000 * 60 * 60 * 12;
 const adminSessions = new Map();
+const ADMIN_ROUTE = normalizeAdminRoute(process.env.ADMIN_ROUTE || process.env.ADMIN_PATH);
+const ADMIN_ACCESS_KEY = (process.env.ADMIN_ACCESS_KEY || '').trim();
+const ADMIN_COOKIE_NAME = 'inner_garden_admin_access';
 
 const safeTrim = (value) => (typeof value === 'string' ? value.trim() : value);
 const toNumber = (value, fallback = null) => {
@@ -48,6 +51,28 @@ const normalizeStatus = (value) => {
     return status;
   }
   return 'available';
+};
+
+const normalizeAdminRoute = (value) => {
+  const trimmed = String(value || '').trim();
+  if (!trimmed) return '/studio';
+  const withSlash = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
+  return withSlash.replace(/\/+$/, '') || '/studio';
+};
+
+const parseCookies = (cookieHeader = '') => {
+  return cookieHeader
+    .split(';')
+    .map((item) => item.trim())
+    .filter(Boolean)
+    .reduce((acc, part) => {
+      const index = part.indexOf('=');
+      if (index === -1) return acc;
+      const key = part.slice(0, index).trim();
+      const value = decodeURIComponent(part.slice(index + 1).trim());
+      acc[key] = value;
+      return acc;
+    }, {});
 };
 
 const readArtworksDb = async () => {
@@ -77,8 +102,14 @@ const writeArtworksDb = async (data) => {
 
 const normalizeArtwork = (input = {}, existing = {}) => {
   const now = new Date().toISOString();
-  const width = toNumber(input.width_cm ?? existing.width_cm, existing.width_cm ?? null);
-  const height = toNumber(input.height_cm ?? existing.height_cm, existing.height_cm ?? null);
+  const hasWidth = Object.prototype.hasOwnProperty.call(input, 'width_cm');
+  const hasHeight = Object.prototype.hasOwnProperty.call(input, 'height_cm');
+  const hasPrice = Object.prototype.hasOwnProperty.call(input, 'price');
+  const hasSize = Object.prototype.hasOwnProperty.call(input, 'size');
+  const hasCurrency = Object.prototype.hasOwnProperty.call(input, 'currency');
+
+  const width = hasWidth ? toNumber(input.width_cm, null) : toNumber(existing.width_cm, existing.width_cm ?? null);
+  const height = hasHeight ? toNumber(input.height_cm, null) : toNumber(existing.height_cm, existing.height_cm ?? null);
   const computedSize = width && height ? `${width} × ${height} см` : existing.size;
 
   return {
@@ -89,9 +120,9 @@ const normalizeArtwork = (input = {}, existing = {}) => {
     description_uk: safeTrim(input.description_uk ?? existing.description_uk ?? ''),
     description_en: safeTrim(input.description_en ?? existing.description_en ?? ''),
     description_de: safeTrim(input.description_de ?? existing.description_de ?? ''),
-    price: toNumber(input.price ?? existing.price, existing.price ?? null),
-    currency: safeTrim(input.currency ?? existing.currency ?? 'EUR'),
-    size: safeTrim(input.size ?? computedSize ?? ''),
+    price: hasPrice ? toNumber(input.price, null) : toNumber(existing.price, existing.price ?? null),
+    currency: safeTrim(hasCurrency ? input.currency : (existing.currency ?? 'EUR')),
+    size: safeTrim(hasSize ? input.size : (computedSize ?? '')),
     technique_uk: safeTrim(input.technique_uk ?? existing.technique_uk ?? ''),
     technique_en: safeTrim(input.technique_en ?? existing.technique_en ?? ''),
     technique_de: safeTrim(input.technique_de ?? existing.technique_de ?? ''),
@@ -104,6 +135,30 @@ const normalizeArtwork = (input = {}, existing = {}) => {
     created_at: existing.created_at || now,
     updated_at: now
   };
+};
+
+const cloudinaryConfig = {
+  cloudName: process.env.CLOUDINARY_CLOUD_NAME || '',
+  apiKey: process.env.CLOUDINARY_API_KEY || '',
+  apiSecret: process.env.CLOUDINARY_API_SECRET || ''
+};
+
+const isCloudinaryConfigured = () => Boolean(
+  cloudinaryConfig.cloudName && cloudinaryConfig.apiKey && cloudinaryConfig.apiSecret
+);
+
+const cloudinaryAuthHeader = () => {
+  const token = Buffer.from(`${cloudinaryConfig.apiKey}:${cloudinaryConfig.apiSecret}`).toString('base64');
+  return `Basic ${token}`;
+};
+
+const signCloudinaryParams = (params = {}) => {
+  const entries = Object.entries(params)
+    .filter(([, value]) => typeof value !== 'undefined' && value !== null && value !== '')
+    .sort(([a], [b]) => a.localeCompare(b))
+    .map(([key, value]) => `${key}=${value}`)
+    .join('&');
+  return crypto.createHash('sha1').update(entries + cloudinaryConfig.apiSecret).digest('hex');
 };
 
 const isAdminConfigured = () => Boolean(process.env.ADMIN_EMAIL && process.env.ADMIN_PASSWORD) || Boolean(process.env.ADMIN_TOKEN);
@@ -193,6 +248,18 @@ const consultLimiter = rateLimit({
 
 app.use('/api/', limiter);
 
+// Block direct access to default admin filenames
+const adminHiddenPaths = new Set(['/admin', '/admin/', '/admin.html']);
+if (adminHiddenPaths.has(ADMIN_ROUTE)) {
+  adminHiddenPaths.delete(ADMIN_ROUTE);
+}
+app.use((req, res, next) => {
+  if (adminHiddenPaths.has(req.path)) {
+    return res.status(404).send('Not Found');
+  }
+  return next();
+});
+
 // Static files with cache
 app.use(express.static(__dirname, {
   maxAge: '1d',
@@ -256,6 +323,35 @@ app.get('/api/artworks', async (req, res) => {
     return res.status(500).json({ success: false, error: 'Failed to load artworks' });
   }
 });
+
+/**
+ * Hidden admin UI route
+ */
+const serveAdminUi = (req, res) => {
+  if (!isAdminConfigured()) {
+    return res.status(503).send('Admin is not configured');
+  }
+
+  if (ADMIN_ACCESS_KEY) {
+    const cookies = parseCookies(req.headers.cookie || '');
+    const queryKey = (req.query.key || '').toString();
+    const cookieKey = (cookies[ADMIN_COOKIE_NAME] || '').toString();
+
+    if (queryKey && queryKey === ADMIN_ACCESS_KEY) {
+      const secureFlag = process.env.NODE_ENV === 'production' ? '; Secure' : '';
+      res.setHeader('Set-Cookie', `${ADMIN_COOKIE_NAME}=${encodeURIComponent(ADMIN_ACCESS_KEY)}; Path=${ADMIN_ROUTE}; HttpOnly; SameSite=Lax; Max-Age=2592000${secureFlag}`);
+      return res.redirect(ADMIN_ROUTE);
+    }
+
+    if (cookieKey !== ADMIN_ACCESS_KEY) {
+      return res.status(404).send('Not Found');
+    }
+  }
+
+  return res.sendFile(path.join(__dirname, 'admin.html'));
+};
+
+app.get([ADMIN_ROUTE, `${ADMIN_ROUTE}/`], serveAdminUi);
 
 /**
  * Admin auth
@@ -351,6 +447,277 @@ app.delete('/api/admin/artworks/:id', requireAdmin, async (req, res) => {
   } catch (error) {
     console.error('Delete artwork error:', error);
     return res.status(500).json({ success: false, error: 'Failed to delete artwork' });
+  }
+});
+
+/**
+ * Bulk update artworks
+ */
+app.put('/api/admin/artworks/bulk', requireAdmin, async (req, res) => {
+  try {
+    const { ids, updates = {}, options = {} } = req.body || {};
+    if (!Array.isArray(ids) || !ids.length) {
+      return res.status(400).json({ success: false, error: 'ids array is required' });
+    }
+
+    const data = await readArtworksDb();
+    const artworks = data.artworks || [];
+    const allowedKeys = new Set([
+      'title_uk', 'title_en', 'title_de',
+      'description_uk', 'description_en', 'description_de',
+      'price', 'currency', 'size', 'width_cm', 'height_cm',
+      'technique_uk', 'technique_en', 'technique_de',
+      'cloudinary_id', 'mood', 'status', 'segments'
+    ]);
+
+    const normalizedUpdates = {};
+    Object.entries(updates).forEach(([key, value]) => {
+      if (!allowedKeys.has(key)) return;
+      if (key === 'status') {
+        normalizedUpdates.status = normalizeStatus(value);
+        return;
+      }
+      if (key === 'price') {
+        normalizedUpdates.price = toNumber(value, null);
+        return;
+      }
+      if (key === 'width_cm' || key === 'height_cm') {
+        normalizedUpdates[key] = toNumber(value, null);
+        return;
+      }
+      if (key === 'segments') {
+        normalizedUpdates.segments = toArray(value, []);
+        return;
+      }
+      normalizedUpdates[key] = safeTrim(value);
+    });
+
+    const segmentsMode = (options.segmentsMode || 'replace').toString();
+    const updated = [];
+    const idSet = new Set(ids);
+    const nextArtworks = artworks.map((art) => {
+      if (!idSet.has(art.id)) return art;
+      const next = { ...art };
+      Object.entries(normalizedUpdates).forEach(([key, value]) => {
+        if (key === 'segments') return;
+        if (typeof value === 'undefined') return;
+        next[key] = value;
+      });
+      if (Array.isArray(normalizedUpdates.segments)) {
+        const currentSegments = Array.isArray(art.segments) ? art.segments : [];
+        if (segmentsMode === 'add') {
+          next.segments = Array.from(new Set([...currentSegments, ...normalizedUpdates.segments]));
+        } else if (segmentsMode === 'remove') {
+          next.segments = currentSegments.filter((segment) => !normalizedUpdates.segments.includes(segment));
+        } else {
+          next.segments = normalizedUpdates.segments;
+        }
+      }
+      const normalized = normalizeArtwork(next, art);
+      updated.push(normalized);
+      return normalized;
+    });
+
+    data.artworks = nextArtworks;
+    data.updated_at = new Date().toISOString();
+    await writeArtworksDb(data);
+    return res.json({ success: true, updated });
+  } catch (error) {
+    console.error('Bulk update error:', error);
+    return res.status(500).json({ success: false, error: 'Failed to bulk update artworks' });
+  }
+});
+
+/**
+ * Bulk delete artworks
+ */
+app.post('/api/admin/artworks/bulk-delete', requireAdmin, async (req, res) => {
+  try {
+    const { ids } = req.body || {};
+    if (!Array.isArray(ids) || !ids.length) {
+      return res.status(400).json({ success: false, error: 'ids array is required' });
+    }
+    const idSet = new Set(ids);
+    const data = await readArtworksDb();
+    const artworks = data.artworks || [];
+    const nextArtworks = artworks.filter((item) => !idSet.has(item.id));
+    const deletedCount = artworks.length - nextArtworks.length;
+    data.artworks = nextArtworks;
+    data.updated_at = new Date().toISOString();
+    await writeArtworksDb(data);
+    return res.json({ success: true, deleted: deletedCount });
+  } catch (error) {
+    console.error('Bulk delete error:', error);
+    return res.status(500).json({ success: false, error: 'Failed to bulk delete artworks' });
+  }
+});
+
+/**
+ * Cloudinary admin helpers
+ */
+app.get('/api/admin/cloudinary/status', requireAdmin, (req, res) => {
+  return res.json({ success: true, configured: isCloudinaryConfigured() });
+});
+
+app.get('/api/admin/cloudinary/search', requireAdmin, async (req, res) => {
+  try {
+    if (!isCloudinaryConfigured()) {
+      return res.status(503).json({ success: false, error: 'Cloudinary is not configured' });
+    }
+
+    const query = (req.query.query || '').toString().trim();
+    const folder = (req.query.folder || '').toString().trim();
+    const tag = (req.query.tag || '').toString().trim();
+    const nextCursor = (req.query.cursor || '').toString().trim();
+
+    const sanitize = (value) => value.replace(/[^\w\-*\/]/g, '');
+    const expressionParts = ['resource_type:image', 'type:upload'];
+
+    if (folder) {
+      expressionParts.push(`folder:${sanitize(folder)}*`);
+    }
+    if (tag) {
+      expressionParts.push(`tags=${sanitize(tag)}`);
+    }
+    if (query) {
+      const cleaned = sanitize(query);
+      expressionParts.push(`public_id:${cleaned.includes('*') ? cleaned : `*${cleaned}*`}`);
+    }
+
+    const payload = {
+      expression: expressionParts.join(' AND '),
+      max_results: 24
+    };
+    if (nextCursor) {
+      payload.next_cursor = nextCursor;
+    }
+
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/resources/search`, {
+      method: 'POST',
+      headers: {
+        Authorization: cloudinaryAuthHeader(),
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      return res.status(502).json({ success: false, error: data?.error?.message || 'Cloudinary search failed' });
+    }
+
+    const assets = (data.resources || []).map((asset) => ({
+      public_id: asset.public_id,
+      secure_url: asset.secure_url,
+      format: asset.format,
+      width: asset.width,
+      height: asset.height,
+      bytes: asset.bytes,
+      created_at: asset.created_at
+    }));
+
+    return res.json({
+      success: true,
+      assets,
+      next_cursor: data.next_cursor || null
+    });
+  } catch (error) {
+    console.error('Cloudinary search error:', error);
+    return res.status(500).json({ success: false, error: 'Cloudinary search failed' });
+  }
+});
+
+app.get('/api/admin/cloudinary/asset', requireAdmin, async (req, res) => {
+  try {
+    if (!isCloudinaryConfigured()) {
+      return res.status(503).json({ success: false, error: 'Cloudinary is not configured' });
+    }
+    const publicId = (req.query.public_id || '').toString().trim();
+    if (!publicId) {
+      return res.status(400).json({ success: false, error: 'public_id is required' });
+    }
+
+    const encodedId = encodeURIComponent(publicId);
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/resources/image/upload/${encodedId}`, {
+      headers: {
+        Authorization: cloudinaryAuthHeader()
+      }
+    });
+    const data = await response.json();
+    if (!response.ok) {
+      return res.status(502).json({ success: false, error: data?.error?.message || 'Cloudinary asset lookup failed' });
+    }
+    return res.json({
+      success: true,
+      asset: {
+        public_id: data.public_id,
+        secure_url: data.secure_url,
+        format: data.format,
+        width: data.width,
+        height: data.height,
+        bytes: data.bytes,
+        created_at: data.created_at
+      }
+    });
+  } catch (error) {
+    console.error('Cloudinary asset error:', error);
+    return res.status(500).json({ success: false, error: 'Cloudinary asset lookup failed' });
+  }
+});
+
+app.post('/api/admin/cloudinary/upload', requireAdmin, async (req, res) => {
+  try {
+    if (!isCloudinaryConfigured()) {
+      return res.status(503).json({ success: false, error: 'Cloudinary is not configured' });
+    }
+
+    const { file, folder, public_id } = req.body || {};
+    if (!file) {
+      return res.status(400).json({ success: false, error: 'file is required' });
+    }
+
+    const timestamp = Math.floor(Date.now() / 1000);
+    const paramsToSign = {
+      timestamp
+    };
+    if (folder) paramsToSign.folder = folder;
+    if (public_id) paramsToSign.public_id = public_id;
+
+    const signature = signCloudinaryParams(paramsToSign);
+    const form = new URLSearchParams({
+      file,
+      api_key: cloudinaryConfig.apiKey,
+      timestamp: timestamp.toString(),
+      signature
+    });
+    if (folder) form.append('folder', folder);
+    if (public_id) form.append('public_id', public_id);
+
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/image/upload`, {
+      method: 'POST',
+      body: form
+    });
+
+    const data = await response.json();
+    if (!response.ok) {
+      return res.status(502).json({ success: false, error: data?.error?.message || 'Cloudinary upload failed' });
+    }
+
+    return res.json({
+      success: true,
+      asset: {
+        public_id: data.public_id,
+        secure_url: data.secure_url,
+        format: data.format,
+        width: data.width,
+        height: data.height,
+        bytes: data.bytes,
+        created_at: data.created_at
+      }
+    });
+  } catch (error) {
+    console.error('Cloudinary upload error:', error);
+    return res.status(500).json({ success: false, error: 'Cloudinary upload failed' });
   }
 });
 
@@ -620,7 +987,7 @@ app.post('/api/tryon', async (req, res) => {
 
     const body = {
       model,
-      temperature: 0.2,
+      temperature: 0.1,
       response_format: {
         type: 'json_schema',
         json_schema: {
@@ -644,14 +1011,14 @@ app.post('/api/tryon', async (req, res) => {
       messages: [
         {
           role: 'system',
-          content: 'You are an interior visualization assistant. Given a wall photo and painting size, return a single JSON object with numeric coordinates (x,y,width,height) in pixels for realistic placement on the main wall. Keep the painting fully inside bounds, avoid overlapping furniture, keep 5–12% margin from edges, and align at comfortable eye level if possible. Return only JSON.'
+          content: 'You are a photorealistic interior placement expert. Given a room photo and painting size, return one JSON object with numeric x,y,width,height in pixels for realistic placement on the primary flat wall. Keep the painting perfectly rectangular (no rotation, no skew), preserve its aspect ratio, and keep it fully inside the image bounds. Avoid overlapping furniture, windows, lamps, doors, or frames. Keep safe margins (5–12%) from wall edges and nearby objects. Aim for gallery-standard hanging height (center ~145 cm from floor) unless the room layout suggests a better alignment (e.g., above a sofa/console). If multiple walls exist, pick the clearest, largest uninterrupted wall plane. Return only JSON.'
         },
         {
           role: 'user',
           content: [
             {
               type: 'text',
-              text: `Painting size: ${widthCm} x ${heightCm} cm. Place it on the primary wall, aligned to the wall plane. Center it if possible, keep safe margins, avoid furniture overlap, and keep it inside the image bounds.`
+              text: `Painting size: ${widthCm} x ${heightCm} cm. Place it on the main wall, aligned to the wall plane, keeping realistic scale vs. the room. Keep safe margins, avoid furniture overlap, and keep it fully inside the image bounds.`
             },
             {
               type: 'image_url',
@@ -714,30 +1081,38 @@ app.post('/api/checkout', async (req, res) => {
     if (!stripe) {
       return res.status(500).json({ success: false, error: 'Stripe is not configured' });
     }
-    const { artworkId, artworkTitle, price } = req.body || {};
+    const { artworkId, artworkTitle, price, currency } = req.body || {};
     if (!artworkTitle || typeof price === 'undefined') {
       return res.status(400).json({ success: false, error: 'artworkTitle and price are required' });
     }
     const amount = Math.max(1, Math.round(Number(price) * 100));
-    const origin = req.headers.origin || 'http://localhost:' + PORT;
+    const normalizedCurrency = (currency || 'EUR').toString().toLowerCase();
+    const origin = process.env.PUBLIC_URL || req.headers.origin || `http://localhost:${PORT}`;
+    const successUrl = process.env.STRIPE_SUCCESS_URL || `${origin}/?checkout=success`;
+    const cancelUrl = process.env.STRIPE_CANCEL_URL || `${origin}/?checkout=cancel`;
+    const productData = {
+      name: artworkTitle,
+      description: artworkId ? `Artwork ID: ${artworkId}` : 'Artwork'
+    };
+    if (artworkId) {
+      productData.metadata = { artworkId };
+    }
+
     const session = await stripe.checkout.sessions.create({
       payment_method_types: ['card'],
       mode: 'payment',
       line_items: [
         {
           price_data: {
-            currency: 'eur',
-            product_data: {
-              name: artworkTitle,
-              description: artworkId ? `Artwork ID: ${artworkId}` : 'Artwork'
-            },
+            currency: normalizedCurrency,
+            product_data: productData,
             unit_amount: amount
           },
           quantity: 1
         }
       ],
-      success_url: `${origin}/?checkout=success`,
-      cancel_url: `${origin}/?checkout=cancel`
+      success_url: successUrl,
+      cancel_url: cancelUrl
     });
     return res.json({ success: true, url: session.url });
   } catch (error) {
