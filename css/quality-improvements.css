@@ -1,29 +1,21 @@
 /* ========================================
-   QUALITY IMPROVEMENTS
-   Perfect animations, typography, and UX
+   QUALITY IMPROVEMENTS - INNER GARDEN
+   Performance, Design, Animation & UX
+   Complete overhaul for premium art gallery
    ======================================== */
 
+
 /* ========================================
-   SMOOTH SCROLL BEHAVIOR
+   1. SMOOTH SCROLL BEHAVIOR
    ======================================== */
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 100px;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  html {
-    scroll-behavior: auto;
-  }
-  * {
-    animation-duration: 0.01ms !important;
-    animation-iteration-count: 1 !important;
-    transition-duration: 0.01ms !important;
-  }
-}
 
 /* ========================================
-   ENHANCED TYPOGRAPHY
+   2. ENHANCED TYPOGRAPHY
    ======================================== */
 body {
   -webkit-font-smoothing: antialiased;
@@ -34,17 +26,85 @@ body {
 
 h1, h2, h3, h4, h5, h6 {
   text-wrap: balance;
-  line-height: 1.2;
+  line-height: 1.15;
   font-weight: 600;
+  letter-spacing: -0.02em;
+}
+
+h1 {
+  line-height: 1.08;
+  letter-spacing: -0.03em;
+}
+
+h2 {
+  line-height: 1.12;
+  letter-spacing: -0.025em;
 }
 
 p {
   text-wrap: pretty;
   max-width: 75ch;
+  line-height: 1.7;
 }
 
+.eyebrow {
+  letter-spacing: 0.18em;
+  font-weight: 700;
+  line-height: 1.4;
+}
+
+.section-subtitle,
+.lead {
+  line-height: 1.75;
+  letter-spacing: 0.005em;
+}
+
+blockquote {
+  line-height: 1.65;
+  letter-spacing: 0.005em;
+}
+
+small {
+  letter-spacing: 0.01em;
+}
+
+
 /* ========================================
-   MAP ENHANCEMENTS - Critical!
+   3. ENHANCED COLOR SCHEME
+   Subtle gradients and layered shadows
+   ======================================== */
+
+/* Depth through layered shadows for elevated cards */
+.hero-card,
+.quiz-preview,
+.meditation-details,
+.story-form-container,
+.newsletter-content {
+  box-shadow:
+    0 1px 2px rgba(15, 23, 32, 0.02),
+    0 4px 8px rgba(15, 23, 32, 0.02),
+    0 12px 24px rgba(15, 23, 32, 0.03),
+    0 24px 48px rgba(15, 23, 32, 0.03);
+}
+
+/* Subtle gradient overlays for section depth */
+.collection-section::after,
+.artworks-section::after,
+.stories-section::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 120px;
+  background: linear-gradient(to top, rgba(247, 245, 242, 0.5), transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+
+/* ========================================
+   4. MAP ENHANCEMENTS - Critical
    ======================================== */
 .harmony-map-section {
   min-height: 600px;
@@ -58,12 +118,15 @@ p {
   border-radius: 24px;
   overflow: hidden;
   background: linear-gradient(135deg, #e8f4f8 0%, #f5f9fc 100%);
-  box-shadow: 0 20px 60px rgba(15, 23, 42, 0.12);
+  box-shadow:
+    0 4px 8px rgba(15, 23, 42, 0.04),
+    0 12px 24px rgba(15, 23, 42, 0.06),
+    0 20px 60px rgba(15, 23, 42, 0.12);
   position: relative;
   z-index: 1;
 }
 
-/* Ensure Leaflet tiles load */
+/* Leaflet tiles */
 .world-map .leaflet-container {
   width: 100%;
   height: 100%;
@@ -99,7 +162,7 @@ p {
   50% { opacity: 0.5; }
 }
 
-/* Map markers - ensure visibility */
+/* Map markers */
 .map-marker-wrapper {
   position: relative;
   z-index: 600 !important;
@@ -127,11 +190,11 @@ p {
 
 @keyframes markerPulse {
   0%, 100% {
-    transform: scale(0.8);
+    transform: scale3d(0.8, 0.8, 1);
     opacity: 0.6;
   }
   50% {
-    transform: scale(1.3);
+    transform: scale3d(1.3, 1.3, 1);
     opacity: 0.2;
   }
 }
@@ -142,11 +205,14 @@ p {
   height: 44px;
   border-radius: 50% 50% 50% 0;
   background: var(--marker-color, #e67e22);
-  transform: rotate(-45deg);
+  transform: rotate(-45deg) translateZ(0);
   z-index: 2;
   border: 4px solid #fff;
-  box-shadow: 0 12px 28px rgba(0, 0, 0, 0.3);
+  box-shadow:
+    0 4px 8px rgba(0, 0, 0, 0.1),
+    0 12px 28px rgba(0, 0, 0, 0.3);
   transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  will-change: transform;
 }
 
 .map-marker__icon {
@@ -173,16 +239,18 @@ p {
 }
 
 .map-marker-wrapper:hover .map-marker__pin {
-  transform: rotate(-45deg) scale(1.15);
+  transform: rotate(-45deg) scale3d(1.15, 1.15, 1);
 }
 
-/* Map legend styling */
+/* Map legend */
 .map-legend {
   background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(12px);
   border-radius: 20px;
   padding: 1.5rem;
-  box-shadow: 0 16px 48px rgba(15, 23, 42, 0.1);
+  box-shadow:
+    0 4px 12px rgba(15, 23, 42, 0.04),
+    0 16px 48px rgba(15, 23, 42, 0.1);
   border: 1px solid rgba(15, 23, 42, 0.05);
 }
 
@@ -210,8 +278,111 @@ p {
   color: #fff !important;
 }
 
+
 /* ========================================
-   GALLERY IMPROVEMENTS
+   5. GPU-ACCELERATED ANIMATIONS
+   Using will-change and transform3d
+   ======================================== */
+
+/* Reserve GPU layer for animated elements */
+.artwork-card,
+.collection-item,
+.story-card,
+.quiz-option,
+.quiz-card,
+.btn,
+.map-marker,
+.back-to-top,
+.collection-link,
+.nav-item,
+.header-cta {
+  transform: translateZ(0);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+
+/* Use will-change sparingly, only on hover-triggered elements */
+.artwork-card:hover,
+.collection-item:hover,
+.quiz-option:hover,
+.collection-link:hover {
+  will-change: transform, box-shadow;
+}
+
+
+/* ========================================
+   6. BETTER IMAGE CARDS
+   Elegant hover with scale + shadow
+   ======================================== */
+.artwork-card,
+.collection-item,
+.story-card {
+  transition:
+    transform 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.artwork-card:hover {
+  transform: translate3d(0, -10px, 0);
+  box-shadow:
+    0 4px 8px rgba(15, 23, 42, 0.04),
+    0 12px 20px rgba(15, 23, 42, 0.06),
+    0 28px 60px rgba(15, 23, 42, 0.15);
+}
+
+.collection-item:hover {
+  transform: translate3d(0, -10px, 0);
+  box-shadow:
+    0 4px 8px rgba(15, 23, 42, 0.04),
+    0 12px 20px rgba(15, 23, 42, 0.06),
+    0 25px 60px rgba(15, 23, 42, 0.12);
+}
+
+.story-card:hover {
+  transform: translate3d(0, -6px, 0);
+  box-shadow:
+    0 4px 12px rgba(15, 23, 42, 0.06),
+    0 18px 45px rgba(15, 23, 42, 0.12);
+}
+
+/* Image zoom on card hover - smooth GPU-accelerated */
+.artwork-card .artwork-image img,
+.artwork-card .artwork-image-container img,
+.collection-item .collection-image {
+  transition: transform 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  will-change: transform;
+}
+
+.artwork-card:hover .artwork-image img,
+.artwork-card:hover .artwork-image-container img {
+  transform: scale3d(1.04, 1.04, 1);
+}
+
+.collection-item:hover .collection-image {
+  transform: scale3d(1.03, 1.03, 1);
+}
+
+/* Overlay reveal on hover - smoother */
+.artwork-overlay,
+.collection-overlay {
+  transition:
+    opacity 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    visibility 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  transform: translate3d(0, 8px, 0);
+}
+
+.artwork-card:hover .artwork-overlay,
+.collection-item:hover .collection-overlay {
+  opacity: 1;
+  visibility: visible;
+  transform: translate3d(0, 0, 0);
+}
+
+
+/* ========================================
+   7. IMPROVED GALLERY GRID
+   Masonry-like layout for artwork cards
    ======================================== */
 .artworks-grid,
 .collection-grid,
@@ -219,20 +390,28 @@ p {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 2rem;
-  animation: fadeInUp 0.6s ease-out;
 }
 
-@keyframes fadeInUp {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
+/* Masonry-like staggered alignment on larger screens */
+@media (min-width: 1025px) {
+  .artworks-grid,
+  .collection-grid {
+    grid-template-columns: repeat(3, 1fr);
   }
-  to {
-    opacity: 1;
-    transform: translateY(0);
+
+  /* Create masonry feel with alternating top margins */
+  .artworks-grid > :nth-child(3n+2),
+  .collection-grid > :nth-child(3n+2) {
+    margin-top: 2rem;
+  }
+
+  .artworks-grid > :nth-child(3n+3),
+  .collection-grid > :nth-child(3n+3) {
+    margin-top: 1rem;
   }
 }
 
+/* Staggered card entrance */
 .artwork-card,
 .collection-item,
 .story-card {
@@ -242,64 +421,228 @@ p {
 
 .artwork-card:nth-child(1),
 .collection-item:nth-child(1),
-.story-card:nth-child(1) { animation-delay: 0.1s; }
+.story-card:nth-child(1) { animation-delay: 0.05s; }
 
 .artwork-card:nth-child(2),
 .collection-item:nth-child(2),
-.story-card:nth-child(2) { animation-delay: 0.2s; }
+.story-card:nth-child(2) { animation-delay: 0.12s; }
 
 .artwork-card:nth-child(3),
 .collection-item:nth-child(3),
-.story-card:nth-child(3) { animation-delay: 0.3s; }
+.story-card:nth-child(3) { animation-delay: 0.19s; }
 
 .artwork-card:nth-child(4),
 .collection-item:nth-child(4),
-.story-card:nth-child(4) { animation-delay: 0.4s; }
+.story-card:nth-child(4) { animation-delay: 0.26s; }
 
 .artwork-card:nth-child(5),
 .collection-item:nth-child(5),
-.story-card:nth-child(5) { animation-delay: 0.5s; }
+.story-card:nth-child(5) { animation-delay: 0.33s; }
 
 .artwork-card:nth-child(6),
 .collection-item:nth-child(6),
-.story-card:nth-child(6) { animation-delay: 0.6s; }
+.story-card:nth-child(6) { animation-delay: 0.40s; }
+
+.artwork-card:nth-child(7),
+.collection-item:nth-child(7),
+.story-card:nth-child(7) { animation-delay: 0.47s; }
+
+.artwork-card:nth-child(8),
+.collection-item:nth-child(8),
+.story-card:nth-child(8) { animation-delay: 0.54s; }
+
+.artwork-card:nth-child(9),
+.collection-item:nth-child(9),
+.story-card:nth-child(9) { animation-delay: 0.61s; }
 
 @keyframes cardFadeIn {
   from {
     opacity: 0;
-    transform: translateY(20px) scale(0.95);
+    transform: translate3d(0, 24px, 0) scale3d(0.97, 0.97, 1);
   }
   to {
     opacity: 1;
-    transform: translateY(0) scale(1);
+    transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
   }
 }
 
+
 /* ========================================
-   SMOOTH ANCHOR NAVIGATION
+   8. MICRO-INTERACTIONS
+   Button press, link underlines, ripples
    ======================================== */
+
+/* Button press effect */
+.btn:active,
+.collection-link:active,
+.header-cta:active,
+.nav-item:active {
+  transform: translate3d(0, 1px, 0) scale3d(0.97, 0.97, 1) !important;
+  transition-duration: 0.1s !important;
+}
+
+/* Animated link underlines */
+a:not(.btn):not(.nav-item):not(.artist-logo):not(.collection-link):not(.social-icon):not(.logo-link) {
+  position: relative;
+}
+
+.footer-section a::after,
+.footer-links a::after {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background: currentColor;
+  transition: width 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+.footer-section a:hover::after,
+.footer-links a:hover::after {
+  width: 100%;
+}
+
+/* Smooth anchor links */
 a[href^="#"] {
   transition: color 0.2s ease;
 }
 
 a[href^="#"]:hover {
-  color: var(--ig-accent);
+  color: var(--ig-accent, var(--accent));
 }
 
-/* Add smooth transitions to all interactive elements */
+/* All interactive elements smooth */
 button,
 .btn,
 input,
 select,
 textarea {
-  transition: all 0.2s ease;
+  transition: all 0.25s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
+/* Quiz option subtle bounce on select */
+.quiz-option:active {
+  transform: translate3d(0, -2px, 0) scale3d(0.98, 0.98, 1) !important;
+}
+
+/* Filter button active ring pulse */
+.collection-filter-btn.active,
+.filter-btn.active {
+  animation: filterPulse 0.4s ease-out;
+}
+
+@keyframes filterPulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(230, 126, 34, 0.4);
+  }
+  100% {
+    box-shadow: 0 12px 28px rgba(230, 126, 34, 0.35);
+  }
+}
+
+/* Social icon hover */
+.social-icon {
+  transition:
+    transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
+    background 0.3s ease,
+    border-color 0.3s ease,
+    color 0.3s ease;
+}
+
+.social-icon:hover {
+  transform: translate3d(0, -3px, 0) scale3d(1.1, 1.1, 1);
+  background: rgba(230, 126, 34, 0.1);
+  border-color: rgba(230, 126, 34, 0.3);
+  color: #e67e22;
+}
+
+
 /* ========================================
-   ENHANCED FOCUS STATES
+   9. SCROLL-TRIGGERED REVEALS
+   Fade-up animations on scroll
+   ======================================== */
+.section {
+  opacity: 0;
+  transform: translate3d(0, 40px, 0);
+  animation: sectionReveal 0.8s ease-out forwards;
+}
+
+.section:nth-child(1) { animation-delay: 0.1s; }
+.section:nth-child(2) { animation-delay: 0.2s; }
+.section:nth-child(3) { animation-delay: 0.3s; }
+.section:nth-child(4) { animation-delay: 0.4s; }
+
+@keyframes sectionReveal {
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* IntersectionObserver-driven class */
+.section.in-view,
+.artwork-card.in-view,
+.collection-item.in-view,
+.story-card.in-view,
+.quiz-card.in-view,
+.quiz-option.in-view {
+  animation: fadeInUpSmooth 0.6s ease-out forwards;
+}
+
+@keyframes fadeInUpSmooth {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 30px, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Fade in from left / right for variety */
+@keyframes fadeInFromLeft {
+  from {
+    opacity: 0;
+    transform: translate3d(-30px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fadeInFromRight {
+  from {
+    opacity: 0;
+    transform: translate3d(30px, 0, 0);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Scale in animation for modals */
+@keyframes scaleIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 0, 0) scale3d(0.9, 0.9, 1);
+  }
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+  }
+}
+
+
+/* ========================================
+   10. BETTER FOCUS STATES
+   Accessible keyboard navigation
    ======================================== */
 *:focus-visible {
-  outline: 3px solid var(--ig-accent);
+  outline: 3px solid var(--ig-accent, var(--accent, #e3742f));
   outline-offset: 3px;
   border-radius: 6px;
 }
@@ -307,10 +650,180 @@ textarea {
 button:focus-visible,
 .btn:focus-visible {
   outline-offset: 4px;
+  box-shadow: 0 0 0 6px rgba(227, 116, 47, 0.15);
 }
 
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--ig-accent, var(--accent, #e3742f));
+  outline-offset: 0;
+  border-color: var(--ig-accent, var(--accent, #e3742f));
+  box-shadow: 0 0 0 5px rgba(227, 116, 47, 0.12);
+}
+
+a:focus-visible {
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+/* Skip link for keyboard users */
+.skip-link {
+  position: fixed;
+  top: -100px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--ig-accent, var(--accent, #e3742f));
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 0 0 12px 12px;
+  font-weight: 600;
+  z-index: 10000;
+  transition: top 0.3s ease;
+}
+
+.skip-link:focus {
+  top: 0;
+}
+
+
 /* ========================================
-   LOADING STATES
+   11. IMPROVED MOBILE MENU
+   Slide-out drawer with backdrop blur
+   ======================================== */
+
+/* Slide-in animation for mobile menu panel */
+.mobile-menu .mobile-menu-container {
+  transform: translate3d(100%, 0, 0);
+  transition: transform 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.mobile-menu.open .mobile-menu-container {
+  transform: translate3d(0, 0, 0);
+}
+
+/* Staggered nav link entrance */
+.mobile-menu.open .mobile-nav-link {
+  animation: mobileNavSlideIn 0.35s ease-out forwards;
+  opacity: 0;
+  transform: translate3d(20px, 0, 0);
+}
+
+.mobile-menu.open li:nth-child(1) .mobile-nav-link { animation-delay: 0.08s; }
+.mobile-menu.open li:nth-child(2) .mobile-nav-link { animation-delay: 0.14s; }
+.mobile-menu.open li:nth-child(3) .mobile-nav-link { animation-delay: 0.20s; }
+.mobile-menu.open li:nth-child(4) .mobile-nav-link { animation-delay: 0.26s; }
+.mobile-menu.open li:nth-child(5) .mobile-nav-link { animation-delay: 0.32s; }
+.mobile-menu.open li:nth-child(6) .mobile-nav-link { animation-delay: 0.38s; }
+
+@keyframes mobileNavSlideIn {
+  to {
+    opacity: 1;
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+/* Better mobile menu backdrop */
+.mobile-menu {
+  -webkit-backdrop-filter: blur(12px);
+  backdrop-filter: blur(12px);
+}
+
+
+/* ========================================
+   12. BETTER MODAL / LIGHTBOX
+   For artwork detail views
+   ======================================== */
+.meditation-modal.open,
+.modal.open {
+  animation: modalBackdropIn 0.3s ease-out;
+}
+
+.meditation-modal.open .meditation-modal-content,
+.modal.open .modal-content {
+  animation: scaleIn 0.35s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes modalBackdropIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.modal-close {
+  transition:
+    background 0.2s ease,
+    transform 0.2s ease;
+}
+
+.modal-close:hover {
+  background: rgba(0, 0, 0, 0.1);
+  transform: rotate(90deg);
+}
+
+/* Artwork lightbox overlay */
+.artwork-lightbox {
+  position: fixed;
+  inset: 0;
+  background: rgba(10, 10, 15, 0.92);
+  -webkit-backdrop-filter: blur(20px);
+  backdrop-filter: blur(20px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 2000;
+  opacity: 0;
+  visibility: hidden;
+  transition: opacity 0.35s ease, visibility 0.35s ease;
+  padding: 2rem;
+}
+
+.artwork-lightbox.open {
+  opacity: 1;
+  visibility: visible;
+}
+
+.artwork-lightbox img {
+  max-width: 90vw;
+  max-height: 85vh;
+  object-fit: contain;
+  border-radius: 12px;
+  box-shadow:
+    0 8px 24px rgba(0, 0, 0, 0.3),
+    0 32px 80px rgba(0, 0, 0, 0.4);
+  animation: scaleIn 0.4s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+.artwork-lightbox .lightbox-close {
+  position: absolute;
+  top: 1.5rem;
+  right: 1.5rem;
+  width: 48px;
+  height: 48px;
+  border-radius: 50%;
+  border: 2px solid rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-size: 1.4rem;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.2s ease;
+}
+
+.artwork-lightbox .lightbox-close:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  transform: rotate(90deg);
+}
+
+
+/* ========================================
+   13. LOADING STATES
    ======================================== */
 .lazy-image {
   background: linear-gradient(
@@ -333,58 +846,122 @@ button:focus-visible,
   100% { background-position: -200% 0; }
 }
 
+
 /* ========================================
-   SECTION TRANSITIONS
+   14. TOOLTIPS & POPOVERS
    ======================================== */
-.section {
-  opacity: 0;
-  transform: translateY(40px);
-  animation: sectionReveal 0.8s ease-out forwards;
+.leaflet-tooltip {
+  background: rgba(0, 0, 0, 0.85);
+  -webkit-backdrop-filter: blur(8px);
+  backdrop-filter: blur(8px);
+  border: none;
+  border-radius: 12px;
+  padding: 0.75rem 1rem;
+  color: #fff;
+  font-family: var(--ig-font-sans);
+  font-size: 0.95rem;
+  font-weight: 600;
+  box-shadow:
+    0 4px 12px rgba(0, 0, 0, 0.15),
+    0 12px 32px rgba(0, 0, 0, 0.3);
+  animation: tooltipFadeIn 0.25s ease-out;
 }
 
-.section:nth-child(1) { animation-delay: 0.1s; }
-.section:nth-child(2) { animation-delay: 0.2s; }
-.section:nth-child(3) { animation-delay: 0.3s; }
-
-@keyframes sectionReveal {
+@keyframes tooltipFadeIn {
+  from {
+    opacity: 0;
+    transform: translate3d(0, 8px, 0);
+  }
   to {
     opacity: 1;
-    transform: translateY(0);
+    transform: translate3d(0, 0, 0);
   }
 }
 
-/* Disable section animations on reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .section {
-    opacity: 1;
-    transform: none;
-    animation: none;
-  }
+.leaflet-tooltip::before {
+  border-top-color: rgba(0, 0, 0, 0.85);
 }
+
 
 /* ========================================
-   RESPONSIVE IMPROVEMENTS
+   15. BACK TO TOP BUTTON
    ======================================== */
-@media (max-width: 768px) {
-  .world-map {
-    height: 400px;
-    min-height: 400px;
-  }
-
-  .map-city-scroll {
-    -webkit-overflow-scrolling: touch;
-  }
-
-  .artworks-grid,
-  .collection-grid,
-  .stories-grid {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
+.back-to-top {
+  position: fixed;
+  bottom: 2rem;
+  right: 2rem;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--ig-accent, var(--accent, #e3742f)), var(--ig-accent-dark, #c65a0a));
+  color: #fff;
+  border: none;
+  box-shadow:
+    0 4px 12px rgba(230, 126, 34, 0.2),
+    0 12px 32px rgba(230, 126, 34, 0.3);
+  cursor: pointer;
+  opacity: 0;
+  visibility: hidden;
+  transform: translate3d(0, 20px, 0) scale3d(0.8, 0.8, 1);
+  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
+.back-to-top.visible {
+  opacity: 1;
+  visibility: visible;
+  transform: translate3d(0, 0, 0) scale3d(1, 1, 1);
+}
+
+.back-to-top:hover {
+  transform: translate3d(0, -4px, 0) scale3d(1.05, 1.05, 1);
+  box-shadow:
+    0 6px 16px rgba(230, 126, 34, 0.25),
+    0 16px 40px rgba(230, 126, 34, 0.4);
+}
+
+.back-to-top:active {
+  transform: translate3d(0, -2px, 0) scale3d(0.98, 0.98, 1);
+}
+
+.back-to-top i {
+  font-size: 1.2rem;
+}
+
+
 /* ========================================
-   MAP FALLBACK STYLING
+   16. ACTIVE NAV LINK HIGHLIGHTING
+   ======================================== */
+.mobile-nav-link.active,
+.header-cta-link.active {
+  color: var(--ig-accent, var(--accent));
+  font-weight: 600;
+  position: relative;
+}
+
+.header-cta-link.active::after {
+  content: '';
+  position: absolute;
+  bottom: -4px;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: var(--ig-accent, var(--accent));
+  border-radius: 2px;
+  animation: underlineGrow 0.3s ease-out;
+}
+
+@keyframes underlineGrow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+
+
+/* ========================================
+   17. MAP FALLBACK STYLING
    ======================================== */
 .map-fallback {
   display: flex;
@@ -411,124 +988,660 @@ button:focus-visible,
   margin-top: 1rem;
 }
 
+
 /* ========================================
-   QUIZ & GALLERY CARDS
+   18. QUIZ & GALLERY CARD TRANSITIONS
    ======================================== */
 .quiz-card,
-.collection-item,
-.artwork-card {
-  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1),
-              box-shadow 0.3s ease;
+.quiz-option {
+  transition:
+    transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    box-shadow 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+    border-color 0.35s ease,
+    background 0.35s ease;
 }
 
-.quiz-card:hover,
-.collection-item:hover,
-.artwork-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 28px 60px rgba(15, 23, 42, 0.15);
+.quiz-card:hover {
+  transform: translate3d(0, -8px, 0);
+  box-shadow:
+    0 8px 16px rgba(15, 23, 42, 0.06),
+    0 28px 60px rgba(15, 23, 42, 0.15);
 }
 
-/* ========================================
-   TOOLTIPS & POPOVERS
-   ======================================== */
-.leaflet-tooltip {
-  background: rgba(0, 0, 0, 0.85);
-  backdrop-filter: blur(8px);
-  border: none;
-  border-radius: 12px;
-  padding: 0.75rem 1rem;
-  color: #fff;
-  font-family: var(--ig-font-sans);
-  font-size: 0.95rem;
-  font-weight: 600;
-  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.3);
-  animation: tooltipFadeIn 0.25s ease-out;
-}
-
-@keyframes tooltipFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-.leaflet-tooltip::before {
-  border-top-color: rgba(0, 0, 0, 0.85);
-}
 
 /* ========================================
    PERFORMANCE OPTIMIZATIONS
    ======================================== */
-.world-map,
-.artworks-grid,
-.collection-grid {
-  will-change: auto;
-  contain: layout style paint;
+
+
+/* ========================================
+   P1. CONTENT VISIBILITY
+   Auto-skip rendering for below-fold
+   ======================================== */
+.harmony-map-section,
+.collection-section,
+.quiz-section,
+.stories-section,
+.artworks-section,
+.meditation-section,
+.business-section,
+.newsletter-section {
+  content-visibility: auto;
+  contain-intrinsic-size: auto 800px;
 }
 
+/* Images also get content-visibility */
 img {
   content-visibility: auto;
 }
 
-/* GPU acceleration for animations */
-.map-marker,
-.btn,
-.quiz-card,
-.collection-item,
-.artwork-card {
-  transform: translateZ(0);
-  backface-visibility: hidden;
-}
 
 /* ========================================
-   BACK TO TOP BUTTON
+   P2. CSS CONTAINMENT
+   Isolate components for paint optimization
    ======================================== */
-.back-to-top {
-  position: fixed;
-  bottom: 2rem;
-  right: 2rem;
-  width: 52px;
-  height: 52px;
-  border-radius: 50%;
-  background: linear-gradient(135deg, var(--ig-accent), var(--ig-accent-dark));
-  color: #fff;
-  border: none;
-  box-shadow: 0 12px 32px rgba(230, 126, 34, 0.3);
-  cursor: pointer;
+.world-map,
+.artworks-grid,
+.collection-grid,
+.stories-grid,
+.quiz-container {
+  contain: layout style paint;
+}
+
+.artwork-card,
+.collection-item,
+.story-card,
+.quiz-option {
+  contain: layout style;
+}
+
+/* Header uses layout containment */
+.catalog-header,
+.header,
+header.site-header {
+  contain: layout style;
+}
+
+
+/* ========================================
+   P3. REDUCE PAINT
+   Use transform instead of top/left
+   All animations use translate3d above
+   ======================================== */
+
+/* Ensure no top/left animations anywhere */
+.map-city-button:hover,
+.map-city-button.active {
+  transform: translate3d(0, -4px, 0);
+}
+
+
+/* ========================================
+   P4. FONT DISPLAY
+   Ensure font-display: swap
+   ======================================== */
+@font-face {
+  font-family: 'Playfair Display';
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Space Grotesk';
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Raleway';
+  font-display: swap;
+}
+
+
+/* ========================================
+   P5. SCROLL REVEAL ANIMATIONS
+   Used by performance-optimizer.js
+   ======================================== */
+.reveal-on-scroll {
   opacity: 0;
-  visibility: hidden;
-  transform: translateY(20px) scale(0.8);
-  transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-  z-index: 999;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  transform: translateY(24px);
+  transition: opacity 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94),
+              transform 0.7s cubic-bezier(0.25, 0.46, 0.45, 0.94);
 }
 
-.back-to-top.visible {
+.reveal-on-scroll.revealed {
   opacity: 1;
-  visibility: visible;
-  transform: translateY(0) scale(1);
+  transform: translateY(0);
 }
 
-.back-to-top:hover {
-  transform: translateY(-4px) scale(1.05);
-  box-shadow: 0 16px 40px rgba(230, 126, 34, 0.4);
+.reveal-on-scroll:nth-child(2) { transition-delay: 0.05s; }
+.reveal-on-scroll:nth-child(3) { transition-delay: 0.1s; }
+.reveal-on-scroll:nth-child(4) { transition-delay: 0.15s; }
+.reveal-on-scroll:nth-child(5) { transition-delay: 0.2s; }
+.reveal-on-scroll:nth-child(6) { transition-delay: 0.25s; }
+
+/* Save-data mode: reduce quality for slow connections */
+.save-data img { image-rendering: auto; }
+.save-data .art-media { background: #f4eee6; }
+.save-data .hero-visual::before,
+.save-data .hero-visual::after,
+.save-data body::before,
+.save-data body::after { display: none; }
+
+
+/* ========================================
+   P6. PRINT STYLESHEET
+   ======================================== */
+@media print {
+  *,
+  *::before,
+  *::after {
+    background: transparent !important;
+    color: #000 !important;
+    box-shadow: none !important;
+    text-shadow: none !important;
+  }
+
+  body {
+    font-size: 12pt;
+    line-height: 1.5;
+    cursor: auto !important;
+  }
+
+  body::before,
+  body::after {
+    display: none !important;
+  }
+
+  .cursor-dot,
+  .cursor-outline,
+  .back-to-top,
+  .floating-actions,
+  .mobile-menu,
+  .mobile-menu-btn,
+  .mobile-menu-toggle,
+  .meditation-modal,
+  .modal,
+  .artwork-lightbox,
+  .toast,
+  .newsletter-section,
+  .quiz-section {
+    display: none !important;
+  }
+
+  header.site-header,
+  .catalog-header,
+  .header {
+    position: static;
+    background: #fff !important;
+    box-shadow: none !important;
+    border-bottom: 1px solid #ccc !important;
+  }
+
+  a {
+    text-decoration: underline;
+  }
+
+  a[href]::after {
+    content: " (" attr(href) ")";
+    font-size: 0.85em;
+    color: #666 !important;
+  }
+
+  a[href^="#"]::after,
+  a[href^="javascript"]::after {
+    content: '';
+  }
+
+  img {
+    max-width: 100% !important;
+    page-break-inside: avoid;
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+
+  .section {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    page-break-inside: avoid;
+  }
+
+  .artwork-card,
+  .collection-item {
+    opacity: 1 !important;
+    transform: none !important;
+    animation: none !important;
+    break-inside: avoid;
+    box-shadow: none !important;
+    border: 1px solid #ddd !important;
+  }
+
+  .artwork-overlay,
+  .collection-overlay {
+    opacity: 1 !important;
+    visibility: visible !important;
+    position: static !important;
+    background: none !important;
+    color: #000 !important;
+    transform: none !important;
+  }
+
+  .artworks-grid,
+  .collection-grid {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+  }
+
+  .footer {
+    border-top: 1px solid #ccc;
+  }
 }
 
-.back-to-top:active {
-  transform: translateY(-2px) scale(0.98);
+
+/* ========================================
+   P6. REDUCED MOTION
+   ======================================== */
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .section {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .artwork-card,
+  .collection-item,
+  .story-card,
+  .quiz-option,
+  .quiz-card {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .artwork-card:hover,
+  .collection-item:hover,
+  .story-card:hover,
+  .quiz-option:hover {
+    transform: none;
+  }
+
+  .artwork-overlay,
+  .collection-overlay {
+    transform: none;
+  }
+
+  .mobile-menu .mobile-menu-container {
+    transition: none;
+  }
+
+  .mobile-menu.open .mobile-nav-link {
+    animation: none;
+    opacity: 1;
+    transform: none;
+  }
+
+  .map-marker__pulse {
+    animation: none;
+  }
 }
 
-.back-to-top i {
-  font-size: 1.2rem;
+
+/* ========================================
+   P7. DARK MODE BASE
+   Disabled: site is always light-themed.
+   OS dark mode should NOT override site styles.
+   ======================================== */
+@media (prefers-color-scheme: dark) and (max-width: 0px) {
+  :root {
+    --ink: #e8eaed;
+    --muted: #9aa0ad;
+    --surface: #1a1f2e;
+    --soft: #141820;
+    --stroke: #2d3344;
+  }
+
+  body {
+    background: var(--soft);
+    color: var(--ink);
+  }
+
+  body::before,
+  body::after {
+    opacity: 0.15;
+  }
+
+  /* Header */
+  header.site-header,
+  .catalog-header,
+  .header {
+    background: rgba(26, 31, 46, 0.95) !important;
+    border-bottom-color: rgba(255, 255, 255, 0.06) !important;
+  }
+
+  /* Cards */
+  .artwork-card,
+  .collection-item,
+  .story-card,
+  .quiz-option,
+  .quiz-preview,
+  .meditation-details,
+  .story-form-container,
+  .testimonial {
+    background: #1e2436 !important;
+    border-color: rgba(255, 255, 255, 0.06) !important;
+    color: #e8eaed;
+  }
+
+  .artwork-card .artwork-info,
+  .collection-body {
+    background: #1e2436;
+  }
+
+  .artwork-info h3,
+  .artwork-title,
+  .collection-body h3,
+  .story-card h4,
+  .quiz-option h3 {
+    color: #e8eaed !important;
+  }
+
+  .artwork-info p,
+  .artwork-description,
+  .collection-description,
+  .story-card p,
+  .quiz-option p {
+    color: #9aa0ad !important;
+  }
+
+  /* Sections */
+  .hero,
+  .hero-banner,
+  .hero-section {
+    background: linear-gradient(135deg, #141820, #1a1f2e) !important;
+  }
+
+  .collection-section,
+  .artworks-section,
+  .stories-section,
+  .quiz-section,
+  .meditation-section,
+  .business-section,
+  .newsletter-section {
+    background: #141820 !important;
+  }
+
+  .artworks-gallery {
+    background: #1a1f2e !important;
+    border-color: rgba(255, 255, 255, 0.04) !important;
+  }
+
+  /* Inputs */
+  input,
+  select,
+  textarea {
+    background: #1e2436 !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #e8eaed !important;
+  }
+
+  /* Footer */
+  .footer,
+  .simple-footer {
+    background: #0d1017 !important;
+  }
+
+  /* Collection filters */
+  .collection-filters {
+    background: #1a1f2e !important;
+  }
+
+  .collection-filter-btn {
+    background: #1e2436 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    color: #9aa0ad !important;
+  }
+
+  .collection-filter-btn.active {
+    color: #fff !important;
+  }
+
+  .collection-search {
+    background: #1e2436 !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+    color: #e8eaed !important;
+  }
+
+  /* Navigation */
+  .main-nav {
+    background: rgba(30, 36, 54, 0.9) !important;
+    border-color: rgba(255, 255, 255, 0.06) !important;
+  }
+
+  .nav-item {
+    color: #9aa0ad !important;
+  }
+
+  .nav-item:hover,
+  .nav-item.active {
+    color: #e8eaed !important;
+    background: rgba(230, 126, 34, 0.12) !important;
+  }
+
+  .lang-toggle {
+    background: #1e2436 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+    color: #9aa0ad !important;
+  }
+
+  .lang-dropdown {
+    background: #1e2436 !important;
+    border-color: rgba(255, 255, 255, 0.06) !important;
+  }
+
+  .lang-option {
+    color: #9aa0ad !important;
+  }
+
+  .lang-option:hover,
+  .lang-option.active {
+    background: rgba(230, 126, 34, 0.12) !important;
+    color: #e67e22 !important;
+  }
+
+  /* Map */
+  .world-map {
+    background: linear-gradient(135deg, #1a2332 0%, #0f172a 100%);
+  }
+
+  .map-legend {
+    background: rgba(26, 31, 46, 0.98) !important;
+    border-color: rgba(255, 255, 255, 0.06) !important;
+  }
+
+  .map-city-button {
+    background: #1e2436 !important;
+    border-color: rgba(255, 255, 255, 0.08) !important;
+  }
+
+  .map-city-button .city-name {
+    color: #e8eaed !important;
+  }
+
+  .map-city-button .city-country {
+    color: #9aa0ad !important;
+  }
+
+  /* Mobile menu */
+  .mobile-menu-container {
+    background: #1a1f2e !important;
+  }
+
+  .mobile-nav-link {
+    color: #e8eaed !important;
+  }
+
+  /* Newsletter */
+  .newsletter-content {
+    background: linear-gradient(135deg, rgba(230, 126, 34, 0.08), rgba(99, 102, 241, 0.08)) !important;
+  }
+
+  /* General text */
+  .hero-banner h1,
+  .hero-title,
+  .section-title {
+    color: #f0f2f5 !important;
+  }
+
+  .hero-banner p,
+  .hero-description,
+  .section-subtitle {
+    color: #9aa0ad !important;
+  }
+
+  /* Shadows in dark mode */
+  .artwork-card,
+  .collection-item,
+  .story-card,
+  .quiz-option {
+    box-shadow:
+      0 4px 12px rgba(0, 0, 0, 0.2),
+      0 12px 28px rgba(0, 0, 0, 0.25) !important;
+  }
+
+  .artwork-card:hover,
+  .collection-item:hover {
+    box-shadow:
+      0 8px 20px rgba(0, 0, 0, 0.25),
+      0 24px 50px rgba(0, 0, 0, 0.35) !important;
+  }
+
+  /* ROI stats */
+  .roi-stat {
+    background: #1e2436 !important;
+    border-color: rgba(255, 255, 255, 0.06) !important;
+  }
+
+  /* Hero card */
+  .hero-card {
+    background: linear-gradient(180deg, #1e2436 0%, #1a1f2e 100%) !important;
+    border-color: rgba(255, 255, 255, 0.04) !important;
+  }
+
+  /* Gradient overlays reduced */
+  .collection-section::after,
+  .artworks-section::after,
+  .stories-section::after {
+    background: linear-gradient(to top, rgba(20, 24, 32, 0.5), transparent);
+  }
+
+  /* Image backgrounds */
+  .artwork-image,
+  .artwork-image-container,
+  .collection-figure {
+    background: #141820 !important;
+  }
+
+  /* Scrollbar */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #141820;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #2d3344;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3d4456;
+  }
 }
 
+
+/* ========================================
+   MOBILE RESPONSIVENESS
+   ======================================== */
+
+
+/* ========================================
+   M1. DISABLE CUSTOM CURSOR ON TOUCH
+   ======================================== */
+@media (pointer: coarse), (hover: none) {
+  body {
+    cursor: auto !important;
+  }
+
+  a, button, input, select, textarea {
+    cursor: auto !important;
+  }
+
+  .cursor-dot,
+  .cursor-outline {
+    display: none !important;
+  }
+}
+
+
+/* ========================================
+   M2. ARTWORK CARDS ON SMALL SCREENS
+   320px-428px perfect display
+   ======================================== */
 @media (max-width: 768px) {
+  .world-map {
+    height: 400px;
+    min-height: 400px;
+  }
+
+  .map-city-scroll {
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .artworks-grid,
+  .collection-grid,
+  .stories-grid {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  /* Remove masonry offset on mobile */
+  .artworks-grid > :nth-child(3n+2),
+  .collection-grid > :nth-child(3n+2),
+  .artworks-grid > :nth-child(3n+3),
+  .collection-grid > :nth-child(3n+3) {
+    margin-top: 0;
+  }
+
+  /* Show overlay always on mobile (no hover) */
+  .artwork-overlay,
+  .collection-overlay {
+    opacity: 1;
+    visibility: visible;
+    transform: translate3d(0, 0, 0);
+  }
+
   .back-to-top {
     bottom: 1.5rem;
     right: 1.5rem;
@@ -537,45 +1650,312 @@ img {
   }
 }
 
-/* ========================================
-   ACTIVE NAV LINK HIGHLIGHTING
-   ======================================== */
-.mobile-nav-link.active,
-.header-cta-link.active {
-  color: var(--ig-accent);
-  font-weight: 600;
-  position: relative;
+@media (max-width: 428px) {
+  .artworks-grid,
+  .collection-grid {
+    gap: 1.25rem;
+    padding: 0 0.5rem;
+  }
+
+  .artwork-card,
+  .collection-item {
+    border-radius: 20px;
+  }
+
+  .collection-body {
+    padding: 1.25rem 1.5rem 1.5rem;
+  }
+
+  .artwork-info {
+    padding: 1.25rem;
+  }
+
+  .artwork-info h3,
+  .artwork-title {
+    font-size: 1.15rem;
+  }
+
+  .collection-body h3 {
+    font-size: 1.25rem;
+  }
+
+  .artwork-price,
+  .collection-price {
+    font-size: 1.4rem;
+  }
 }
 
-.header-cta-link.active::after {
-  content: '';
+@media (max-width: 320px) {
+  .artworks-grid,
+  .collection-grid {
+    padding: 0 0.25rem;
+    gap: 1rem;
+  }
+
+  .artwork-card,
+  .collection-item {
+    border-radius: 16px;
+  }
+
+  .collection-body {
+    padding: 1rem 1.25rem 1.25rem;
+  }
+
+  .collection-actions .btn {
+    padding: 0.7rem 1rem;
+    font-size: 0.9rem;
+  }
+}
+
+
+/* ========================================
+   M3. FIX OVERFLOW-X ISSUES
+   ======================================== */
+html,
+body {
+  overflow-x: hidden;
+  max-width: 100vw;
+}
+
+/* Prevent elements from escaping viewport */
+.container,
+.header-container,
+.footer-container,
+.header-inner {
+  max-width: 100%;
+}
+
+.section {
+  overflow-x: hidden;
+}
+
+/* Horizontal scroll containers */
+.map-city-scroll {
+  overflow-x: auto;
+  overflow-y: hidden;
+  -webkit-overflow-scrolling: touch;
+  scrollbar-width: thin;
+  scrollbar-color: rgba(0, 0, 0, 0.15) transparent;
+}
+
+.map-city-scroll::-webkit-scrollbar {
+  height: 4px;
+}
+
+.map-city-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.map-city-scroll::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.15);
+  border-radius: 4px;
+}
+
+
+/* ========================================
+   M4. TOUCH TARGETS 44x44px
+   ======================================== */
+@media (pointer: coarse) {
+  .nav-item,
+  .header-cta-link,
+  .header-cta-btn,
+  .collection-filter-btn,
+  .filter-btn,
+  .lang-toggle,
+  .lang-option,
+  .mobile-nav-link,
+  .social-icon,
+  .modal-close,
+  .map-city-button {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .nav-item {
+    padding: 12px 16px;
+  }
+
+  .collection-filter-btn,
+  .filter-btn {
+    padding: 10px 16px;
+  }
+
+  .lang-option {
+    padding: 12px 16px;
+  }
+
+  .mobile-nav-link {
+    padding: 12px 0;
+    display: block;
+  }
+
+  .footer-section a {
+    padding: 8px 0;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+
+  .legal-link {
+    padding: 8px 0;
+    min-height: 44px;
+    display: inline-flex;
+    align-items: center;
+  }
+}
+
+
+/* ========================================
+   M5. IMPROVED MOBILE NAVIGATION
+   ======================================== */
+@media (max-width: 1024px) {
+  /* Ensure hamburger is easily tappable */
+  .mobile-menu-btn,
+  .mobile-menu-toggle {
+    min-width: 44px;
+    min-height: 44px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 768px) {
+  /* Better mobile menu container */
+  .mobile-menu-container {
+    padding: 2.5rem 1.75rem;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .mobile-nav-list {
+    gap: 0.5rem;
+  }
+
+  .mobile-nav-link {
+    font-size: 1.15rem;
+    padding: 0.85rem 0;
+    border-bottom: 1px solid rgba(0, 0, 0, 0.04);
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+  }
+
+  .mobile-nav-link:last-child {
+    border-bottom: none;
+  }
+}
+
+
+/* ========================================
+   M6. PREVENT LAYOUT SHIFTS FROM IMAGES
+   ======================================== */
+.artwork-image,
+.artwork-image-container,
+.collection-figure {
+  aspect-ratio: 2 / 3;
+}
+
+/* hero-visual aspect-ratio removed — paintings display at natural proportions */
+
+.quiz-preview img {
+  aspect-ratio: 16 / 9;
+  object-fit: cover;
+}
+
+.meditation-preview img {
+  aspect-ratio: 4 / 5;
+  object-fit: cover;
+}
+
+/* All images should be stable */
+img {
+  height: auto;
+  max-width: 100%;
+}
+
+/* Explicit width/height for known images */
+.collection-image,
+.artwork-image img,
+.artwork-image-container img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+
+/* ========================================
+   M7. TABLET SPECIFIC (768px - 1024px)
+   ======================================== */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .artworks-grid,
+  .collection-grid {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1.75rem;
+  }
+
+  /* Remove masonry on tablet */
+  .artworks-grid > :nth-child(3n+2),
+  .collection-grid > :nth-child(3n+2),
+  .artworks-grid > :nth-child(3n+3),
+  .collection-grid > :nth-child(3n+3) {
+    margin-top: 0;
+  }
+}
+
+
+/* ========================================
+   UTILITY CLASSES
+   ======================================== */
+
+/* Visually hidden but accessible */
+.sr-only {
   position: absolute;
-  bottom: -4px;
-  left: 0;
-  right: 0;
-  height: 2px;
-  background: var(--ig-accent);
-  border-radius: 2px;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border-width: 0;
 }
 
-/* ========================================
-   SCROLL REVEAL ANIMATIONS
-   ======================================== */
-.section.in-view,
-.artwork-card.in-view,
-.collection-item.in-view,
-.story-card.in-view,
-.quiz-card.in-view {
-  animation: fadeInUpSmooth 0.6s ease-out forwards;
+/* Fade utility for JS usage */
+.fade-enter {
+  opacity: 0;
+  transform: translate3d(0, 10px, 0);
 }
 
-@keyframes fadeInUpSmooth {
-  from {
-    opacity: 0;
-    transform: translateY(30px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
+.fade-enter-active {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+.fade-exit {
+  opacity: 1;
+  transform: translate3d(0, 0, 0);
+}
+
+.fade-exit-active {
+  opacity: 0;
+  transform: translate3d(0, -10px, 0);
+  transition: opacity 0.3s ease, transform 0.3s ease;
+}
+
+/* No scroll utility */
+.no-scroll {
+  overflow: hidden !important;
+}
+
+/* Selection color */
+::selection {
+  background: rgba(227, 116, 47, 0.2);
+  color: inherit;
+}
+
+::-moz-selection {
+  background: rgba(227, 116, 47, 0.2);
+  color: inherit;
 }

@@ -1,1156 +1,1690 @@
+/**
+ * Inner Garden — Admin Panel Application
+ * Premium SaaS-quality admin for art gallery management
+ * Features: visual grid, inline edit, keyboard shortcuts, dark mode,
+ *           real-time search, batch ops, drag-drop upload, toast notifications
+ */
 (() => {
-  const CLOUDINARY_BASE = 'https://res.cloudinary.com/djdc6wcpg/image/upload/f_auto,q_auto/';
+  'use strict';
+
+  // ============================
+  // Constants
+  // ============================
+  const CLOUD_NAME = 'djdc6wcpg';
+  const CLOUDINARY_BASE = `https://res.cloudinary.com/${CLOUD_NAME}/image/upload/`;
+  const THUMB_TRANSFORM = 'c_fill,w_480,h_360,q_auto,f_auto';
+  const PREVIEW_TRANSFORM = 'c_limit,w_800,q_auto,f_auto';
+  const ZOOM_TRANSFORM = 'c_limit,w_1600,q_auto,f_auto';
+  const TOKEN_KEY = 'inner-garden-admin-token';
+  const THEME_KEY = 'inner-garden-admin-theme';
+  const DEBOUNCE_MS = 200;
+  const TOAST_DURATION = 3000;
+
+  const STATUS_LABELS = {
+    available: 'Available',
+    reserved: 'Reserved',
+    commission: 'Commission',
+    sold: 'Sold'
+  };
+
+  const STATUS_ICONS = {
+    available: 'fa-check-circle',
+    reserved: 'fa-clock',
+    commission: 'fa-pen-ruler',
+    sold: 'fa-shopping-bag'
+  };
+
+  const STATUS_CYCLE = ['available', 'reserved', 'sold', 'commission'];
+
+  // ============================
+  // State
+  // ============================
   const state = {
-    token: localStorage.getItem('inner-garden-admin-token') || '',
+    token: localStorage.getItem(TOKEN_KEY) || '',
     artworks: [],
     filtered: [],
-    selectedId: null,
     selectedIds: new Set(),
+    editingId: null,
+    currentView: 'artworks',
+    editorOpen: false,
+    darkMode: localStorage.getItem(THEME_KEY) === 'dark',
     cloudinary: {
+      configured: false,
       assets: [],
       nextCursor: null,
       loading: false,
-      configured: false,
+      selectedId: null,
       ratio: null,
-      baseUrl: CLOUDINARY_BASE,
-      selectedId: null
+      baseUrl: CLOUDINARY_BASE
     }
   };
 
-  const $ = (selector) => document.querySelector(selector);
-  const $$ = (selector) => Array.from(document.querySelectorAll(selector));
+  // ============================
+  // DOM Helpers
+  // ============================
+  const $ = (sel) => document.querySelector(sel);
+  const $$ = (sel) => [...document.querySelectorAll(sel)];
 
-  const elements = {
-    loginModal: $('#loginModal'),
-    loginForm: $('#loginForm'),
-    loginBtn: $('#loginBtn'),
-    summaryCards: $('#summaryCards'),
-    artworksList: $('#artworksList'),
-    searchInput: $('#searchInput'),
-    statusFilter: $('#statusFilter'),
-    segmentFilter: $('#segmentFilter'),
-    newArtworkBtn: $('#newArtworkBtn'),
-    refreshBtn: $('#refreshBtn'),
-    logoutBtn: $('#logoutBtn'),
-    bulkPanel: $('#bulkPanel'),
-    bulkCount: $('#bulkCount'),
-    bulkSelectAll: $('#bulkSelectAll'),
-    bulkClear: $('#bulkClear'),
-    bulkStatus: $('#bulkStatus'),
-    bulkMood: $('#bulkMood'),
-    bulkPrice: $('#bulkPrice'),
-    bulkCurrency: $('#bulkCurrency'),
-    bulkSegmentsMode: $('#bulkSegmentsMode'),
-    bulkSegments: $('#bulkSegments'),
-    bulkPriceClear: $('#bulkPriceClear'),
-    bulkApply: $('#bulkApply'),
-    bulkDelete: $('#bulkDelete'),
-    artworkForm: $('#artworkForm'),
-    formTitle: $('#formTitle'),
-    formStatusBadge: $('#formStatusBadge'),
-    artworkId: $('#artworkId'),
-    cloudinaryInput: $('#cloudinaryInput'),
-    previewImage: $('#previewImage'),
-    cloudinaryDrop: $('#cloudinaryDrop'),
-    statusSelect: $('#statusSelect'),
-    resetBtn: $('#resetBtn'),
-    toast: $('#toast'),
-    widthInput: $('#artworkForm [name="width_cm"]'),
-    heightInput: $('#artworkForm [name="height_cm"]'),
-    sizeInput: $('#artworkForm [name="size"]'),
-    ratioHint: $('#ratioHint'),
-    cloudinaryStatus: $('#cloudinaryStatus'),
-    cloudinarySearch: $('#cloudinarySearch'),
-    cloudinaryFolder: $('#cloudinaryFolder'),
-    cloudinaryTag: $('#cloudinaryTag'),
-    cloudinarySearchBtn: $('#cloudinarySearchBtn'),
-    cloudinaryClearBtn: $('#cloudinaryClearBtn'),
-    cloudinaryResults: $('#cloudinaryResults'),
-    cloudinaryLoadMore: $('#cloudinaryLoadMore'),
-    cloudinaryUpload: $('#cloudinaryUpload'),
-    cloudinaryUploadFolder: $('#cloudinaryUploadFolder'),
-    cloudinaryUploadPublicId: $('#cloudinaryUploadPublicId'),
-    cloudinaryUploadBtn: $('#cloudinaryUploadBtn'),
-    cloudinaryInspectBtn: $('#cloudinaryInspectBtn'),
-    cloudinaryOpenBtn: $('#cloudinaryOpenBtn'),
-    cloudinaryCopyBtn: $('#cloudinaryCopyBtn'),
-    cloudinaryMeta: $('#cloudinaryMeta')
-  };
+  // ============================
+  // Utility Functions
+  // ============================
+  function debounce(fn, ms) {
+    let timer;
+    return (...args) => {
+      clearTimeout(timer);
+      timer = setTimeout(() => fn(...args), ms);
+    };
+  }
 
-  const statusLabels = {
-    available: 'Доступна',
-    reserved: 'Резерв',
-    commission: 'Під замовлення',
-    sold: 'Продано'
-  };
+  function normalizeStatus(val) {
+    const s = String(val || '').trim().toLowerCase();
+    return STATUS_LABELS[s] ? s : 'available';
+  }
 
-  const showToast = (message) => {
-    if (!elements.toast) return;
-    elements.toast.textContent = message;
-    elements.toast.classList.add('show');
-    clearTimeout(showToast.timer);
-    showToast.timer = setTimeout(() => {
-      elements.toast.classList.remove('show');
-    }, 2500);
-  };
-
-  const updateBulkUi = () => {
-    const count = state.selectedIds.size;
-    if (elements.bulkCount) {
-      elements.bulkCount.textContent = `Обрано: ${count}`;
-    }
-    if (elements.bulkPanel) {
-      elements.bulkPanel.classList.toggle('has-selection', count > 0);
-    }
-    if (elements.bulkApply) elements.bulkApply.disabled = count === 0;
-    if (elements.bulkDelete) elements.bulkDelete.disabled = count === 0;
-  };
-
-  const clearBulkSelection = () => {
-    state.selectedIds.clear();
-    updateBulkUi();
-    renderList();
-  };
-
-  const toggleSelection = (id, isSelected) => {
-    if (!id) return;
-    if (isSelected) {
-      state.selectedIds.add(id);
-    } else {
-      state.selectedIds.delete(id);
-    }
-    updateBulkUi();
-    renderList();
-  };
-
-  const authHeaders = () => {
-    return state.token ? { Authorization: `Bearer ${state.token}` } : {};
-  };
-
-  const normalizeStatus = (value) => {
-    const status = String(value || '').trim().toLowerCase();
-    return ['available', 'reserved', 'commission', 'sold'].includes(status) ? status : 'available';
-  };
-
-  const formatPrice = (art) => {
+  function formatPrice(art) {
     if (typeof art.price === 'number' && Number.isFinite(art.price)) {
-      const currency = art.currency || 'EUR';
-      return `${currency} ${art.price.toLocaleString('en-US')}`;
+      return `${art.currency || 'EUR'} ${art.price.toLocaleString('en-US')}`;
     }
-    return 'За запитом';
-  };
+    return 'On request';
+  }
 
-  const extractCloudinaryId = (value) => {
-    if (!value) return '';
-    const trimmed = String(value).trim();
-    if (!trimmed) return '';
-    if (!trimmed.includes('/') && !trimmed.includes('http')) {
-      return trimmed;
-    }
-    try {
-      const url = new URL(trimmed);
-      const parts = url.pathname.split('/').filter(Boolean);
-      const uploadIndex = parts.findIndex((part) => part === 'upload');
-      if (uploadIndex >= 0) {
-        const afterUpload = parts.slice(uploadIndex + 1);
-        const versionIndex = afterUpload.findIndex((part) => /^v\\d+$/.test(part));
-        const transformationPattern = /^(?:c_|w_|h_|q_|f_|g_|t_|ar_|b_|e_)/;
-        let startIndex = 0;
-        if (versionIndex >= 0) {
-          startIndex = versionIndex + 1;
-        } else {
-          while (startIndex < afterUpload.length - 1) {
-            const segment = afterUpload[startIndex];
-            if (segment.includes(',') || transformationPattern.test(segment)) {
-              startIndex += 1;
-            } else {
-              break;
-            }
-          }
-        }
-        const idParts = afterUpload.slice(startIndex);
-        if (!idParts.length) return '';
-        const lastIndex = idParts.length - 1;
-        idParts[lastIndex] = idParts[lastIndex].replace(/\\.[a-z0-9]+$/i, '');
-        return idParts.join('/');
-      }
-    } catch (error) {
-      const match = trimmed.match(/upload\\/(?:v\\d+\\/)?(.+)\\.[a-z0-9]+$/i);
-      if (match) return match[1];
-    }
-    return '';
-  };
-
-  const formatBytes = (bytes) => {
+  function formatBytes(bytes) {
     if (typeof bytes !== 'number' || Number.isNaN(bytes)) return '';
     if (bytes < 1024) return `${bytes} B`;
     const kb = bytes / 1024;
     if (kb < 1024) return `${kb.toFixed(0)} KB`;
-    const mb = kb / 1024;
-    return `${mb.toFixed(1)} MB`;
-  };
+    return `${(kb / 1024).toFixed(1)} MB`;
+  }
 
-  const formatRatio = (width, height) => {
-    if (!width || !height) return '';
+  function formatRatio(w, h) {
+    if (!w || !h) return '';
     const gcd = (a, b) => (b ? gcd(b, a % b) : a);
-    const divisor = gcd(width, height) || 1;
-    return `${Math.round(width / divisor)}:${Math.round(height / divisor)}`;
-  };
+    const d = gcd(w, h) || 1;
+    return `${Math.round(w / d)}:${Math.round(h / d)}`;
+  }
 
-  const setRatioHint = (asset) => {
-    if (!elements.ratioHint) return;
-    if (!asset || !asset.width || !asset.height) {
-      elements.ratioHint.textContent = 'Співвідношення: —';
-      return;
+  function thumbUrl(cloudinaryId) {
+    if (!cloudinaryId) return '';
+    return `${CLOUDINARY_BASE}${THUMB_TRANSFORM}/${cloudinaryId}`;
+  }
+
+  function previewUrl(cloudinaryId) {
+    if (!cloudinaryId) return '';
+    return `${CLOUDINARY_BASE}${PREVIEW_TRANSFORM}/${cloudinaryId}`;
+  }
+
+  function zoomUrl(cloudinaryId) {
+    if (!cloudinaryId) return '';
+    return `${CLOUDINARY_BASE}${ZOOM_TRANSFORM}/${cloudinaryId}`;
+  }
+
+  function authHeaders() {
+    const headers = { 'Content-Type': 'application/json' };
+    if (state.token) headers.Authorization = `Bearer ${state.token}`;
+    return headers;
+  }
+
+  function authHeadersNoBody() {
+    const headers = {};
+    if (state.token) headers.Authorization = `Bearer ${state.token}`;
+    return headers;
+  }
+
+  function extractCloudinaryId(value) {
+    if (!value) return '';
+    const trimmed = String(value).trim();
+    if (!trimmed) return '';
+    if (!trimmed.includes('/') && !trimmed.includes('http')) return trimmed;
+    try {
+      const url = new URL(trimmed);
+      const parts = url.pathname.split('/').filter(Boolean);
+      const uploadIdx = parts.findIndex(p => p === 'upload');
+      if (uploadIdx >= 0) {
+        const after = parts.slice(uploadIdx + 1);
+        const versionIdx = after.findIndex(p => /^v\d+$/.test(p));
+        const transformPattern = /^(?:c_|w_|h_|q_|f_|g_|t_|ar_|b_|e_)/;
+        let start = 0;
+        if (versionIdx >= 0) {
+          start = versionIdx + 1;
+        } else {
+          while (start < after.length - 1) {
+            if (after[start].includes(',') || transformPattern.test(after[start])) {
+              start++;
+            } else break;
+          }
+        }
+        const idParts = after.slice(start);
+        if (!idParts.length) return '';
+        idParts[idParts.length - 1] = idParts[idParts.length - 1].replace(/\.[a-z0-9]+$/i, '');
+        return idParts.join('/');
+      }
+    } catch {
+      const m = trimmed.match(/upload\/(?:v\d+\/)?(.+)\.[a-z0-9]+$/i);
+      if (m) return m[1];
     }
-    const ratio = formatRatio(asset.width, asset.height);
-    elements.ratioHint.textContent = `Співвідношення: ${ratio} (${asset.width}×${asset.height}px)`;
-  };
+    return '';
+  }
 
-  const updateCloudinaryMeta = (asset) => {
-    if (!elements.cloudinaryMeta) return;
-    if (!asset || !asset.width || !asset.height) {
-      elements.cloudinaryMeta.textContent = 'Метадані: —';
-      return;
+  // ============================
+  // Toast Notifications
+  // ============================
+  function toast(message, type = 'default') {
+    const container = $('#toastContainer');
+    if (!container) return;
+
+    const icons = {
+      success: 'fa-check-circle',
+      error: 'fa-exclamation-circle',
+      warning: 'fa-exclamation-triangle',
+      default: 'fa-info-circle'
+    };
+
+    const el = document.createElement('div');
+    el.className = `toast toast-${type}`;
+    el.innerHTML = `<i class="fas ${icons[type] || icons.default}"></i><span>${message}</span>`;
+    container.appendChild(el);
+
+    setTimeout(() => {
+      el.classList.add('toast-out');
+      el.addEventListener('animationend', () => el.remove());
+    }, TOAST_DURATION);
+  }
+
+  // ============================
+  // Dark Mode
+  // ============================
+  function applyTheme() {
+    document.documentElement.setAttribute('data-theme', state.darkMode ? 'dark' : 'light');
+    const toggle = $('#darkModeSwitch');
+    if (toggle) toggle.classList.toggle('on', state.darkMode);
+    const icon = $('#darkModeToggle i');
+    if (icon) {
+      icon.className = state.darkMode ? 'fas fa-sun' : 'fas fa-moon';
     }
-    const ratio = formatRatio(asset.width, asset.height);
-    const bytes = formatBytes(asset.bytes);
-    const parts = [
-      `${asset.width}×${asset.height}px`,
-      ratio ? `ratio ${ratio}` : null,
-      bytes || null,
-      asset.format ? asset.format.toUpperCase() : null
-    ].filter(Boolean);
-    elements.cloudinaryMeta.textContent = `Метадані: ${parts.join(' · ')}`;
-  };
+  }
 
-  const updateSizeAuto = () => {
-    if (!elements.widthInput || !elements.heightInput || !elements.sizeInput) return;
-    const width = Number(elements.widthInput.value);
-    const height = Number(elements.heightInput.value);
-    if (!width || !height) return;
-    const autoValue = `${width} × ${height} см`;
-    if (!elements.sizeInput.value || elements.sizeInput.dataset.auto === 'true') {
-      elements.sizeInput.value = autoValue;
-      elements.sizeInput.dataset.auto = 'true';
+  function toggleDarkMode() {
+    state.darkMode = !state.darkMode;
+    localStorage.setItem(THEME_KEY, state.darkMode ? 'dark' : 'light');
+    applyTheme();
+    toast(state.darkMode ? 'Dark mode enabled' : 'Light mode enabled');
+  }
+
+  // ============================
+  // Auth / Login
+  // ============================
+  function showLogin() {
+    const screen = $('#loginScreen');
+    const shell = $('#appShell');
+    if (screen) screen.style.display = 'flex';
+    if (shell) shell.style.display = 'none';
+  }
+
+  function hideLogin() {
+    const screen = $('#loginScreen');
+    const shell = $('#appShell');
+    if (screen) screen.style.display = 'none';
+    if (shell) shell.style.display = 'flex';
+  }
+
+  async function handleLogin(e) {
+    e.preventDefault();
+    const btn = $('#loginBtn');
+    const email = $('#loginEmail').value;
+    const password = $('#loginPassword').value;
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="spinner"></span>';
+
+    try {
+      const res = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password })
+      });
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error || 'Login failed');
+
+      state.token = data.token;
+      localStorage.setItem(TOKEN_KEY, data.token);
+      hideLogin();
+      toast('Welcome back!', 'success');
+      await Promise.all([fetchArtworks(), fetchCloudinaryStatus()]);
+    } catch (err) {
+      toast('Invalid credentials or server error', 'error');
+    } finally {
+      btn.disabled = false;
+      btn.innerHTML = '<span>Sign In</span><i class="fas fa-arrow-right"></i>';
     }
-  };
+  }
 
-  const applyRatioIfMissing = (changedField) => {
-    if (!state.cloudinary.ratio || !elements.widthInput || !elements.heightInput) return;
-    const widthVal = Number(elements.widthInput.value);
-    const heightVal = Number(elements.heightInput.value);
-    if (changedField === 'width' && widthVal && !heightVal) {
-      elements.heightInput.value = Math.round(widthVal / state.cloudinary.ratio);
+  function handleLogout() {
+    state.token = '';
+    state.artworks = [];
+    state.filtered = [];
+    state.selectedIds.clear();
+    state.editingId = null;
+    localStorage.removeItem(TOKEN_KEY);
+    closeEditor();
+    resetCloudinaryState();
+    showLogin();
+    toast('Signed out');
+  }
+
+  // ============================
+  // Navigation / Views
+  // ============================
+  function switchView(view) {
+    state.currentView = view;
+
+    // Update sidebar nav active state
+    $$('.sidebar-nav .nav-item').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.view === view);
+    });
+
+    // Update bottom nav active state
+    $$('.bottom-nav-item[data-view]').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.view === view);
+    });
+
+    // Show/hide view panels
+    const panels = {
+      artworks: '#viewArtworks',
+      cloudinary: '#viewCloudinary',
+      bulk: '#viewBulk'
+    };
+
+    Object.entries(panels).forEach(([key, sel]) => {
+      const el = $(sel);
+      if (el) el.style.display = key === view ? '' : 'none';
+    });
+
+    // Close mobile sidebar if open
+    const sidebar = $('#sidebar');
+    if (sidebar) sidebar.classList.remove('mobile-open');
+
+    // Fetch cloudinary status when switching to media
+    if (view === 'cloudinary' && !state.cloudinary.configured) {
+      fetchCloudinaryStatus();
     }
-    if (changedField === 'height' && heightVal && !widthVal) {
-      elements.widthInput.value = Math.round(heightVal * state.cloudinary.ratio);
-    }
-  };
+  }
 
-  const updateSummary = () => {
-    if (!elements.summaryCards) return;
-    const total = state.artworks.length;
-    const counts = state.artworks.reduce((acc, art) => {
-      const status = normalizeStatus(art.status);
-      acc[status] = (acc[status] || 0) + 1;
-      return acc;
-    }, {});
-    elements.summaryCards.innerHTML = `
-      <div class="summary-card">
-        <span>Всього робіт</span>
-        <strong>${total}</strong>
-      </div>
-      <div class="summary-card">
-        <span>Доступні</span>
-        <strong>${counts.available || 0}</strong>
-      </div>
-      <div class="summary-card">
-        <span>Продані</span>
-        <strong>${counts.sold || 0}</strong>
-      </div>
-      <div class="summary-card">
-        <span>Під замовлення</span>
-        <strong>${counts.commission || 0}</strong>
-      </div>
-    `;
-  };
+  // ============================
+  // Stats
+  // ============================
+  function updateStats() {
+    const counts = { total: 0, available: 0, sold: 0, reserved: 0, commission: 0 };
+    state.artworks.forEach(art => {
+      counts.total++;
+      const s = normalizeStatus(art.status);
+      counts[s] = (counts[s] || 0) + 1;
+    });
 
-  const renderList = () => {
-    if (!elements.artworksList) return;
+    const map = {
+      statTotal: counts.total,
+      statAvailable: counts.available,
+      statSold: counts.sold,
+      statReserved: counts.reserved,
+      statCommission: counts.commission
+    };
+
+    Object.entries(map).forEach(([id, val]) => {
+      const el = $(`#${id}`);
+      if (el) el.textContent = val;
+    });
+  }
+
+  // ============================
+  // Filtering
+  // ============================
+  function applyFilters() {
+    const query = ($('#globalSearch')?.value || '').trim().toLowerCase();
+    const statusF = $('#statusFilter')?.value || 'all';
+    const segmentF = $('#segmentFilter')?.value || 'all';
+    const moodF = $('#moodFilter')?.value || 'all';
+
+    state.filtered = state.artworks.filter(art => {
+      const text = [art.title_uk, art.title_en, art.title_de, art.description_uk, art.description_en, art.description_de]
+        .filter(Boolean).join(' ').toLowerCase();
+      const matchQuery = !query || text.includes(query);
+      const matchStatus = statusF === 'all' || normalizeStatus(art.status) === statusF;
+      const matchSegment = segmentF === 'all' || (art.segments || []).includes(segmentF);
+      const matchMood = moodF === 'all' || art.mood === moodF;
+      return matchQuery && matchStatus && matchSegment && matchMood;
+    });
+
+    renderGrid();
+    updateSelectionUI();
+  }
+
+  const debouncedFilter = debounce(applyFilters, DEBOUNCE_MS);
+
+  // ============================
+  // Artwork Grid Rendering
+  // ============================
+  function renderGrid() {
+    const grid = $('#artworkGrid');
+    const empty = $('#emptyState');
+    if (!grid) return;
+
     if (!state.filtered.length) {
-      elements.artworksList.innerHTML = '<p class="muted">Немає робіт для відображення.</p>';
+      grid.innerHTML = '';
+      if (empty) empty.style.display = '';
       return;
     }
 
-    elements.artworksList.innerHTML = state.filtered.map((art) => {
+    if (empty) empty.style.display = 'none';
+
+    grid.innerHTML = state.filtered.map(art => {
       const status = normalizeStatus(art.status);
-      const title = art.title_uk || art.title_en || 'Без назви';
-      const segments = (art.segments || []).join(', ');
-      const base = state.cloudinary.baseUrl || CLOUDINARY_BASE;
-      const thumbSrc = art.cloudinary_id ? `${base}${art.cloudinary_id}.webp` : '';
-      const isSelected = state.selectedIds.has(art.id);
+      const title = art.title_uk || art.title_en || 'Untitled';
+      const selected = state.selectedIds.has(art.id);
+      const imgSrc = thumbUrl(art.cloudinary_id);
+      const segments = (art.segments || []).join(', ') || '--';
+      const nextStatus = STATUS_CYCLE[(STATUS_CYCLE.indexOf(status) + 1) % STATUS_CYCLE.length];
+
       return `
-        <div class="artwork-row ${isSelected ? 'is-selected' : ''}" data-id="${art.id}">
-          <label class="row-select">
-            <input type="checkbox" class="row-select-input" data-id="${art.id}" ${isSelected ? 'checked' : ''}>
-          </label>
-          <img class="artwork-thumb" src="${thumbSrc}" alt="${title}" loading="lazy" decoding="async">
-          <div class="artwork-info">
-            <h4>${title}</h4>
-            <div class="artwork-meta">
-              <span>${formatPrice(art)}</span>
-              <span>${segments || 'без сегментів'}</span>
+        <div class="art-card ${selected ? 'is-selected' : ''}" data-id="${art.id}">
+          <div class="art-card-select" data-action="select">
+            <input type="checkbox" ${selected ? 'checked' : ''} data-action="select">
+          </div>
+          <div class="art-card-img-wrap">
+            ${imgSrc ? `<img class="art-card-img" src="${imgSrc}" alt="${title}" loading="lazy" decoding="async">` : '<div style="width:100%;height:100%;display:flex;align-items:center;justify-content:center;color:var(--muted);"><i class="fas fa-image" style="font-size:2rem;opacity:0.3;"></i></div>'}
+            <span class="art-card-status art-card-status--${status}">${STATUS_LABELS[status]}</span>
+            ${imgSrc ? `<button class="art-card-zoom" data-action="zoom" title="Zoom"><i class="fas fa-expand"></i></button>` : ''}
+          </div>
+          <div class="art-card-body" data-action="edit">
+            <div class="art-card-title">${title}</div>
+            <div class="art-card-meta">
+              <span class="art-card-price">${formatPrice(art)}</span>
+              <span class="art-card-meta-dot"></span>
               <span>${art.size || ''}</span>
             </div>
           </div>
-          <div class="row-actions">
-            <span class="status-pill ${status}">${statusLabels[status]}</span>
-            <button class="icon-btn" data-action="edit" title="Редагувати"><i class="fas fa-pen"></i></button>
-            <button class="icon-btn" data-action="toggle" title="Змінити статус"><i class="fas fa-tag"></i></button>
-            <button class="icon-btn" data-action="delete" title="Видалити"><i class="fas fa-trash"></i></button>
+          <div class="art-card-footer">
+            <button class="art-card-quick-btn art-card-quick-btn--status" data-action="cycle-status" title="Change to ${STATUS_LABELS[nextStatus]}">
+              <i class="fas ${STATUS_ICONS[nextStatus]}"></i> ${STATUS_LABELS[nextStatus]}
+            </button>
+            <button class="art-card-quick-btn" data-action="edit" title="Edit">
+              <i class="fas fa-pen"></i> Edit
+            </button>
+            <button class="art-card-quick-btn art-card-quick-btn--delete" data-action="delete" title="Delete">
+              <i class="fas fa-trash"></i>
+            </button>
           </div>
         </div>
       `;
     }).join('');
-  };
+  }
 
-  const applyFilters = () => {
-    const query = (elements.searchInput?.value || '').trim().toLowerCase();
-    const statusFilter = elements.statusFilter?.value || 'all';
-    const segmentFilter = elements.segmentFilter?.value || 'all';
-
-    state.filtered = state.artworks.filter((art) => {
-      const title = `${art.title_uk || ''} ${art.title_en || ''} ${art.title_de || ''}`.toLowerCase();
-      const description = `${art.description_uk || ''} ${art.description_en || ''} ${art.description_de || ''}`.toLowerCase();
-      const matchesQuery = !query || title.includes(query) || description.includes(query);
-      const status = normalizeStatus(art.status);
-      const matchesStatus = statusFilter === 'all' || status === statusFilter;
-      const segments = art.segments || [];
-      const matchesSegment = segmentFilter === 'all' || segments.includes(segmentFilter);
-      return matchesQuery && matchesStatus && matchesSegment;
-    });
-
-    renderList();
-    updateBulkUi();
-  };
-
-  const fillForm = (artwork) => {
-    if (!elements.artworkForm) return;
-    const form = elements.artworkForm;
-    form.reset();
-    if (elements.sizeInput) {
-      elements.sizeInput.dataset.auto = 'true';
+  // ============================
+  // Selection Management
+  // ============================
+  function toggleSelect(id, selected) {
+    if (selected) {
+      state.selectedIds.add(id);
+    } else {
+      state.selectedIds.delete(id);
     }
-    elements.artworkId.value = artwork?.id || '';
+    updateSelectionUI();
+  }
 
-    if (!artwork) {
-      elements.formTitle.textContent = 'Нова картина';
-      elements.formStatusBadge.textContent = statusLabels.available;
-      elements.formStatusBadge.className = 'status-pill';
-      elements.previewImage.src = '';
-      elements.previewImage.alt = '';
-      state.cloudinary.ratio = null;
-      setRatioHint(null);
-      updateCloudinaryMeta(null);
-      state.selectedId = null;
-      return;
+  function selectAllVisible() {
+    state.filtered.forEach(art => state.selectedIds.add(art.id));
+    renderGrid();
+    updateSelectionUI();
+    toast(`Selected ${state.selectedIds.size} artworks`);
+  }
+
+  function clearSelection() {
+    state.selectedIds.clear();
+    renderGrid();
+    updateSelectionUI();
+  }
+
+  function updateSelectionUI() {
+    const count = state.selectedIds.size;
+
+    // Selection count badge
+    const countEl = $('#selectionCount');
+    if (countEl) {
+      countEl.style.display = count > 0 ? '' : 'none';
+      countEl.textContent = `${count} selected`;
     }
 
-    state.selectedId = artwork.id;
-    elements.formTitle.textContent = artwork.title_uk || 'Редагування';
-
-    Object.entries(artwork).forEach(([key, value]) => {
-      const field = form.querySelector(`[name="${key}"]`);
-      if (!field) return;
-      if (field.type === 'checkbox') return;
-      if (field.tagName === 'SELECT' || field.tagName === 'TEXTAREA' || field.tagName === 'INPUT') {
-        field.value = value ?? '';
-      }
-    });
-
-    const segments = artwork.segments || [];
-    $$('#segmentChips input[type="checkbox"]').forEach((checkbox) => {
-      checkbox.checked = segments.includes(checkbox.value);
-    });
-
-    const status = normalizeStatus(artwork.status);
-    elements.formStatusBadge.textContent = statusLabels[status];
-    elements.formStatusBadge.className = `status-pill ${status}`;
-
-    if (elements.sizeInput) {
-      elements.sizeInput.dataset.auto = artwork.size ? 'false' : 'true';
-    }
-    updateSizeAuto();
-
-    updatePreview(artwork.cloudinary_id || '');
-    updateCloudinaryMeta(null);
-  };
-
-  const updatePreview = (cloudinaryId) => {
-    if (!elements.previewImage) return;
-    const hint = elements.cloudinaryDrop?.querySelector('.drop-hint');
-    if (!cloudinaryId) {
-      elements.previewImage.src = '';
-      elements.previewImage.alt = '';
-      if (hint) hint.style.display = 'block';
-      updateCloudinaryMeta(null);
-      return;
-    }
-    const base = state.cloudinary.baseUrl || CLOUDINARY_BASE;
-    elements.previewImage.src = `${base}${cloudinaryId}.webp`;
-    elements.previewImage.alt = 'Preview';
-    if (hint) hint.style.display = 'none';
-  };
-
-  const updateCloudinaryStatus = (configured) => {
-    if (!elements.cloudinaryStatus) return;
-    elements.cloudinaryStatus.textContent = configured ? 'API активне' : 'API вимкнено';
-    elements.cloudinaryStatus.className = `status-pill ${configured ? '' : 'offline'}`.trim();
-    [elements.cloudinarySearchBtn, elements.cloudinaryUploadBtn, elements.cloudinaryLoadMore, elements.cloudinaryInspectBtn].forEach((btn) => {
-      if (btn) btn.disabled = !configured;
-    });
-  };
-
-  const renderCloudinaryResults = () => {
-    if (!elements.cloudinaryResults) return;
-    if (!state.cloudinary.assets.length) {
-      elements.cloudinaryResults.innerHTML = '<p class="muted">Немає результатів.</p>';
-      if (elements.cloudinaryLoadMore) {
-        elements.cloudinaryLoadMore.style.display = 'none';
-      }
-      return;
+    // Bulk nav badge
+    const navBadge = $('#bulkNavBadge');
+    if (navBadge) {
+      navBadge.style.display = count > 0 ? '' : 'none';
+      navBadge.textContent = count;
     }
 
-    elements.cloudinaryResults.innerHTML = state.cloudinary.assets.map((asset) => {
-      const ratio = formatRatio(asset.width, asset.height);
-      const size = `${asset.width}×${asset.height}px`;
-      const bytes = formatBytes(asset.bytes);
-      const metaParts = [size, bytes, ratio ? `ratio ${ratio}` : null].filter(Boolean).join(' · ');
-      const isSelected = asset.public_id === state.cloudinary.selectedId;
-      const thumbUrl = asset.secure_url
-        ? asset.secure_url.replace('/upload/', '/upload/c_fill,w_140,h_140,q_auto,f_auto/')
-        : '';
-      return `
-        <div class="cloudinary-card ${isSelected ? 'is-selected' : ''}" data-id="${asset.public_id}">
-          <img src="${thumbUrl}" alt="${asset.public_id}" loading="lazy">
-          <div>
-            <strong>${asset.public_id}</strong>
-            <div class="cloudinary-meta">${metaParts}</div>
-            <div class="cloudinary-card-actions">
-              <button class="btn ghost" data-action="use">Використати</button>
-              <button class="btn ghost" data-action="copy">Копія ID</button>
-            </div>
-          </div>
-        </div>
-      `;
-    }).join('');
+    // Bulk view badge
+    const bulkBadge = $('#bulkSelectionBadge');
+    if (bulkBadge) bulkBadge.textContent = `${count} artwork${count !== 1 ? 's' : ''} selected`;
 
-    if (elements.cloudinaryLoadMore) {
-      elements.cloudinaryLoadMore.style.display = state.cloudinary.nextCursor ? 'inline-flex' : 'none';
-    }
-  };
+    // Enable/disable bulk buttons
+    const applyBtn = $('#bulkApplyBtn');
+    const deleteBtn = $('#bulkDeleteBtn');
+    if (applyBtn) applyBtn.disabled = count === 0;
+    if (deleteBtn) deleteBtn.disabled = count === 0;
+  }
 
-  const fetchCloudinaryStatus = async () => {
-    if (!state.token) return;
-    try {
-      const response = await fetch('/api/admin/cloudinary/status', {
-        headers: {
-          ...authHeaders()
+  // ============================
+  // Grid Event Handling
+  // ============================
+  function handleGridClick(e) {
+    const card = e.target.closest('.art-card');
+    if (!card) return;
+
+    const id = card.dataset.id;
+    const art = state.artworks.find(a => a.id === id);
+    if (!art) return;
+
+    const action = e.target.closest('[data-action]')?.dataset.action;
+
+    switch (action) {
+      case 'select': {
+        const checkbox = card.querySelector('.art-card-select input');
+        // If click was on the div wrapper, not the checkbox itself
+        if (e.target !== checkbox) {
+          checkbox.checked = !checkbox.checked;
         }
-      });
-      const data = await response.json();
-      state.cloudinary.configured = Boolean(data.configured);
-      updateCloudinaryStatus(state.cloudinary.configured);
-      if (!state.cloudinary.configured) {
-        if (elements.cloudinaryResults) {
-          elements.cloudinaryResults.innerHTML = '<p class="muted">Cloudinary не налаштовано. Додайте ключі у .env.</p>';
-        }
-      }
-    } catch (error) {
-      updateCloudinaryStatus(false);
-    }
-  };
-
-  const fetchCloudinaryAssets = async ({ append = false } = {}) => {
-    if (!state.cloudinary.configured) {
-      showToast('Cloudinary не налаштовано');
-      return;
-    }
-    if (append && !state.cloudinary.nextCursor) {
-      return;
-    }
-    if (state.cloudinary.loading) return;
-    state.cloudinary.loading = true;
-    try {
-      const params = new URLSearchParams();
-      const query = (elements.cloudinarySearch?.value || '').trim();
-      const folder = (elements.cloudinaryFolder?.value || '').trim();
-      const tag = (elements.cloudinaryTag?.value || '').trim();
-      if (query) params.set('query', query);
-      if (folder) params.set('folder', folder);
-      if (tag) params.set('tag', tag);
-      if (append && state.cloudinary.nextCursor) {
-        params.set('cursor', state.cloudinary.nextCursor);
-      }
-
-      const response = await fetch(`/api/admin/cloudinary/search?${params.toString()}`, {
-        headers: {
-          ...authHeaders()
-        }
-      });
-      const data = await response.json();
-      if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Cloudinary error');
-      }
-
-      const nextAssets = data.assets || [];
-      state.cloudinary.assets = append ? [...state.cloudinary.assets, ...nextAssets] : nextAssets;
-      state.cloudinary.nextCursor = data.next_cursor || null;
-      renderCloudinaryResults();
-    } catch (error) {
-      console.error(error);
-      showToast('Не вдалося завантажити Cloudinary');
-    } finally {
-      state.cloudinary.loading = false;
-    }
-  };
-
-  const clearCloudinarySearch = () => {
-    if (elements.cloudinarySearch) elements.cloudinarySearch.value = '';
-    if (elements.cloudinaryFolder) elements.cloudinaryFolder.value = '';
-    if (elements.cloudinaryTag) elements.cloudinaryTag.value = '';
-    state.cloudinary.assets = [];
-    state.cloudinary.nextCursor = null;
-    state.cloudinary.selectedId = null;
-    renderCloudinaryResults();
-  };
-
-  const applyCloudinaryAsset = (asset) => {
-    if (!asset) return;
-    state.cloudinary.selectedId = asset.public_id;
-    state.cloudinary.ratio = asset.width && asset.height ? asset.width / asset.height : null;
-    const urlMatch = asset.secure_url?.match(/res\.cloudinary\.com\/([^/]+)\//);
-    if (urlMatch?.[1]) {
-      state.cloudinary.baseUrl = `https://res.cloudinary.com/${urlMatch[1]}/image/upload/f_auto,q_auto/`;
-    }
-    elements.cloudinaryInput.value = asset.public_id;
-    updatePreview(asset.public_id);
-    setRatioHint(asset);
-    updateCloudinaryMeta(asset);
-
-    applyRatioIfMissing('width');
-    applyRatioIfMissing('height');
-    updateSizeAuto();
-    renderCloudinaryResults();
-    showToast('Cloudinary ID оновлено');
-  };
-
-  const fileToDataUrl = (file, maxSize = 2400, quality = 0.9) => new Promise((resolve, reject) => {
-    const reader = new FileReader();
-    const img = new Image();
-    reader.onload = () => {
-      img.src = reader.result;
-    };
-    reader.onerror = reject;
-    img.onerror = reject;
-    img.onload = () => {
-      const { naturalWidth, naturalHeight } = img;
-      const maxDim = Math.max(naturalWidth, naturalHeight);
-      const scale = maxDim > maxSize ? maxSize / maxDim : 1;
-      const targetWidth = Math.round(naturalWidth * scale);
-      const targetHeight = Math.round(naturalHeight * scale);
-      const canvas = document.createElement('canvas');
-      canvas.width = targetWidth;
-      canvas.height = targetHeight;
-      const ctx = canvas.getContext('2d');
-      ctx.drawImage(img, 0, 0, targetWidth, targetHeight);
-      resolve(canvas.toDataURL('image/jpeg', quality));
-    };
-    reader.readAsDataURL(file);
-  });
-
-  const uploadCloudinaryAsset = async () => {
-    if (!state.cloudinary.configured) {
-      showToast('Cloudinary не налаштовано');
-      return;
-    }
-    const file = elements.cloudinaryUpload?.files?.[0];
-    if (!file) {
-      showToast('Оберіть файл для завантаження');
-      return;
-    }
-    try {
-      elements.cloudinaryUploadBtn.disabled = true;
-      elements.cloudinaryUploadBtn.textContent = 'Завантаження...';
-      const fileData = await fileToDataUrl(file);
-      const payload = {
-        file: fileData,
-        folder: (elements.cloudinaryUploadFolder?.value || '').trim() || undefined,
-        public_id: (elements.cloudinaryUploadPublicId?.value || '').trim() || undefined
-      };
-      const response = await fetch('/api/admin/cloudinary/upload', {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json',
-          ...authHeaders()
-        },
-        body: JSON.stringify(payload)
-      });
-      const data = await response.json();
-      if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Upload failed');
-      }
-      const asset = data.asset;
-      state.cloudinary.assets = [asset, ...state.cloudinary.assets];
-      renderCloudinaryResults();
-      applyCloudinaryAsset(asset);
-    } catch (error) {
-      console.error(error);
-      showToast('Не вдалося завантажити файл');
-    } finally {
-      elements.cloudinaryUploadBtn.disabled = false;
-      elements.cloudinaryUploadBtn.innerHTML = '<i class="fas fa-cloud-arrow-up"></i> Завантажити';
-    }
-  };
-
-  const inspectCloudinaryAsset = async () => {
-    const id = (elements.cloudinaryInput?.value || '').trim();
-    if (!id) {
-      showToast('Вкажіть Cloudinary ID');
-      return;
-    }
-    try {
-      elements.cloudinaryInspectBtn.disabled = true;
-      const response = await fetch(`/api/admin/cloudinary/asset?public_id=${encodeURIComponent(id)}`, {
-        headers: {
-          ...authHeaders()
-        }
-      });
-      if (response.status === 401) {
-        showLogin();
+        toggleSelect(id, checkbox.checked);
+        // Update card class without full re-render for speed
+        card.classList.toggle('is-selected', checkbox.checked);
         return;
       }
-      const data = await response.json();
-      if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Cloudinary lookup failed');
+      case 'zoom': {
+        e.stopPropagation();
+        showZoom(art.cloudinary_id);
+        return;
       }
-      const asset = data.asset;
-      const urlMatch = asset.secure_url?.match(/res\.cloudinary\.com\/([^/]+)\//);
-      if (urlMatch?.[1]) {
-        state.cloudinary.baseUrl = `https://res.cloudinary.com/${urlMatch[1]}/image/upload/f_auto,q_auto/`;
+      case 'cycle-status': {
+        e.stopPropagation();
+        const current = normalizeStatus(art.status);
+        const next = STATUS_CYCLE[(STATUS_CYCLE.indexOf(current) + 1) % STATUS_CYCLE.length];
+        quickStatusChange(art, next);
+        return;
       }
-      updatePreview(asset.public_id);
-      setRatioHint(asset);
-      updateCloudinaryMeta(asset);
-      state.cloudinary.ratio = asset.width && asset.height ? asset.width / asset.height : null;
-      applyRatioIfMissing('width');
-      applyRatioIfMissing('height');
-      updateSizeAuto();
-      showToast('Дані Cloudinary оновлено');
-    } catch (error) {
-      console.error(error);
-      showToast('Не вдалося перевірити Cloudinary');
-    } finally {
-      if (elements.cloudinaryInspectBtn) {
-        elements.cloudinaryInspectBtn.disabled = false;
+      case 'delete': {
+        e.stopPropagation();
+        if (confirm(`Delete "${art.title_uk || art.title_en || 'this artwork'}"?`)) {
+          deleteArtwork(id);
+        }
+        return;
+      }
+      case 'edit':
+      default: {
+        openEditor(art);
+        return;
       }
     }
-  };
+  }
 
-  const openCloudinaryAsset = () => {
-    const id = (elements.cloudinaryInput?.value || '').trim();
-    if (!id) {
-      showToast('Вкажіть Cloudinary ID');
+  // ============================
+  // Quick Status Change
+  // ============================
+  async function quickStatusChange(art, newStatus) {
+    try {
+      const res = await fetch(`/api/admin/artworks/${art.id}`, {
+        method: 'PUT',
+        headers: authHeaders(),
+        body: JSON.stringify({ ...art, status: newStatus })
+      });
+      if (res.status === 401) { showLogin(); return; }
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error || 'Failed');
+
+      // Update local state for instant feedback
+      const idx = state.artworks.findIndex(a => a.id === art.id);
+      if (idx >= 0) state.artworks[idx].status = newStatus;
+
+      applyFilters();
+      updateStats();
+      toast(`Status changed to ${STATUS_LABELS[newStatus]}`, 'success');
+    } catch (err) {
+      toast('Failed to change status', 'error');
+    }
+  }
+
+  // ============================
+  // Image Zoom
+  // ============================
+  function showZoom(cloudinaryId) {
+    if (!cloudinaryId) return;
+    const overlay = $('#zoomOverlay');
+    const img = $('#zoomImage');
+    if (!overlay || !img) return;
+    img.src = zoomUrl(cloudinaryId);
+    overlay.classList.add('visible');
+    document.body.style.overflow = 'hidden';
+  }
+
+  function closeZoom() {
+    const overlay = $('#zoomOverlay');
+    if (overlay) overlay.classList.remove('visible');
+    document.body.style.overflow = '';
+  }
+
+  // ============================
+  // Editor Panel
+  // ============================
+  function openEditor(artwork) {
+    const panel = $('#editorPanel');
+    const overlay = $('#editorOverlay');
+    if (!panel) return;
+
+    state.editorOpen = true;
+    state.editingId = artwork?.id || null;
+    panel.classList.add('open');
+    if (overlay) overlay.classList.add('visible');
+
+    fillEditorForm(artwork);
+  }
+
+  function closeEditor() {
+    const panel = $('#editorPanel');
+    const overlay = $('#editorOverlay');
+    if (panel) panel.classList.remove('open');
+    if (overlay) overlay.classList.remove('visible');
+    state.editorOpen = false;
+    state.editingId = null;
+  }
+
+  function fillEditorForm(artwork) {
+    const form = $('#artworkForm');
+    if (!form) return;
+
+    // Reset form
+    form.reset();
+
+    const title = $('#editorTitle');
+    const idInput = $('#artworkId');
+    const previewImg = $('#editorPreviewImg');
+    const placeholder = $('#editorDropPlaceholder');
+    const dropZone = $('#editorDropZone');
+    const sizeInput = $('#editorSize');
+    const cloudMeta = $('#editorCloudMeta');
+    const ratioHint = $('#editorRatioHint');
+
+    if (!artwork) {
+      // New artwork
+      if (title) title.textContent = 'New Artwork';
+      if (idInput) idInput.value = '';
+      if (previewImg) { previewImg.style.display = 'none'; previewImg.src = ''; }
+      if (placeholder) placeholder.style.display = '';
+      if (dropZone) dropZone.classList.remove('has-image');
+      if (cloudMeta) cloudMeta.textContent = 'Image metadata: --';
+      if (ratioHint) ratioHint.textContent = 'Aspect ratio: --';
+      if (sizeInput) sizeInput.dataset.auto = 'true';
+
+      setEditorStatus('available');
+      setEditorMood('calm');
+      state.cloudinary.ratio = null;
+
+      // Show/hide buttons
+      const delBtn = $('#editorDeleteBtn');
+      const dupBtn = $('#editorDuplicateBtn');
+      if (delBtn) delBtn.style.display = 'none';
+      if (dupBtn) dupBtn.style.display = 'none';
+
       return;
     }
-    const base = state.cloudinary.baseUrl || CLOUDINARY_BASE;
-    window.open(`${base}${id}`, '_blank');
-  };
 
-  const collectFormData = () => {
-    const formData = new FormData(elements.artworkForm);
-    const segments = formData.getAll('segments');
-    const payload = {};
-    formData.forEach((value, key) => {
-      if (key === 'segments') return;
-      payload[key] = value;
+    // Editing existing artwork
+    if (title) title.textContent = artwork.title_uk || artwork.title_en || 'Edit Artwork';
+    if (idInput) idInput.value = artwork.id;
+
+    // Fill all fields
+    const fields = ['title_uk', 'title_en', 'title_de', 'description_uk', 'description_en', 'description_de',
+                     'technique_uk', 'technique_en', 'technique_de', 'price', 'currency', 'width_cm',
+                     'height_cm', 'size', 'cloudinary_id'];
+    fields.forEach(name => {
+      const el = form.querySelector(`[name="${name}"]`);
+      if (el && artwork[name] !== undefined && artwork[name] !== null) {
+        el.value = artwork[name];
+      }
     });
-    payload.segments = segments;
+
+    // Status
+    setEditorStatus(normalizeStatus(artwork.status));
+
+    // Mood
+    setEditorMood(artwork.mood || 'calm');
+
+    // Segments
+    $$('#artworkForm [name="segments"]').forEach(cb => {
+      cb.checked = (artwork.segments || []).includes(cb.value);
+    });
+
+    // Image preview
+    if (artwork.cloudinary_id) {
+      if (previewImg) {
+        previewImg.src = previewUrl(artwork.cloudinary_id);
+        previewImg.style.display = '';
+      }
+      if (placeholder) placeholder.style.display = 'none';
+      if (dropZone) dropZone.classList.add('has-image');
+    } else {
+      if (previewImg) { previewImg.style.display = 'none'; previewImg.src = ''; }
+      if (placeholder) placeholder.style.display = '';
+      if (dropZone) dropZone.classList.remove('has-image');
+    }
+
+    if (cloudMeta) cloudMeta.textContent = 'Image metadata: --';
+    if (ratioHint) {
+      const w = artwork.width_cm;
+      const h = artwork.height_cm;
+      if (w && h) {
+        ratioHint.textContent = `Aspect ratio: ${formatRatio(w, h)} (${w} x ${h} cm)`;
+      } else {
+        ratioHint.textContent = 'Aspect ratio: --';
+      }
+    }
+
+    if (sizeInput) sizeInput.dataset.auto = artwork.size ? 'false' : 'true';
+
+    // Show/hide buttons
+    const delBtn = $('#editorDeleteBtn');
+    const dupBtn = $('#editorDuplicateBtn');
+    if (delBtn) delBtn.style.display = '';
+    if (dupBtn) dupBtn.style.display = '';
+  }
+
+  function setEditorStatus(status) {
+    const hiddenInput = $('#editorStatus');
+    if (hiddenInput) hiddenInput.value = status;
+
+    $$('#statusToggleGroup .status-toggle').forEach(btn => {
+      btn.classList.toggle('active', btn.dataset.status === status);
+    });
+  }
+
+  function setEditorMood(mood) {
+    const hiddenInput = $('#editorMood');
+    if (hiddenInput) hiddenInput.value = mood;
+
+    $$('#moodSelect .mood-chip').forEach(chip => {
+      chip.classList.toggle('active', chip.dataset.mood === mood);
+    });
+  }
+
+  function updateEditorPreview(cloudinaryId) {
+    const img = $('#editorPreviewImg');
+    const placeholder = $('#editorDropPlaceholder');
+    const dropZone = $('#editorDropZone');
+
+    if (!cloudinaryId) {
+      if (img) { img.style.display = 'none'; img.src = ''; }
+      if (placeholder) placeholder.style.display = '';
+      if (dropZone) dropZone.classList.remove('has-image');
+      return;
+    }
+
+    if (img) {
+      img.src = previewUrl(cloudinaryId);
+      img.style.display = '';
+    }
+    if (placeholder) placeholder.style.display = 'none';
+    if (dropZone) dropZone.classList.add('has-image');
+  }
+
+  function collectFormData() {
+    const form = $('#artworkForm');
+    if (!form) return {};
+
+    const fd = new FormData(form);
+    const payload = {};
+    fd.forEach((val, key) => {
+      if (key === 'segments') return;
+      payload[key] = val;
+    });
+
+    payload.segments = fd.getAll('segments');
     payload.price = payload.price ? Number(payload.price) : null;
     payload.width_cm = payload.width_cm ? Number(payload.width_cm) : null;
     payload.height_cm = payload.height_cm ? Number(payload.height_cm) : null;
-    return payload;
-  };
 
-  const collectBulkPayload = () => {
+    return payload;
+  }
+
+  function autoFillSize() {
+    const wInput = $('#editorWidth');
+    const hInput = $('#editorHeight');
+    const sInput = $('#editorSize');
+    const ratioHint = $('#editorRatioHint');
+    if (!wInput || !hInput || !sInput) return;
+
+    const w = Number(wInput.value);
+    const h = Number(hInput.value);
+
+    if (w && h) {
+      if (!sInput.value || sInput.dataset.auto === 'true') {
+        sInput.value = `${w} \u00D7 ${h} cm`;
+        sInput.dataset.auto = 'true';
+      }
+      if (ratioHint) {
+        ratioHint.textContent = `Aspect ratio: ${formatRatio(w, h)} (${w} x ${h} cm)`;
+      }
+    }
+  }
+
+  function applyRatioFromCloud(changedField) {
+    if (!state.cloudinary.ratio) return;
+    const wInput = $('#editorWidth');
+    const hInput = $('#editorHeight');
+    if (!wInput || !hInput) return;
+
+    const w = Number(wInput.value);
+    const h = Number(hInput.value);
+
+    if (changedField === 'width' && w && !h) {
+      hInput.value = Math.round(w / state.cloudinary.ratio);
+    }
+    if (changedField === 'height' && h && !w) {
+      wInput.value = Math.round(h * state.cloudinary.ratio);
+    }
+  }
+
+  // ============================
+  // API: Artworks CRUD
+  // ============================
+  async function fetchArtworks() {
+    try {
+      const res = await fetch('/api/admin/artworks', { headers: authHeadersNoBody() });
+      if (res.status === 401) { showLogin(); return; }
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error || 'Failed');
+
+      state.artworks = data.artworks || [];
+
+      // Clean up selections of deleted items
+      const liveIds = new Set(state.artworks.map(a => a.id));
+      state.selectedIds.forEach(id => {
+        if (!liveIds.has(id)) state.selectedIds.delete(id);
+      });
+
+      applyFilters();
+      updateStats();
+      updateSelectionUI();
+    } catch (err) {
+      toast('Failed to load artworks', 'error');
+      console.error(err);
+    }
+  }
+
+  async function saveArtwork(payload) {
+    const id = payload.id || state.editingId;
+    const isEditing = Boolean(id);
+    const url = isEditing ? `/api/admin/artworks/${id}` : '/api/admin/artworks';
+    const method = isEditing ? 'PUT' : 'POST';
+
+    const saveBtn = $('#saveBtn');
+    if (saveBtn) {
+      saveBtn.disabled = true;
+      saveBtn.innerHTML = '<span class="spinner"></span> Saving...';
+    }
+
+    try {
+      const res = await fetch(url, {
+        method,
+        headers: authHeaders(),
+        body: JSON.stringify(payload)
+      });
+      if (res.status === 401) { showLogin(); return; }
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error || 'Save failed');
+
+      toast(isEditing ? 'Artwork updated' : 'Artwork created', 'success');
+      await fetchArtworks();
+
+      // If editing, keep editor open with updated data
+      if (data.artwork) {
+        state.editingId = data.artwork.id;
+        fillEditorForm(data.artwork);
+      }
+    } catch (err) {
+      toast('Failed to save artwork', 'error');
+      console.error(err);
+    } finally {
+      if (saveBtn) {
+        saveBtn.disabled = false;
+        saveBtn.innerHTML = '<i class="fas fa-save"></i><span>Save Artwork</span><kbd>Ctrl+S</kbd>';
+      }
+    }
+  }
+
+  async function deleteArtwork(id) {
+    try {
+      const res = await fetch(`/api/admin/artworks/${id}`, {
+        method: 'DELETE',
+        headers: authHeadersNoBody()
+      });
+      if (res.status === 401) { showLogin(); return; }
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error || 'Delete failed');
+
+      toast('Artwork deleted', 'success');
+      state.selectedIds.delete(id);
+      if (state.editingId === id) closeEditor();
+      await fetchArtworks();
+    } catch (err) {
+      toast('Failed to delete artwork', 'error');
+    }
+  }
+
+  // ============================
+  // Bulk Operations
+  // ============================
+  async function bulkUpdate() {
+    const ids = [...state.selectedIds];
+    if (!ids.length) { toast('No artworks selected', 'warning'); return; }
+
     const updates = {};
     const options = {};
 
-    if (elements.bulkStatus?.value) {
-      updates.status = elements.bulkStatus.value;
-    }
-    if (elements.bulkMood?.value) {
-      updates.mood = elements.bulkMood.value;
-    }
-    if (elements.bulkCurrency?.value) {
-      updates.currency = elements.bulkCurrency.value;
-    }
+    const bulkStatus = $('#bulkStatus')?.value;
+    const bulkMood = $('#bulkMood')?.value;
+    const bulkCurrency = $('#bulkCurrency')?.value;
+    const bulkPrice = $('#bulkPrice')?.value;
+    const bulkPriceClear = $('#bulkPriceClear')?.checked;
 
-    const priceClear = elements.bulkPriceClear?.checked;
-    const priceValue = elements.bulkPrice?.value;
-    if (priceClear) {
+    if (bulkStatus) updates.status = bulkStatus;
+    if (bulkMood) updates.mood = bulkMood;
+    if (bulkCurrency) updates.currency = bulkCurrency;
+
+    if (bulkPriceClear) {
       updates.price = null;
-    } else if (priceValue !== '' && typeof priceValue !== 'undefined') {
-      updates.price = Number(priceValue);
+    } else if (bulkPrice !== '' && bulkPrice !== undefined) {
+      updates.price = Number(bulkPrice);
     }
 
-    const segmentInputs = elements.bulkSegments
-      ? Array.from(elements.bulkSegments.querySelectorAll('input[type="checkbox"]'))
-      : [];
-    const selectedSegments = segmentInputs.filter((input) => input.checked).map((input) => input.value);
+    const segmentInputs = $$('#bulkSegmentChips input[type="checkbox"]');
+    const selectedSegments = segmentInputs.filter(cb => cb.checked).map(cb => cb.value);
     if (selectedSegments.length) {
       updates.segments = selectedSegments;
-      options.segmentsMode = elements.bulkSegmentsMode?.value || 'replace';
+      options.segmentsMode = $('#bulkSegmentsMode')?.value || 'replace';
     }
 
-    return { updates, options };
-  };
-
-  const resetBulkInputs = () => {
-    if (elements.bulkStatus) elements.bulkStatus.value = '';
-    if (elements.bulkMood) elements.bulkMood.value = '';
-    if (elements.bulkCurrency) elements.bulkCurrency.value = '';
-    if (elements.bulkPrice) {
-      elements.bulkPrice.value = '';
-      elements.bulkPrice.disabled = false;
-    }
-    if (elements.bulkPriceClear) elements.bulkPriceClear.checked = false;
-    if (elements.bulkSegmentsMode) elements.bulkSegmentsMode.value = 'replace';
-    if (elements.bulkSegments) {
-      elements.bulkSegments.querySelectorAll('input[type="checkbox"]').forEach((input) => {
-        input.checked = false;
-      });
-    }
-  };
-
-  const fetchArtworks = async () => {
-    try {
-      const response = await fetch('/api/admin/artworks', {
-        headers: {
-          ...authHeaders()
-        }
-      });
-      if (response.status === 401) {
-        showLogin();
-        return;
-      }
-      const data = await response.json();
-      if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Failed to load artworks');
-      }
-      state.artworks = data.artworks || [];
-      const liveIds = new Set(state.artworks.map((item) => item.id));
-      state.selectedIds.forEach((id) => {
-        if (!liveIds.has(id)) state.selectedIds.delete(id);
-      });
-      applyFilters();
-      updateSummary();
-    } catch (error) {
-      showToast('Не вдалося завантажити роботи');
-      console.error(error);
-    }
-  };
-
-  const saveArtwork = async (payload) => {
-    const targetId = payload.id || state.selectedId;
-    const isEditing = Boolean(targetId);
-    const url = isEditing ? `/api/admin/artworks/${targetId}` : '/api/admin/artworks';
-    const method = isEditing ? 'PUT' : 'POST';
-
-    const response = await fetch(url, {
-      method,
-      headers: {
-        'Content-Type': 'application/json',
-        ...authHeaders()
-      },
-      body: JSON.stringify(payload)
-    });
-
-    const data = await response.json();
-    if (!response.ok || !data.success) {
-      throw new Error(data.error || 'Save failed');
-    }
-
-    showToast(isEditing ? 'Оновлено' : 'Додано');
-    await fetchArtworks();
-    fillForm(data.artwork || null);
-  };
-
-  const bulkUpdateArtworks = async () => {
-    const ids = Array.from(state.selectedIds);
-    if (!ids.length) {
-      showToast('Немає вибраних робіт');
-      return;
-    }
-    const { updates, options } = collectBulkPayload();
     if (!Object.keys(updates).length) {
-      showToast('Оберіть, що потрібно змінити');
+      toast('Select at least one field to update', 'warning');
       return;
     }
 
-    const response = await fetch('/api/admin/artworks/bulk', {
-      method: 'PUT',
-      headers: {
-        'Content-Type': 'application/json',
-        ...authHeaders()
-      },
-      body: JSON.stringify({ ids, updates, options })
-    });
-    if (response.status === 401) {
-      showLogin();
-      return;
-    }
-    const data = await response.json();
-    if (!response.ok || !data.success) {
-      throw new Error(data.error || 'Bulk update failed');
-    }
-    showToast('Bulk-оновлення виконано');
-    resetBulkInputs();
-    clearBulkSelection();
-    await fetchArtworks();
-  };
+    const applyBtn = $('#bulkApplyBtn');
+    if (applyBtn) { applyBtn.disabled = true; applyBtn.innerHTML = '<span class="spinner"></span> Applying...'; }
 
-  const bulkDeleteArtworks = async () => {
-    const ids = Array.from(state.selectedIds);
-    if (!ids.length) {
-      showToast('Немає вибраних робіт');
-      return;
-    }
-    if (!confirm(`Видалити ${ids.length} робіт?`)) {
-      return;
-    }
-
-    const response = await fetch('/api/admin/artworks/bulk-delete', {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        ...authHeaders()
-      },
-      body: JSON.stringify({ ids })
-    });
-    if (response.status === 401) {
-      showLogin();
-      return;
-    }
-    const data = await response.json();
-    if (!response.ok || !data.success) {
-      throw new Error(data.error || 'Bulk delete failed');
-    }
-    showToast('Видалено');
-    clearBulkSelection();
-    await fetchArtworks();
-  };
-
-  const deleteArtwork = async (id) => {
-    const response = await fetch(`/api/admin/artworks/${id}`, {
-      method: 'DELETE',
-      headers: {
-        ...authHeaders()
-      }
-    });
-    const data = await response.json();
-    if (!response.ok || !data.success) {
-      throw new Error(data.error || 'Delete failed');
-    }
-    showToast('Видалено');
-    await fetchArtworks();
-    fillForm(null);
-  };
-
-  const toggleStatus = async (artwork) => {
-    const status = normalizeStatus(artwork.status);
-    const next = status === 'sold' ? 'available' : 'sold';
-    await saveArtwork({ ...artwork, status: next });
-  };
-
-  const showLogin = () => {
-    if (elements.loginModal) {
-      elements.loginModal.style.display = 'flex';
-    }
-  };
-
-  const hideLogin = () => {
-    if (elements.loginModal) {
-      elements.loginModal.style.display = 'none';
-    }
-  };
-
-  const handleLogin = async (event) => {
-    event.preventDefault();
-    const formData = new FormData(elements.loginForm);
-    const payload = {
-      email: formData.get('email'),
-      password: formData.get('password')
-    };
-
-    elements.loginBtn.disabled = true;
     try {
-      const response = await fetch('/api/admin/login', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify(payload)
+      const res = await fetch('/api/admin/artworks/bulk', {
+        method: 'PUT',
+        headers: authHeaders(),
+        body: JSON.stringify({ ids, updates, options })
       });
-      const data = await response.json();
-      if (!response.ok || !data.success) {
-        throw new Error(data.error || 'Login failed');
-      }
-      state.token = data.token;
-      localStorage.setItem('inner-garden-admin-token', data.token);
-      hideLogin();
-      showToast('Вітаємо!');
-      await fetchArtworks();
-      await fetchCloudinaryStatus();
-    } catch (error) {
-      showToast('Невірні дані або адмінка не налаштована');
-    } finally {
-      elements.loginBtn.disabled = false;
-    }
-  };
+      if (res.status === 401) { showLogin(); return; }
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error || 'Bulk update failed');
 
-  const handleLogout = () => {
-    state.token = '';
-    localStorage.removeItem('inner-garden-admin-token');
-    clearBulkSelection();
-    resetBulkInputs();
+      toast(`Updated ${ids.length} artworks`, 'success');
+      resetBulkForm();
+      clearSelection();
+      await fetchArtworks();
+    } catch (err) {
+      toast('Bulk update failed', 'error');
+    } finally {
+      if (applyBtn) {
+        applyBtn.disabled = state.selectedIds.size === 0;
+        applyBtn.innerHTML = '<i class="fas fa-check"></i> Apply to Selected';
+      }
+    }
+  }
+
+  async function bulkDelete() {
+    const ids = [...state.selectedIds];
+    if (!ids.length) { toast('No artworks selected', 'warning'); return; }
+
+    if (!confirm(`Delete ${ids.length} artwork${ids.length > 1 ? 's' : ''}? This cannot be undone.`)) return;
+
+    try {
+      const res = await fetch('/api/admin/artworks/bulk-delete', {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify({ ids })
+      });
+      if (res.status === 401) { showLogin(); return; }
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error || 'Bulk delete failed');
+
+      toast(`Deleted ${ids.length} artworks`, 'success');
+      clearSelection();
+      if (state.editingId && ids.includes(state.editingId)) closeEditor();
+      await fetchArtworks();
+    } catch (err) {
+      toast('Bulk delete failed', 'error');
+    }
+  }
+
+  function resetBulkForm() {
+    ['bulkStatus', 'bulkMood', 'bulkCurrency', 'bulkSegmentsMode'].forEach(id => {
+      const el = $(`#${id}`);
+      if (el) el.value = el.options ? el.options[0].value : '';
+    });
+    const price = $('#bulkPrice');
+    if (price) { price.value = ''; price.disabled = false; }
+    const priceClear = $('#bulkPriceClear');
+    if (priceClear) priceClear.checked = false;
+    $$('#bulkSegmentChips input[type="checkbox"]').forEach(cb => { cb.checked = false; });
+  }
+
+  // ============================
+  // Cloudinary
+  // ============================
+  function resetCloudinaryState() {
     state.cloudinary = {
+      configured: false,
       assets: [],
       nextCursor: null,
       loading: false,
-      configured: false,
+      selectedId: null,
       ratio: null,
-      baseUrl: CLOUDINARY_BASE,
-      selectedId: null
+      baseUrl: CLOUDINARY_BASE
     };
-    clearCloudinarySearch();
-    updateCloudinaryStatus(false);
-    showLogin();
-  };
+    updateCloudinaryStatusUI(false);
+    const grid = $('#cloudGrid');
+    if (grid) grid.innerHTML = '';
+  }
 
-  const handleListClick = (event) => {
-    const row = event.target.closest('.artwork-row');
-    if (!row) return;
-    if (event.target.closest('.row-select')) return;
-    const id = row.dataset.id;
-    const artwork = state.artworks.find((item) => item.id === id);
-    if (!artwork) return;
+  function updateCloudinaryStatusUI(configured) {
+    const chip = $('#cloudinaryStatusChip');
+    if (!chip) return;
+    chip.className = `status-chip ${configured ? 'online' : 'offline'}`;
+    chip.innerHTML = configured
+      ? '<i class="fas fa-circle"></i><span>Connected</span>'
+      : '<i class="fas fa-circle"></i><span>Disconnected</span>';
+  }
 
-    const action = event.target.closest('button')?.dataset.action;
-    if (action === 'delete') {
-      if (confirm('Видалити цю картину?')) {
-        deleteArtwork(id).catch((error) => {
-          console.error(error);
-          showToast('Помилка видалення');
-        });
-      }
+  async function fetchCloudinaryStatus() {
+    if (!state.token) return;
+    try {
+      const res = await fetch('/api/admin/cloudinary/status', { headers: authHeadersNoBody() });
+      const data = await res.json();
+      state.cloudinary.configured = Boolean(data.configured);
+      updateCloudinaryStatusUI(state.cloudinary.configured);
+    } catch {
+      updateCloudinaryStatusUI(false);
+    }
+  }
+
+  async function searchCloudinary(append = false) {
+    if (!state.cloudinary.configured) { toast('Cloudinary not configured', 'warning'); return; }
+    if (append && !state.cloudinary.nextCursor) return;
+    if (state.cloudinary.loading) return;
+
+    state.cloudinary.loading = true;
+    const searchBtn = $('#cloudSearchBtn');
+    if (searchBtn && !append) searchBtn.innerHTML = '<span class="spinner"></span>';
+
+    try {
+      const params = new URLSearchParams();
+      const q = ($('#cloudSearch')?.value || '').trim();
+      const folder = ($('#cloudFolder')?.value || '').trim();
+      const tag = ($('#cloudTag')?.value || '').trim();
+      if (q) params.set('query', q);
+      if (folder) params.set('folder', folder);
+      if (tag) params.set('tag', tag);
+      if (append && state.cloudinary.nextCursor) params.set('cursor', state.cloudinary.nextCursor);
+
+      const res = await fetch(`/api/admin/cloudinary/search?${params}`, { headers: authHeadersNoBody() });
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error || 'Search failed');
+
+      const assets = data.assets || [];
+      state.cloudinary.assets = append ? [...state.cloudinary.assets, ...assets] : assets;
+      state.cloudinary.nextCursor = data.next_cursor || null;
+      renderCloudGrid();
+    } catch (err) {
+      toast('Cloudinary search failed', 'error');
+    } finally {
+      state.cloudinary.loading = false;
+      if (searchBtn) searchBtn.innerHTML = '<i class="fas fa-search"></i> Search';
+    }
+  }
+
+  function clearCloudSearch() {
+    const fields = ['cloudSearch', 'cloudFolder', 'cloudTag'];
+    fields.forEach(id => { const el = $(`#${id}`); if (el) el.value = ''; });
+    state.cloudinary.assets = [];
+    state.cloudinary.nextCursor = null;
+    state.cloudinary.selectedId = null;
+    renderCloudGrid();
+  }
+
+  function renderCloudGrid() {
+    const grid = $('#cloudGrid');
+    const loadMore = $('#cloudLoadMore');
+    if (!grid) return;
+
+    if (!state.cloudinary.assets.length) {
+      grid.innerHTML = '<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted);">No results. Try searching above.</div>';
+      if (loadMore) loadMore.style.display = 'none';
       return;
     }
 
-    if (action === 'toggle') {
-      toggleStatus(artwork).catch((error) => {
-        console.error(error);
-        showToast('Не вдалося змінити статус');
-      });
-      return;
+    grid.innerHTML = state.cloudinary.assets.map(asset => {
+      const thumbSrc = asset.secure_url
+        ? asset.secure_url.replace('/upload/', '/upload/c_fill,w_240,h_240,q_auto,f_auto/')
+        : '';
+      const ratio = formatRatio(asset.width, asset.height);
+      const size = `${asset.width || '?'}x${asset.height || '?'}`;
+      const bytes = formatBytes(asset.bytes);
+      const meta = [size, bytes, ratio].filter(Boolean).join(' / ');
+      const isSelected = asset.public_id === state.cloudinary.selectedId;
+      const tags = (asset.tags || []).slice(0, 5);
+      const tagsHtml = tags.length
+        ? `<div class="cloud-card-tags">${tags.map(t => `<span class="cloud-tag">${t}</span>`).join('')}</div>`
+        : '';
+      const caption = asset.context?.caption || asset.context?.alt || '';
+      const captionHtml = caption
+        ? `<div class="cloud-card-caption" title="${caption}">${caption}</div>`
+        : '';
+
+      return `
+        <div class="cloud-card ${isSelected ? 'is-selected' : ''}" data-id="${asset.public_id}">
+          <img class="cloud-card-img" src="${thumbSrc}" alt="${asset.public_id}" loading="lazy">
+          <div class="cloud-card-body">
+            <div class="cloud-card-id" title="${asset.public_id}">${asset.public_id}</div>
+            <div class="cloud-card-meta">${meta}</div>
+            ${captionHtml}
+            ${tagsHtml}
+          </div>
+          <div class="cloud-card-actions">
+            <button class="btn btn-primary btn-sm" data-action="use">Use</button>
+            <button class="btn btn-accent btn-sm" data-action="autofill" title="Auto-fill form from metadata">Auto-fill</button>
+            <button class="btn btn-ghost btn-sm" data-action="copy">Copy ID</button>
+          </div>
+        </div>
+      `;
+    }).join('');
+
+    if (loadMore) {
+      loadMore.style.display = state.cloudinary.nextCursor ? '' : 'none';
+    }
+  }
+
+  function useCloudinaryAsset(asset) {
+    if (!asset) return;
+    state.cloudinary.selectedId = asset.public_id;
+    state.cloudinary.ratio = (asset.width && asset.height) ? asset.width / asset.height : null;
+
+    const cidInput = $('#editorCloudinaryId');
+    if (cidInput) cidInput.value = asset.public_id;
+
+    updateEditorPreview(asset.public_id);
+
+    const cloudMeta = $('#editorCloudMeta');
+    if (cloudMeta && asset.width && asset.height) {
+      const ratio = formatRatio(asset.width, asset.height);
+      const bytes = formatBytes(asset.bytes);
+      const parts = [
+        `${asset.width}x${asset.height}px`,
+        ratio ? `ratio ${ratio}` : null,
+        bytes,
+        asset.format ? asset.format.toUpperCase() : null
+      ].filter(Boolean);
+      cloudMeta.textContent = `Image: ${parts.join(' / ')}`;
     }
 
-    fillForm(artwork);
-  };
+    // Auto-fill dimensions from ratio
+    applyRatioFromCloud('width');
+    applyRatioFromCloud('height');
+    autoFillSize();
 
-  const bindEvents = () => {
-    elements.loginForm?.addEventListener('submit', handleLogin);
-    elements.searchInput?.addEventListener('input', applyFilters);
-    elements.statusFilter?.addEventListener('change', applyFilters);
-    elements.segmentFilter?.addEventListener('change', applyFilters);
-    elements.newArtworkBtn?.addEventListener('click', () => fillForm(null));
-    elements.refreshBtn?.addEventListener('click', fetchArtworks);
-    elements.logoutBtn?.addEventListener('click', handleLogout);
-    elements.artworksList?.addEventListener('click', handleListClick);
-    elements.artworksList?.addEventListener('change', (event) => {
-      const checkbox = event.target.closest('.row-select-input');
-      if (!checkbox) return;
-      toggleSelection(checkbox.dataset.id, checkbox.checked);
+    renderCloudGrid();
+    toast('Cloudinary ID applied', 'success');
+
+    // If editor is open, it's already there. If not, open it.
+    if (state.editorOpen) return;
+  }
+
+  function autoFillFromCloudinary(asset) {
+    if (!asset) return;
+
+    // Apply cloudinary_id and preview
+    useCloudinaryAsset(asset);
+
+    const context = asset.context || {};
+    const tags = asset.tags || [];
+
+    // Map context.alt -> title fields (only if empty)
+    const altText = context.alt || '';
+    if (altText) {
+      const titleEn = $('[name="title_en"]');
+      if (titleEn && !titleEn.value) titleEn.value = altText;
+    }
+
+    // Map context.caption -> description fields (only if empty)
+    const caption = context.caption || context.description || '';
+    if (caption) {
+      const descEn = $('[name="description_en"]');
+      if (descEn && !descEn.value) descEn.value = caption;
+    }
+
+    // Map tags to mood (if matching)
+    const moodTags = ['calm', 'energy', 'luxury', 'focus', 'warmth', 'balance', 'depth'];
+    const matchedMood = tags.find(t => moodTags.includes(t.toLowerCase()));
+    if (matchedMood) {
+      setEditorMood(matchedMood.toLowerCase());
+    }
+
+    // Map tags to segments (if matching)
+    const segmentTags = ['home', 'business', 'wellness', 'office', 'hotel', 'spa'];
+    const matchedSegments = tags.filter(t => segmentTags.includes(t.toLowerCase()));
+    if (matchedSegments.length) {
+      $$('#artworkForm [name="segments"]').forEach(cb => {
+        if (matchedSegments.includes(cb.value)) cb.checked = true;
+      });
+    }
+
+    toast('Auto-filled from Cloudinary metadata', 'success');
+  }
+
+  async function uploadToCloudinary() {
+    if (!state.cloudinary.configured) { toast('Cloudinary not configured', 'warning'); return; }
+
+    const fileInput = $('#cloudFileInput');
+    const file = fileInput?.files?.[0];
+    if (!file) { toast('Select a file first', 'warning'); return; }
+
+    const uploadBtn = $('#uploadBtn');
+    const progress = $('#uploadProgress');
+    const progressBar = progress?.querySelector('.upload-progress-bar');
+
+    if (uploadBtn) { uploadBtn.disabled = true; uploadBtn.innerHTML = '<span class="spinner"></span> Uploading...'; }
+    if (progress) progress.style.display = '';
+    if (progressBar) progressBar.style.width = '30%';
+
+    try {
+      // Convert to data URL
+      const dataUrl = await new Promise((resolve, reject) => {
+        const reader = new FileReader();
+        const img = new Image();
+        reader.onload = () => { img.src = reader.result; };
+        reader.onerror = reject;
+        img.onerror = reject;
+        img.onload = () => {
+          const maxDim = Math.max(img.naturalWidth, img.naturalHeight);
+          const scale = maxDim > 2400 ? 2400 / maxDim : 1;
+          const canvas = document.createElement('canvas');
+          canvas.width = Math.round(img.naturalWidth * scale);
+          canvas.height = Math.round(img.naturalHeight * scale);
+          canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height);
+          resolve(canvas.toDataURL('image/jpeg', 0.9));
+        };
+        reader.readAsDataURL(file);
+      });
+
+      if (progressBar) progressBar.style.width = '60%';
+
+      const payload = {
+        file: dataUrl,
+        folder: ($('#uploadFolder')?.value || '').trim() || undefined,
+        public_id: ($('#uploadPublicId')?.value || '').trim() || undefined
+      };
+
+      const res = await fetch('/api/admin/cloudinary/upload', {
+        method: 'POST',
+        headers: authHeaders(),
+        body: JSON.stringify(payload)
+      });
+
+      if (progressBar) progressBar.style.width = '90%';
+
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error || 'Upload failed');
+
+      if (progressBar) progressBar.style.width = '100%';
+
+      const asset = data.asset;
+      state.cloudinary.assets = [asset, ...state.cloudinary.assets];
+      renderCloudGrid();
+
+      toast('File uploaded successfully', 'success');
+
+      // Auto-use the uploaded asset
+      useCloudinaryAsset(asset);
+
+      // Reset file input
+      if (fileInput) fileInput.value = '';
+      if (uploadBtn) uploadBtn.style.display = 'none';
+    } catch (err) {
+      toast('Upload failed', 'error');
+      console.error(err);
+    } finally {
+      if (uploadBtn) {
+        uploadBtn.disabled = false;
+        uploadBtn.innerHTML = '<i class="fas fa-upload"></i> Upload';
+      }
+      setTimeout(() => {
+        if (progress) progress.style.display = 'none';
+        if (progressBar) progressBar.style.width = '0%';
+      }, 500);
+    }
+  }
+
+  async function inspectCloudinaryAsset() {
+    const id = ($('#editorCloudinaryId')?.value || '').trim();
+    if (!id) { toast('Enter a Cloudinary ID first', 'warning'); return; }
+
+    const btn = $('#editorInspectBtn');
+    if (btn) btn.disabled = true;
+
+    try {
+      const res = await fetch(`/api/admin/cloudinary/asset?public_id=${encodeURIComponent(id)}`, {
+        headers: authHeadersNoBody()
+      });
+      if (res.status === 401) { showLogin(); return; }
+      const data = await res.json();
+      if (!res.ok || !data.success) throw new Error(data.error || 'Lookup failed');
+
+      const asset = data.asset;
+      state.cloudinary.ratio = (asset.width && asset.height) ? asset.width / asset.height : null;
+
+      updateEditorPreview(asset.public_id);
+
+      const cloudMeta = $('#editorCloudMeta');
+      if (cloudMeta) {
+        const ratio = formatRatio(asset.width, asset.height);
+        const bytes = formatBytes(asset.bytes);
+        const parts = [
+          `${asset.width}x${asset.height}px`,
+          ratio ? `ratio ${ratio}` : null,
+          bytes,
+          asset.format ? asset.format.toUpperCase() : null
+        ].filter(Boolean);
+        const tagStr = (asset.tags || []).length ? ` | Tags: ${asset.tags.join(', ')}` : '';
+        const ctx = asset.context || {};
+        const ctxStr = (ctx.caption || ctx.alt) ? ` | ${ctx.caption || ctx.alt}` : '';
+        cloudMeta.textContent = `Image: ${parts.join(' / ')}${tagStr}${ctxStr}`;
+      }
+
+      applyRatioFromCloud('width');
+      applyRatioFromCloud('height');
+      autoFillSize();
+
+      toast('Cloudinary data loaded', 'success');
+    } catch (err) {
+      toast('Failed to inspect asset', 'error');
+    } finally {
+      if (btn) btn.disabled = false;
+    }
+  }
+
+  // ============================
+  // Event Binding
+  // ============================
+  function bindEvents() {
+    // Login
+    $('#loginForm')?.addEventListener('submit', handleLogin);
+
+    // Logout
+    $('#logoutBtn')?.addEventListener('click', handleLogout);
+
+    // Refresh
+    $('#refreshBtn')?.addEventListener('click', () => {
+      fetchArtworks();
+      toast('Refreshing...');
     });
-    elements.bulkSelectAll?.addEventListener('click', () => {
-      state.filtered.forEach((art) => state.selectedIds.add(art.id));
-      updateBulkUi();
-      renderList();
-    });
-    elements.bulkClear?.addEventListener('click', clearBulkSelection);
-    elements.bulkApply?.addEventListener('click', () => {
-      bulkUpdateArtworks().catch((error) => {
-        console.error(error);
-        showToast('Bulk-оновлення не вдалося');
+
+    // Dark Mode
+    $('#darkModeToggle')?.addEventListener('click', toggleDarkMode);
+
+    // Navigation — Sidebar
+    $$('.sidebar-nav .nav-item').forEach(btn => {
+      btn.addEventListener('click', () => {
+        if (btn.dataset.view) switchView(btn.dataset.view);
       });
     });
-    elements.bulkDelete?.addEventListener('click', () => {
-      bulkDeleteArtworks().catch((error) => {
-        console.error(error);
-        showToast('Bulk-видалення не вдалося');
+
+    // Navigation — Bottom Nav
+    $$('.bottom-nav-item[data-view]').forEach(btn => {
+      btn.addEventListener('click', () => switchView(btn.dataset.view));
+    });
+
+    // Mobile menu toggle
+    $('#menuToggle')?.addEventListener('click', () => {
+      $('#sidebar')?.classList.toggle('mobile-open');
+    });
+
+    // Mobile new button
+    $('#mobileNewBtn')?.addEventListener('click', () => openEditor(null));
+
+    // New Artwork
+    $('#newArtworkBtn')?.addEventListener('click', () => openEditor(null));
+
+    // Search
+    $('#globalSearch')?.addEventListener('input', debouncedFilter);
+
+    // Filters
+    ['statusFilter', 'segmentFilter', 'moodFilter'].forEach(id => {
+      $(`#${id}`)?.addEventListener('change', applyFilters);
+    });
+
+    // Selection
+    $('#selectAllVisible')?.addEventListener('click', selectAllVisible);
+    $('#clearSelection')?.addEventListener('click', clearSelection);
+
+    // Artwork Grid
+    $('#artworkGrid')?.addEventListener('click', handleGridClick);
+
+    // Editor — Close
+    $('#editorCloseBtn')?.addEventListener('click', closeEditor);
+    $('#editorOverlay')?.addEventListener('click', closeEditor);
+
+    // Editor — Form submit
+    $('#artworkForm')?.addEventListener('submit', e => {
+      e.preventDefault();
+      saveArtwork(collectFormData());
+    });
+
+    // Editor — Status toggles
+    $('#statusToggleGroup')?.addEventListener('click', e => {
+      const btn = e.target.closest('.status-toggle');
+      if (!btn) return;
+      setEditorStatus(btn.dataset.status);
+    });
+
+    // Editor — Language tabs
+    $$('.lang-tab').forEach(tab => {
+      tab.addEventListener('click', () => {
+        const lang = tab.dataset.lang;
+        $$('.lang-tab').forEach(t => t.classList.toggle('active', t.dataset.lang === lang));
+        $$('.lang-panel').forEach(p => p.classList.toggle('active', p.dataset.lang === lang));
       });
     });
-    elements.bulkPriceClear?.addEventListener('change', () => {
-      if (!elements.bulkPrice) return;
-      if (elements.bulkPriceClear.checked) {
-        elements.bulkPrice.value = '';
-        elements.bulkPrice.disabled = true;
-      } else {
-        elements.bulkPrice.disabled = false;
-      }
+
+    // Editor — Mood chips
+    $('#moodSelect')?.addEventListener('click', e => {
+      const chip = e.target.closest('.mood-chip');
+      if (!chip) return;
+      setEditorMood(chip.dataset.mood);
     });
-    elements.cloudinaryInput?.addEventListener('input', (event) => {
-      const raw = event.target.value.trim();
-      const cloudMatch = raw.match(/res\.cloudinary\.com\/([^/]+)\//);
-      if (cloudMatch?.[1]) {
-        state.cloudinary.baseUrl = `https://res.cloudinary.com/${cloudMatch[1]}/image/upload/f_auto,q_auto/`;
-      }
+
+    // Editor — Dimensions auto-fill
+    $('#editorWidth')?.addEventListener('input', () => {
+      applyRatioFromCloud('width');
+      autoFillSize();
+    });
+    $('#editorHeight')?.addEventListener('input', () => {
+      applyRatioFromCloud('height');
+      autoFillSize();
+    });
+    $('#editorSize')?.addEventListener('input', () => {
+      $('#editorSize').dataset.auto = 'false';
+    });
+
+    // Editor — Cloudinary ID input
+    const cidInput = $('#editorCloudinaryId');
+    cidInput?.addEventListener('input', e => {
+      const raw = e.target.value.trim();
       const extracted = extractCloudinaryId(raw);
-      if (extracted && extracted !== raw) {
-        event.target.value = extracted;
-      }
-      updatePreview(event.target.value.trim());
+      if (extracted && extracted !== raw) e.target.value = extracted;
+      updateEditorPreview(e.target.value.trim());
       state.cloudinary.ratio = null;
-      setRatioHint(null);
-      updateCloudinaryMeta(null);
     });
-    elements.cloudinaryInput?.addEventListener('paste', (event) => {
-      const text = event.clipboardData?.getData('text/plain') || '';
+
+    cidInput?.addEventListener('paste', e => {
+      const text = e.clipboardData?.getData('text/plain') || '';
       const id = extractCloudinaryId(text);
       if (id) {
-        event.preventDefault();
-        elements.cloudinaryInput.value = id;
-        const cloudMatch = text.match(/res\.cloudinary\.com\/([^/]+)\//);
-        if (cloudMatch?.[1]) {
-          state.cloudinary.baseUrl = `https://res.cloudinary.com/${cloudMatch[1]}/image/upload/f_auto,q_auto/`;
-        }
-        updatePreview(id);
+        e.preventDefault();
+        cidInput.value = id;
+        updateEditorPreview(id);
         state.cloudinary.ratio = null;
-        setRatioHint(null);
-        updateCloudinaryMeta(null);
-        showToast('Cloudinary ID оновлено');
+        toast('Cloudinary ID applied');
       }
     });
-    if (elements.cloudinaryDrop) {
-      const dropZone = elements.cloudinaryDrop;
-      dropZone.addEventListener('dragover', (event) => {
-        event.preventDefault();
-        dropZone.classList.add('dragover');
-      });
+
+    // Editor — Drop zone
+    const dropZone = $('#editorDropZone');
+    if (dropZone) {
+      dropZone.addEventListener('dragover', e => { e.preventDefault(); dropZone.classList.add('dragover'); });
       dropZone.addEventListener('dragleave', () => dropZone.classList.remove('dragover'));
-      dropZone.addEventListener('drop', (event) => {
-        event.preventDefault();
+      dropZone.addEventListener('drop', e => {
+        e.preventDefault();
         dropZone.classList.remove('dragover');
-        const text = event.dataTransfer?.getData('text/uri-list')
-          || event.dataTransfer?.getData('text/plain')
-          || '';
-        if (!text && event.dataTransfer?.files?.length) {
-          showToast('Перетягніть Cloudinary URL або вставте ID');
-          return;
-        }
+        const text = e.dataTransfer?.getData('text/uri-list') || e.dataTransfer?.getData('text/plain') || '';
         const id = extractCloudinaryId(text);
-        if (!id) {
-          showToast('Не вдалося розпізнати Cloudinary ID');
-          return;
+        if (id) {
+          const input = $('#editorCloudinaryId');
+          if (input) input.value = id;
+          updateEditorPreview(id);
+          state.cloudinary.ratio = null;
+          toast('Cloudinary ID applied from drop');
+        } else {
+          toast('Could not extract Cloudinary ID', 'warning');
         }
-        elements.cloudinaryInput.value = id;
-        const cloudMatch = text.match(/res\.cloudinary\.com\/([^/]+)\//);
-        if (cloudMatch?.[1]) {
-          state.cloudinary.baseUrl = `https://res.cloudinary.com/${cloudMatch[1]}/image/upload/f_auto,q_auto/`;
+      });
+
+      // Click on image zone to zoom
+      dropZone.addEventListener('click', e => {
+        const img = $('#editorPreviewImg');
+        if (img && img.style.display !== 'none' && img.src) {
+          const cidVal = $('#editorCloudinaryId')?.value?.trim();
+          if (cidVal) showZoom(cidVal);
         }
-        updatePreview(id);
-        state.cloudinary.ratio = null;
-        setRatioHint(null);
-        updateCloudinaryMeta(null);
-        showToast('Cloudinary ID оновлено');
       });
     }
-    elements.statusSelect?.addEventListener('change', (event) => {
-      const status = normalizeStatus(event.target.value);
-      elements.formStatusBadge.textContent = statusLabels[status];
-      elements.formStatusBadge.className = `status-pill ${status}`;
-    });
-    elements.widthInput?.addEventListener('input', () => {
-      applyRatioIfMissing('width');
-      updateSizeAuto();
-    });
-    elements.heightInput?.addEventListener('input', () => {
-      applyRatioIfMissing('height');
-      updateSizeAuto();
-    });
-    elements.sizeInput?.addEventListener('input', () => {
-      elements.sizeInput.dataset.auto = 'false';
-    });
-    elements.cloudinarySearchBtn?.addEventListener('click', () => fetchCloudinaryAssets());
-    elements.cloudinaryClearBtn?.addEventListener('click', clearCloudinarySearch);
-    elements.cloudinarySearch?.addEventListener('keydown', (event) => {
-      if (event.key === 'Enter') {
-        event.preventDefault();
-        fetchCloudinaryAssets();
+
+    // Editor — Inspect / Open / Auto-fill buttons
+    $('#editorInspectBtn')?.addEventListener('click', inspectCloudinaryAsset);
+    $('#editorAutoFillBtn')?.addEventListener('click', async () => {
+      const id = ($('#editorCloudinaryId')?.value || '').trim();
+      if (!id) { toast('Enter a Cloudinary ID first', 'warning'); return; }
+      try {
+        const res = await fetch(`/api/admin/cloudinary/asset?public_id=${encodeURIComponent(id)}`, { headers: authHeadersNoBody() });
+        if (res.status === 401) { showLogin(); return; }
+        const data = await res.json();
+        if (!res.ok || !data.success) throw new Error(data.error || 'Lookup failed');
+        autoFillFromCloudinary(data.asset);
+      } catch (err) {
+        toast('Failed to fetch metadata', 'error');
       }
     });
-    elements.cloudinaryLoadMore?.addEventListener('click', () => fetchCloudinaryAssets({ append: true }));
-    elements.cloudinaryResults?.addEventListener('click', (event) => {
-      const card = event.target.closest('.cloudinary-card');
+    $('#editorOpenCloudBtn')?.addEventListener('click', () => {
+      const id = ($('#editorCloudinaryId')?.value || '').trim();
+      if (!id) { toast('Enter a Cloudinary ID first', 'warning'); return; }
+      window.open(`${CLOUDINARY_BASE}${id}`, '_blank');
+    });
+
+    // Editor — Delete
+    $('#editorDeleteBtn')?.addEventListener('click', () => {
+      if (!state.editingId) return;
+      const art = state.artworks.find(a => a.id === state.editingId);
+      if (confirm(`Delete "${art?.title_uk || art?.title_en || 'this artwork'}"?`)) {
+        deleteArtwork(state.editingId);
+      }
+    });
+
+    // Editor — Duplicate
+    $('#editorDuplicateBtn')?.addEventListener('click', () => {
+      if (!state.editingId) return;
+      const art = state.artworks.find(a => a.id === state.editingId);
+      if (!art) return;
+      const dup = { ...art };
+      delete dup.id;
+      dup.title_uk = (dup.title_uk || '') + ' (copy)';
+      dup.title_en = (dup.title_en || '') + ' (copy)';
+      dup.title_de = (dup.title_de || '') + ' (copy)';
+      state.editingId = null;
+      fillEditorForm(dup);
+      $('#artworkId').value = '';
+      $('#editorTitle').textContent = 'Duplicate Artwork';
+      toast('Duplicated -- make changes and save');
+    });
+
+    // Bulk operations
+    $('#bulkApplyBtn')?.addEventListener('click', bulkUpdate);
+    $('#bulkDeleteBtn')?.addEventListener('click', bulkDelete);
+    $('#bulkPriceClear')?.addEventListener('change', () => {
+      const price = $('#bulkPrice');
+      if (price) {
+        if ($('#bulkPriceClear').checked) {
+          price.value = '';
+          price.disabled = true;
+        } else {
+          price.disabled = false;
+        }
+      }
+    });
+
+    // Cloudinary
+    $('#cloudSearchBtn')?.addEventListener('click', () => searchCloudinary(false));
+    $('#cloudClearBtn')?.addEventListener('click', clearCloudSearch);
+    $('#cloudLoadMore')?.addEventListener('click', () => searchCloudinary(true));
+
+    $('#cloudSearch')?.addEventListener('keydown', e => {
+      if (e.key === 'Enter') { e.preventDefault(); searchCloudinary(false); }
+    });
+
+    // Cloud grid clicks
+    $('#cloudGrid')?.addEventListener('click', e => {
+      const card = e.target.closest('.cloud-card');
       if (!card) return;
       const id = card.dataset.id;
-      const asset = state.cloudinary.assets.find((item) => item.public_id === id);
+      const asset = state.cloudinary.assets.find(a => a.public_id === id);
       if (!asset) return;
-      const action = event.target.closest('button')?.dataset.action;
-      if (action === 'copy') {
-        if (navigator.clipboard?.writeText) {
-          navigator.clipboard.writeText(id);
-          showToast('ID скопійовано');
-        }
-        return;
-      }
-      applyCloudinaryAsset(asset);
-    });
-    elements.cloudinaryUploadBtn?.addEventListener('click', uploadCloudinaryAsset);
-    elements.cloudinaryInspectBtn?.addEventListener('click', inspectCloudinaryAsset);
-    elements.cloudinaryOpenBtn?.addEventListener('click', openCloudinaryAsset);
-    elements.cloudinaryCopyBtn?.addEventListener('click', () => {
-      const id = (elements.cloudinaryInput?.value || '').trim();
-      if (!id) {
-        showToast('Немає Cloudinary ID');
-        return;
-      }
-      if (navigator.clipboard?.writeText) {
-        navigator.clipboard.writeText(id);
-        showToast('ID скопійовано');
-      }
-    });
-    elements.resetBtn?.addEventListener('click', () => fillForm(null));
-    elements.artworkForm?.addEventListener('submit', (event) => {
-      event.preventDefault();
-      const payload = collectFormData();
-      saveArtwork(payload).catch((error) => {
-        console.error(error);
-        showToast('Не вдалося зберегти');
-      });
-    });
-  };
 
-  const init = () => {
+      const action = e.target.closest('[data-action]')?.dataset.action;
+      if (action === 'copy') {
+        navigator.clipboard?.writeText(id);
+        toast('ID copied to clipboard');
+        return;
+      }
+      if (action === 'autofill') {
+        if (!state.editorOpen) openEditor(null);
+        autoFillFromCloudinary(asset);
+        return;
+      }
+      // Use asset (either "use" button or card click)
+      useCloudinaryAsset(asset);
+    });
+
+    // Upload zone
+    const uploadZone = $('#uploadZone');
+    if (uploadZone) {
+      uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+      uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+      uploadZone.addEventListener('drop', e => {
+        e.preventDefault();
+        uploadZone.classList.remove('dragover');
+        const files = e.dataTransfer?.files;
+        if (files?.length) {
+          const fileInput = $('#cloudFileInput');
+          if (fileInput) {
+            fileInput.files = files;
+            const uploadBtn = $('#uploadBtn');
+            if (uploadBtn) uploadBtn.style.display = '';
+          }
+        }
+      });
+    }
+
+    $('#cloudFileInput')?.addEventListener('change', e => {
+      const uploadBtn = $('#uploadBtn');
+      if (uploadBtn) uploadBtn.style.display = e.target.files?.length ? '' : 'none';
+    });
+
+    $('#uploadBtn')?.addEventListener('click', uploadToCloudinary);
+
+    // Zoom overlay
+    $('#zoomOverlay')?.addEventListener('click', closeZoom);
+    $('#zoomClose')?.addEventListener('click', e => { e.stopPropagation(); closeZoom(); });
+
+    // Shortcuts modal
+    $('#shortcutsClose')?.addEventListener('click', () => {
+      const modal = $('#shortcutsModal');
+      if (modal) modal.style.display = 'none';
+    });
+
+    // Keyboard Shortcuts
+    document.addEventListener('keydown', handleKeyboard);
+  }
+
+  // ============================
+  // Keyboard Shortcuts
+  // ============================
+  function handleKeyboard(e) {
+    const tag = (e.target.tagName || '').toLowerCase();
+    const isInput = tag === 'input' || tag === 'textarea' || tag === 'select';
+
+    // Escape — close things
+    if (e.key === 'Escape') {
+      if ($('#zoomOverlay')?.classList.contains('visible')) { closeZoom(); return; }
+      if ($('#shortcutsModal')?.style.display !== 'none') { $('#shortcutsModal').style.display = 'none'; return; }
+      if (state.editorOpen) { closeEditor(); return; }
+      const sidebar = $('#sidebar');
+      if (sidebar?.classList.contains('mobile-open')) { sidebar.classList.remove('mobile-open'); return; }
+    }
+
+    // Ctrl+S — Save
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+      e.preventDefault();
+      if (state.editorOpen) {
+        saveArtwork(collectFormData());
+      }
+      return;
+    }
+
+    // Ctrl+K — Focus search
+    if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+      e.preventDefault();
+      const search = $('#globalSearch');
+      if (search) { search.focus(); search.select(); }
+      return;
+    }
+
+    // Ctrl+N — New artwork
+    if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+      e.preventDefault();
+      openEditor(null);
+      return;
+    }
+
+    // Ctrl+D — Toggle dark mode
+    if ((e.ctrlKey || e.metaKey) && e.key === 'd') {
+      e.preventDefault();
+      toggleDarkMode();
+      return;
+    }
+
+    // ? — Show shortcuts (only when not in input)
+    if (e.key === '?' && !isInput) {
+      const modal = $('#shortcutsModal');
+      if (modal) modal.style.display = modal.style.display === 'none' ? '' : 'none';
+    }
+  }
+
+  // ============================
+  // Initialization
+  // ============================
+  function init() {
+    applyTheme();
     bindEvents();
-    updateBulkUi();
+
     if (!state.token) {
       showLogin();
       return;
     }
+
     hideLogin();
     fetchArtworks();
     fetchCloudinaryStatus();
-  };
+  }
 
-  init();
+  // Run
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
 })();

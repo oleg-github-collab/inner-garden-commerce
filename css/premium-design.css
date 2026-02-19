@@ -10,6 +10,7 @@
 .catalog-header {
   background: rgba(255, 255, 255, 0.98);
   backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
   border-bottom: 1px solid rgba(230, 126, 34, 0.08);
   box-shadow:
     0 1px 3px rgba(0, 0, 0, 0.02),
@@ -17,13 +18,18 @@
   position: sticky;
   top: 0;
   z-index: 1000;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: background 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+              border-color 0.3s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
 .catalog-header.scrolled {
+  background: rgba(255, 255, 255, 0.96);
   box-shadow:
+    0 1px 2px rgba(0, 0, 0, 0.03),
     0 2px 8px rgba(0, 0, 0, 0.06),
     0 8px 24px rgba(0, 0, 0, 0.08);
+  border-bottom-color: rgba(230, 126, 34, 0.12);
 }
 
 .header-container {
@@ -43,8 +49,9 @@
   color: #1a2332;
   text-decoration: none;
   letter-spacing: -0.02em;
-  transition: all 0.3s ease;
+  transition: color 0.3s ease, transform 0.3s ease;
   position: relative;
+  transform: translateZ(0);
 }
 
 .artist-logo::after {
@@ -81,28 +88,41 @@
   color: #555;
   text-decoration: none;
   border-radius: 24px;
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  transition: color 0.25s ease,
+              background 0.25s ease,
+              transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+              box-shadow 0.25s ease;
   letter-spacing: 0.01em;
   position: relative;
+  transform: translateZ(0);
 }
 
 .nav-item:hover {
   color: #e67e22;
   background: rgba(230, 126, 34, 0.06);
-  transform: translateY(-1px);
+  transform: translate3d(0, -1px, 0);
 }
 
 .nav-item.special {
   background: linear-gradient(135deg, #e67e22 0%, #f39c12 100%);
   color: white;
   font-weight: 600;
-  box-shadow: 0 4px 12px rgba(230, 126, 34, 0.25);
+  box-shadow:
+    0 2px 6px rgba(230, 126, 34, 0.15),
+    0 4px 12px rgba(230, 126, 34, 0.25);
 }
 
 .nav-item.special:hover {
   background: linear-gradient(135deg, #d35400 0%, #e67e22 100%);
-  box-shadow: 0 6px 18px rgba(230, 126, 34, 0.35);
-  transform: translateY(-2px);
+  box-shadow:
+    0 4px 10px rgba(230, 126, 34, 0.2),
+    0 6px 18px rgba(230, 126, 34, 0.35);
+  transform: translate3d(0, -2px, 0);
+}
+
+.nav-item.special:active {
+  transform: translate3d(0, 0, 0);
+  box-shadow: 0 2px 8px rgba(230, 126, 34, 0.25);
 }
 
 /* Language Selector */
@@ -226,9 +246,10 @@
   color: #1a2332;
   margin-bottom: 1.25rem;
   letter-spacing: -0.03em;
-  line-height: 1.2;
+  line-height: 1.1;
   position: relative;
   z-index: 1;
+  text-wrap: balance;
 }
 
 .hero-banner p {
@@ -279,15 +300,17 @@
 
 .collection-link:hover {
   background: linear-gradient(135deg, #d35400 0%, #e67e22 100%);
-  transform: translateY(-4px) scale(1.02);
+  transform: translate3d(0, -4px, 0) scale(1.02);
   box-shadow:
+    0 4px 10px rgba(230, 126, 34, 0.2),
     0 8px 20px rgba(230, 126, 34, 0.35),
     0 16px 40px rgba(230, 126, 34, 0.2);
   border-color: rgba(255, 255, 255, 0.3);
 }
 
 .collection-link:active {
-  transform: translateY(-2px) scale(1);
+  transform: translate3d(0, -2px, 0) scale(0.99);
+  transition-duration: 0.1s;
 }
 
 /* ========================================
@@ -303,6 +326,7 @@
   padding: 4rem 2rem 2rem;
   position: relative;
   overflow: hidden;
+  contain: layout style;
 }
 
 .simple-footer::before {
@@ -360,7 +384,7 @@
 
 .footer-section a:hover {
   color: #f39c12;
-  transform: translateX(4px);
+  transform: translate3d(4px, 0, 0);
 }
 
 .footer-bottom {
@@ -426,14 +450,106 @@
 @media (max-width: 480px) {
   .hero-banner h1 {
     font-size: 1.85rem;
+    letter-spacing: -0.02em;
   }
 
   .hero-banner p {
     font-size: 1rem;
+    line-height: 1.65;
   }
 
   .collection-link {
     padding: 1rem 1.75rem;
     font-size: 0.95rem;
+    min-height: 48px;
   }
+}
+
+
+/* ========================================
+   PREMIUM ENHANCEMENTS - Depth & Polish
+   ======================================== */
+
+/* Layered shadow system for header on scroll */
+.catalog-header::after {
+  content: '';
+  position: absolute;
+  bottom: -1px;
+  left: 10%;
+  right: 10%;
+  height: 1px;
+  background: linear-gradient(90deg,
+    transparent 0%,
+    rgba(230, 126, 34, 0.15) 50%,
+    transparent 100%);
+  opacity: 0;
+  transition: opacity 0.3s ease;
+}
+
+.catalog-header.scrolled::after {
+  opacity: 1;
+}
+
+/* Language dropdown animation refinement */
+.lang-dropdown {
+  transform-origin: top right;
+}
+
+.lang-dropdown.active {
+  animation: dropdownReveal 0.25s cubic-bezier(0.32, 0.72, 0, 1);
+}
+
+@keyframes dropdownReveal {
+  from {
+    opacity: 0;
+    transform: translateY(-8px) scale(0.96);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+  }
+}
+
+/* Hero banner subtle depth */
+.hero-banner::after {
+  content: '';
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  right: 0;
+  height: 80px;
+  background: linear-gradient(to top, rgba(246, 241, 235, 0.8), transparent);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Collection link icon micro-animation */
+.collection-link i {
+  transition: transform 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.collection-link:hover i {
+  transform: translate3d(3px, 0, 0);
+}
+
+/* Footer section links stagger on hover */
+.footer-section a {
+  position: relative;
+}
+
+/* Footer bottom subtle divider enhancement */
+.footer-bottom::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 60px;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, rgba(230, 126, 34, 0.4), transparent);
+  border-radius: 2px;
+}
+
+.footer-bottom {
+  position: relative;
 }

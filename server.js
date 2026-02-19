@@ -28,9 +28,6 @@ const stripe = process.env.STRIPE_SECRET_KEY ? new Stripe(process.env.STRIPE_SEC
 const ARTWORKS_DB_PATH = path.join(__dirname, 'artworks-database.json');
 const ADMIN_SESSION_TTL_MS = 1000 * 60 * 60 * 12;
 const adminSessions = new Map();
-const ADMIN_ROUTE = normalizeAdminRoute(process.env.ADMIN_ROUTE || process.env.ADMIN_PATH);
-const ADMIN_ACCESS_KEY = (process.env.ADMIN_ACCESS_KEY || '').trim();
-const ADMIN_COOKIE_NAME = 'inner_garden_admin_access';
 
 const safeTrim = (value) => (typeof value === 'string' ? value.trim() : value);
 const toNumber = (value, fallback = null) => {
@@ -59,6 +56,10 @@ const normalizeAdminRoute = (value) => {
   const withSlash = trimmed.startsWith('/') ? trimmed : `/${trimmed}`;
   return withSlash.replace(/\/+$/, '') || '/studio';
 };
+
+const ADMIN_ROUTE = normalizeAdminRoute(process.env.ADMIN_ROUTE || process.env.ADMIN_PATH);
+const ADMIN_ACCESS_KEY = (process.env.ADMIN_ACCESS_KEY || '').trim();
+const ADMIN_COOKIE_NAME = 'inner_garden_admin_access';
 
 const parseCookies = (cookieHeader = '') => {
   return cookieHeader
@@ -230,7 +231,7 @@ app.use(express.urlencoded({ extended: true, limit: '20mb' }));
 // Rate limiting
 const limiter = rateLimit({
   windowMs: 15 * 60 * 1000, // 15 minutes
-  max: 100, // Limit each IP to 100 requests per windowMs
+  max: 300, // Limit each IP to 300 requests per windowMs (allows active admin use)
   message: 'Too many requests from this IP, please try again later.'
 });
 
@@ -260,22 +261,31 @@ app.use((req, res, next) => {
   return next();
 });
 
-// Static files with cache
+// Static files with optimized cache
 app.use(express.static(__dirname, {
   maxAge: '1d',
   etag: true,
   lastModified: true,
+  immutable: false,
   setHeaders: (res, filePath) => {
-    // Cache CSS, JS, fonts for 1 week
+    // Cache CSS, JS, fonts for 1 week with stale-while-revalidate
     if (filePath.match(/\.(css|js|woff2?|ttf|eot)$/)) {
-      res.setHeader('Cache-Control', 'public, max-age=604800');
+      res.setHeader('Cache-Control', 'public, max-age=604800, stale-while-revalidate=86400');
     }
     // Cache images for 1 month
-    if (filePath.match(/\.(jpg|jpeg|png|webp|svg|gif)$/)) {
-      res.setHeader('Cache-Control', 'public, max-age=2592000');
+    if (filePath.match(/\.(jpg|jpeg|png|webp|svg|gif|avif|ico)$/)) {
+      res.setHeader('Cache-Control', 'public, max-age=2592000, immutable');
+    }
+    // Cache audio/video for 1 week
+    if (filePath.match(/\.(mp3|mp4|ogg|wav|webm)$/)) {
+      res.setHeader('Cache-Control', 'public, max-age=604800');
     }
     // No cache for HTML
     if (filePath.endsWith('.html')) {
+      res.setHeader('Cache-Control', 'no-cache, must-revalidate');
+    }
+    // No cache for JSON data
+    if (filePath.endsWith('.json') && !filePath.includes('manifest')) {
       res.setHeader('Cache-Control', 'no-cache, must-revalidate');
     }
   }
@@ -586,7 +596,8 @@ app.get('/api/admin/cloudinary/search', requireAdmin, async (req, res) => {
 
     const payload = {
       expression: expressionParts.join(' AND '),
-      max_results: 24
+      max_results: 24,
+      with_field: ['tags', 'context']
     };
     if (nextCursor) {
       payload.next_cursor = nextCursor;
@@ -613,7 +624,9 @@ app.get('/api/admin/cloudinary/search', requireAdmin, async (req, res) => {
       width: asset.width,
       height: asset.height,
       bytes: asset.bytes,
-      created_at: asset.created_at
+      created_at: asset.created_at,
+      tags: asset.tags || [],
+      context: asset.context?.custom || {}
     }));
 
     return res.json({
@@ -638,7 +651,7 @@ app.get('/api/admin/cloudinary/asset', requireAdmin, async (req, res) => {
     }
 
     const encodedId = encodeURIComponent(publicId);
-    const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/resources/image/upload/${encodedId}`, {
+    const response = await fetch(`https://api.cloudinary.com/v1_1/${cloudinaryConfig.cloudName}/resources/image/upload/${encodedId}?tags=true&context=true`, {
       headers: {
         Authorization: cloudinaryAuthHeader()
       }
@@ -656,7 +669,9 @@ app.get('/api/admin/cloudinary/asset', requireAdmin, async (req, res) => {
         width: data.width,
         height: data.height,
         bytes: data.bytes,
-        created_at: data.created_at
+        created_at: data.created_at,
+        tags: data.tags || [],
+        context: data.context?.custom || {}
       }
     });
   } catch (error) {
