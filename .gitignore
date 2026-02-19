@@ -26,6 +26,9 @@
 .env
 .env.local
 
+# Dependencies
+node_modules/
+
 # Backup
 *.backup
 *.bak
